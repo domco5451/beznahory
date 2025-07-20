@@ -1,0 +1,35 @@
+---
+import PageLayout from "../Layouts/PageLayout.astro";
+import BlogPost from "../Components/BlogPost.astro";
+
+const allPosts = Object.values(
+  import.meta.glob("./posts/*.md", { eager: true })
+);
+---
+
+<PageLayout>
+  <div class="container">
+    <h1>Blog</h1>
+    <p>
+      Chcete sa aj Vy podeliť o svoje zážitky z túry? Pošlite svoj príspevok na <a
+        href="">blabla@gmail.com</a
+      >
+    </p>
+    <section class="main-grid">
+      {allPosts.map((post: any, i: number) => <BlogPost
+        href={post.url}
+        i={i} 
+        src={post.frontmatter.thumbnail.url}
+        alt={post.frontmatter.thumbnail.alt}
+        pfpSrc={post.frontmatter.pfp.url}
+        pfpAlt={post.frontmatter.pfp.alt}
+        title={post.frontmatter.title}
+        author={post.frontmatter.author}
+        date={post.frontmatter.pubDate.toString().slice(0, 10)}
+        excerpt={post.frontmatter.excerpt}
+        tags={post.frontmatter.tags}
+        />
+        )}
+    </section>
+  </div>
+</PageLayout>
