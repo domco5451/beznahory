@@ -25,6 +25,8 @@ img {
     padding-block: 30px;
     color: #273541;
     border-block-end: 1px solid #273541;
+    position: sticky;
+    top: 0;
 }
 .main-ul {
     display: flex;
@@ -54,94 +56,34 @@ img {
 }
 
 /* Blog */
-
+.container {
+    max-width: 1300px;
+    margin: auto;
+}
+.container h1 {
+    margin-block: 15px;
+}
+.wrapper {
+    box-shadow: 1px 1px 10px rgb(175, 175, 175);
+    border-radius: 15px;
+}
 .main-grid {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
-    text-align: justify;
-    gap: 30px;
+    gap: 40px;
 }
-.container {
-    width: 1300px;
-    margin: auto;
-}
-.container > p {
-    margin-block: 20px;
-}
-.container > h1 {
-    margin-block-start: 20px;
-}
-.container .thumbnail {
+.thumbnail {
     max-width: 100%;
     height: auto;
-    border-radius: 20px 20px 0 0;
+    border-radius: 15px 15px 0 0;
 }
-.container h2 {
-    margin-block-end: 15px;
-}
-.author-name {
-    margin-block: 5px;
-}
-.tags {
-    margin-block-end: 15px;
-    display: flex;
-    list-style: none;
-    gap: 10px;
-
-}
-.tag {
-    background: #ff682c;
-    padding: 7px;
-    border-radius: 20px;
-    color: white;
-    font-size: 0.8rem;
-}
-.wrapper {
-    border-radius: 20px;
-    box-shadow: 1px 1px 10px #bbbbbb;
-}
-.content-wrapper {
-    padding: 15px
-}
-
 .pfp {
-    border-radius: 50px;
+    max-width: 100px;
+    height: auto;
+    border-radius: 100%;
 }
-
-.content-wrapper > div {
-    margin-block-start: 10px;
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    justify-content: space-between;
-}
-
-.content-wrapper > div > div{
-    display: flex;
-    gap: 15px;
-}
-.read-more {
-    background: black;
-    padding-inline: 10px;
-    padding-block: 5px;
-    color: white;
-    display: flex;
-    gap: 7px;
-    align-items: center;
-    font-weight: bold;
-    text-decoration: none;
-}
-.read-more svg {
-    width: 20px;
-}
-.read-more:hover {
-    background: rgb(102, 167, 112);
-    cursor: pointer;
-}
-.read-more:hover svg {
-    transform: translateX(3px);
-    transition-duration: 200ms;
-
+.arrow {
+    width: 30px;
 }
 
 /* 3 lines */
@@ -168,10 +110,6 @@ img {
     background: #ffffff;
     padding: 15px;
 }
-.image-1 {
-    max-width: 100%;
-    height: auto;
-}
 .ratings {
     width: 250px;
     height: fit-content;
@@ -196,6 +134,20 @@ img {
     display: flex;
     align-items: center;
     gap: 5px;
+}
+
+/* mdx posts */
+
+.image {
+    width: 100%;
+    height: auto;
+    margin-block: 15px;
+}
+.post-h2 {
+    margin-block: 15px;
+}
+.post-p {
+    line-height: 25px;
 }
 
 /* Dark-mode */
