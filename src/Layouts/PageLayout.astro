@@ -1,16 +1,13 @@
 ---
 import "../Styles/global.css";
-import Header from "../Components/Header.astro"
-import Footer from "../Components/Footer.astro"
-
+import Header from "../Components/basic/Header.astro"
+import Footer from "../Components/basic/Footer.astro"
+import BaseHead from "../Components/head/BaseHead.astro";
+const {title} = Astro.props;
 ---
 <html lang="en">
   <head>
-    <meta charset="utf-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="viewport" content="width=device-width" />
-    <meta name="generator" content={Astro.generator} />
-    <title>Runhill</title>
+    <BaseHead {title}/>
   </head>
   <body >
     <Header />

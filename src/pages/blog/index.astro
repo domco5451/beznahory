@@ -1,0 +1,82 @@
+---
+import { Image } from "astro:assets";
+import PageLayout from "../../Layouts/PageLayout.astro";
+const allPosts = Object.values(
+  import.meta.glob("../posts/*.mdx", { eager: true })
+);
+---
+
+<PageLayout title="Blog">
+  <div class="container">
+    <div class="filter-flex">
+      <h1>Blog</h1>
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 1 1-3 0m3 0a1.5 1.5 0 1 0-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-9.75 0h9.75" />
+      </svg>
+    </div>
+    <section class="main-grid">
+      {
+        allPosts.map((post: any, i: number) => (
+          <article class="wrapper">
+            <Image
+              class="thumbnail"
+              src={post.frontmatter.thumbnail.url}
+              alt={post.frontmatter.thumbnail.alt}
+              inferSize={true}
+              layout="constrained"
+              loading={i < 3 ? "eager" : "lazy"}
+              fetchpriority="high"
+            />
+            <div class="content-wrapper">
+              <ul class="tags">
+                {post.frontmatter.tags.map((tag: any) => <li class="tag">{tag}</li>)}
+              </ul>
+              <div class="margin-nadpis">
+                <h2>{post.frontmatter.title}</h2>
+                <h3><i>"{post.frontmatter.description}"</i></h3>
+              </div>
+              <p class="excerpt">{post.frontmatter.excerpt}</p>
+              <div class="wrapper-flex">
+                <div class="author-flex">
+                  <Image
+                    width={50}
+                    class="pfp"
+                    src={post.frontmatter.pfp.url}
+                    alt={post.frontmatter.pfp.alt}
+                    inferSize={true}
+                    layout="constrained"
+                    loading={i < 3 ? "eager" : "lazy"}
+                  />
+                  <div>
+                    <p><strong>{post.frontmatter.author}</strong></p>
+                    <p>{post.frontmatter.pubDate}</p>
+                  </div>
+                </div>
+                    <a class="arrow-flex" href={post.url}>
+                      <span>Čítať ďalej</span>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="-5 0 24 24"
+                        stroke-width="1.5"
+                        stroke="currentColor"
+                        class="arrow"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          d="m8.25 4.5 7.5 7.5-7.5 7.5"
+                        />
+                      </svg>
+                    </a>
+              </div>
+            </div>
+          </article>
+        ))
+      }
+    </section>
+  </div>
+</PageLayout>
+<script>
+  
+</script>
