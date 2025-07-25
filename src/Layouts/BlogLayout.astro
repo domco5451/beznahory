@@ -76,7 +76,7 @@ const {title, pubDate, author, frontmatter} = Astro.props
         </svg>
         <p>Dĺžka</p>
       </div>
-      <p>{frontmatter.ratings.length}</p>
+      <p class="rating-text">{frontmatter.ratings.length}</p>
       <hr />
       <div class="rating-icons">
         <svg width={30} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
@@ -84,7 +84,7 @@ const {title, pubDate, author, frontmatter} = Astro.props
         </svg>
         <p>Trvanie</p>
       </div>
-      <p>{frontmatter.ratings.time}</p>
+      <p class="rating-text">{frontmatter.ratings.time}</p>
       <hr />
       <div class="rating-icons">
         <svg width={30} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
@@ -92,6 +92,12 @@ const {title, pubDate, author, frontmatter} = Astro.props
         </svg>
         <p>Terén</p>
       </div>
-      <p>{frontmatter.ratings.terrain}</p>
+      <p class="rating-text">{frontmatter.ratings.terrain}</p>
     </section>
   </div>
+  <style>
+    .rating-text {
+      font-size: 1.5rem;
+      color: green;
+    }
+  </style>
