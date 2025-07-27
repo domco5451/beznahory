@@ -4,17 +4,16 @@ import BaseHead from "../Components/head/BaseHead.astro"
 import Header from "../Components/basic/Header.astro";
 import Footer from "../Components/basic/Footer.astro";
 
-const { content, frontmatter } = Astro.props;
-const {title, description, pubDate, thumbnail, author }= content;
+const { frontmatter } = Astro.props;
 ---
-<html lang={content.lang || "sk"}>
+<html>
   <head>
-    <BaseHead {title} {description}/>
+    <BaseHead {frontmatter}/>
   </head>
 <body>
   <Header />
   <main>
-    <BlogLayout {title} {pubDate} {thumbnail} {author} {frontmatter}>
+    <BlogLayout {frontmatter}>
       <slot />
     </BlogLayout>
   </main>
