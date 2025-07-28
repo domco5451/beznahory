@@ -74,6 +74,109 @@ const allPosts = Object.values(
     </section>
   </div>
 </PageLayout>
+<style is:global>
+  .container {
+    max-width: 1300px;
+    margin: auto;
+}
+.container h1 {
+    margin-block: 15px;
+}
+.wrapper {
+    box-shadow: 1px 1px 10px rgb(175, 175, 175);
+    border-radius: 15px;
+}
+.wrapper:hover {
+    transform: scale(1.05);
+    transition-duration: 500ms;
+}
+.main-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 40px;
+}
+.thumbnail {
+    max-width: 100%;
+    height: 50%;
+    border-radius: 15px 15px 0 0;
+}
+.author-flex {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+.wrapper-flex {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-block-start: 15px;
+}
+.pfp {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    border-radius: 100%;
+}
+.arrow-flex {
+    display: flex;
+    align-items: center;
+    background: #000000;
+    padding-inline: 8px;
+    color: white;
+    text-decoration: none;
+}
+.arrow-flex:hover {
+    background-color: rgb(14, 136, 69);
+}
+.arrow-flex:hover .arrow{
+    transform: translateX(3px);
+    transition-duration: 300ms;
+}
+.arrow {
+    width: 30px;
+}
+
+.content-wrapper {
+    padding: 20px;
+}
+.tags {
+    display: flex;
+    gap: 20px;
+    list-style: none;
+    margin-block-end: 15px;
+}
+.filter-flex {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+}
+.filter-flex svg {
+    width: 35px;
+}
+.margin-nadpis {
+    margin-bottom: 15px;
+}
+.margin-nadpis h3 {
+    font-weight: 300;
+}
+
+/* 3 lines */
+
+.excerpt {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+          line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 25px;
+}
+@media (max-width: 768px) {
+    .main-grid {
+      grid-template-columns: 1fr;
+      padding: 15px;
+    }
+</style>
 <script>
   
 </script>

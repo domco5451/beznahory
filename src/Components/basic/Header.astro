@@ -1,21 +1,101 @@
 ---
 import SwitchMode from "../darkmode/SwitchMode.astro";
+import { Icon } from "Astro-icon/components";
 ---
 
 <header>
   <nav class="main-nav">
     <div class="main-logo">
-      <img src="" alt="" />
-      <h2>beznahory.sk</h2>
+      <div class="logo-container">
+        <Icon class="hamburger" name="hamburger" size={35}/>
+        <h2>beznahory.sk</h2>
+      </div>
     </div>
     <div class="nav-flex">
       <ul class="main-ul">
-        <li><a href="/">Domov</a></li>
-        <li><a href="/blog">Blog</a></li>
-        <li><a href="/hikes">Túry</a></li>
-        <li><a href="/about">O mne</a></li>
+        <li class="nav-item"><a href="/">Domov</a></li>
+        <li class="nav-item"><a href="/blog">Blog</a></li>
+        <li class="nav-item"><a href="/hikes">Túry</a></li>
+        <li class="nav-item"><a href="/about">O mne</a></li>
       </ul>
       <SwitchMode />
     </div>
   </nav>
 </header>
+<style>
+  :global(.main-nav) {
+    display: flex;
+    justify-content: space-around; 
+    align-items: center;
+    padding-inline: 100px;
+    background: #f2f2f2;
+    padding-block: 30px;
+    color: #273541;
+    border-block-end: 1px solid #273541;
+    position: sticky;
+    top: 0;
+}
+.logo-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+:global(.main-ul) {
+    display: flex;
+    list-style: none;
+    gap: 30px;
+    font-size: 1.1rem;
+    align-items: center;
+}
+.main-logo {
+    display: flex;
+}
+:global(.main-ul a) {
+    color: #273541;
+    text-decoration: none;
+}
+.nav-flex {
+    display: flex;
+    gap: 20px;
+}
+.hamburger {
+    display: none;
+}
+@media (max-width: 768px) {
+  .hamburger {
+    display: block;
+    cursor: pointer;
+  }
+  .main-ul {
+    position: fixed;
+    left: -100%;
+    top: 70px;
+    flex-direction: column;
+    gap: 0;
+    background: #f2f2f2;
+    width: 100%;
+    transition: left 0.3s;
+    text-align: center;
+  }
+  :global(.dark .main-ul) {
+    background: #273541;
+  }
+  :global(.dark .main-ul a) {
+    color: white;
+  }
+  .nav-item {
+    margin: 20px 0;
+  }
+  .main-ul.active {
+    left: 0;
+  }
+}
+</style>
+<script>
+  const hamburger = document.querySelector(".hamburger");
+  const navMenu = document.querySelector(".main-ul");
+
+  hamburger?.addEventListener("click", () => {
+    navMenu?.classList.toggle("active");
+  });
+</script>
