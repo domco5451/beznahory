@@ -1,31 +1,100 @@
 ---
 import SwitchMode from "../darkmode/SwitchMode.astro";
 import { Icon } from "Astro-icon/components";
+
+const regions = [
+  { name: "Bratislavský", color: "#bfa900", href: "/" },
+  { name: "Trenčiansky", color: "#b7c0ee", href: "/" },
+  { name: "Košický", color: "rgb(255, 86, 86)", href: "/" },
+  { name: "Prešovský", color: "#6f9c76", href: "/" },
+  { name: "Žilinský", color: "#57cc99", href: "/" },
+  { name: "Nitriansky", color: "#b5ead7", href: "/" },
+  { name: "Banskobystrický", color: "#e5989b", href: "/" },
+  { name: "Trnavský", color: "#f7b267", href: "/" },
+];
 ---
 
 <header>
   <nav class="main-nav">
     <div class="main-logo">
       <div class="logo-container">
-        <Icon class="hamburger" name="hamburger" size={35}/>
+        <Icon class="hamburger" name="hamburger" size={35} />
         <h2>beznahory.sk</h2>
       </div>
     </div>
     <div class="nav-flex">
       <ul class="main-ul">
-        <li class="nav-item"><a href="/">Domov</a></li>
-        <li class="nav-item"><a href="/blog">Blog</a></li>
-        <li class="nav-item"><a href="/hikes">Túry</a></li>
-        <li class="nav-item"><a href="/about">O mne</a></li>
+        <li
+          class:list={[
+            "nav-item",
+            Astro.url.pathname === "/" && "nav-item-active",
+          ]}
+        >
+          <a class="main-link" href="/">Domov</a>
+        </li>
+        <li
+          class:list={[
+            "nav-item",
+            Astro.url.pathname === "/blog" && "nav-item-active",
+          ]}
+        >
+          <a class="main-link" href="/blog">Blog</a>
+        </li>
+        <li
+          class:list={[
+            "nav-item",
+            Astro.url.pathname === "/hikes" && "nav-item-active",
+          ]}
+        >
+          <div class="nav-item-dropdown">
+            <a class="main-link" href="/hikes">Túry</a>
+            <Icon class="arrow-dropdown" name="arrow-down" size={20} />
+          </div>
+          <div class="nav-dropdown">
+            <ul class="nav-dropdown-content">
+              {
+                regions.map((region) => (
+                  <li class="nav-item-dropdown">
+                    <Icon
+                      name="line"
+                      size={40}
+                      stroke-width={3}
+                      stroke={region.color}
+                    />
+                    <div style="padding-block: 10px;">
+                      <a href={region.href}>{region.name}</a>
+                      <span style="font-size: 0.8rem;">
+                        Túry pre {region.name} kraj
+                      </span>
+                    </div>
+                  </li>
+                ))
+              }
+            </ul>
+          </div>
+        </li>
+        <li
+          class:list={[
+            "nav-item",
+            Astro.url.pathname === "/about" && "nav-item-active",
+          ]}
+        >
+          <a class="main-link" href="/about">O mne</a>
+        </li>
       </ul>
       <SwitchMode />
     </div>
   </nav>
 </header>
 <style>
+  .nav-item-dropdown {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+  }
   :global(.main-nav) {
     display: flex;
-    justify-content: space-around; 
+    justify-content: space-around;
     align-items: center;
     padding-inline: 100px;
     background: #f2f2f2;
@@ -34,62 +103,119 @@ import { Icon } from "Astro-icon/components";
     border-block-end: 1px solid #273541;
     position: sticky;
     top: 0;
-}
-.logo-container {
+  }
+  .nav-item-dropdown {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    cursor: pointer;
+  }
+  .nav-dropdown {
+    position: relative;
+  }
+  .nav-dropdown-content {
+    display: none;
+    transition: opacity 0.3s ease;
+    list-style: none;
+    position: absolute;
+    background-color: #f2f2f2;
+    min-width: 240px;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+    top: 10px;
+    border-radius: 10px;
+    border: 1px solid #b9b9b9;
+  }
+  .nav-dropdown-content li {
+    margin: 5px;
+  }
+  .nav-dropdown-content a {
+    color: #273541;
+    text-decoration: none;
+    display: block;
+    font-weight: 300;
+  }
+  .nav-dropdown-content li:hover {
+    background: rgb(218, 218, 218);
+  }
+  .nav-item:hover .nav-dropdown-content {
+    display: block;
+  }
+  .nav-dropdown::after {
+    content: "";
+    display: block;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 100%;
+    height: 20px; /* výška medzery medzi textom a menu */
+    z-index: 9999;
+  }
+  .arrow-dropdown {
+    transition: transform 0.3s ease;
+  }
+  .nav-item:hover .arrow-dropdown {
+    transform: rotate(180deg);
+  }
+  .logo-container {
     display: flex;
     align-items: center;
     gap: 10px;
-}
-:global(.main-ul) {
+  }
+  :global(.main-ul) {
     display: flex;
     list-style: none;
     gap: 30px;
     font-size: 1.1rem;
     align-items: center;
-}
-.main-logo {
+  }
+  .main-logo {
     display: flex;
-}
-:global(.main-ul a) {
+  }
+  :global(.main-ul a) {
     color: #273541;
     text-decoration: none;
-}
-.nav-flex {
+  }
+  .nav-flex {
     display: flex;
     gap: 20px;
-}
-.hamburger {
-    display: none;
-}
-@media (max-width: 768px) {
+  }
   .hamburger {
-    display: block;
-    cursor: pointer;
+    display: none;
   }
-  .main-ul {
-    position: fixed;
-    left: -100%;
-    top: 70px;
-    flex-direction: column;
-    gap: 0;
-    background: #f2f2f2;
-    width: 100%;
-    transition: left 0.3s;
-    text-align: center;
+  .nav-item-active .main-link {
+    font-weight: bold;
   }
-  :global(.dark .main-ul) {
-    background: #273541;
+
+  @media (max-width: 768px) {
+    .hamburger {
+      display: block;
+      cursor: pointer;
+    }
+    .main-ul {
+      position: fixed;
+      left: -100%;
+      top: 70px;
+      flex-direction: column;
+      gap: 0;
+      background: #f2f2f2;
+      width: 100%;
+      transition: left 0.3s;
+      text-align: center;
+    }
+    :global(.dark .main-ul) {
+      background: #273541;
+    }
+    :global(.dark .main-ul a) {
+      color: white;
+    }
+    .nav-item {
+      margin: 20px 0;
+    }
+    .main-ul.active {
+      left: 0;
+    }
   }
-  :global(.dark .main-ul a) {
-    color: white;
-  }
-  .nav-item {
-    margin: 20px 0;
-  }
-  .main-ul.active {
-    left: 0;
-  }
-}
 </style>
 <script>
   const hamburger = document.querySelector(".hamburger");

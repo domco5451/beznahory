@@ -18,7 +18,7 @@ const { frontmatter } = Astro.props;
       <p>Napísal: <strong>{frontmatter.author}</strong></p>
     </div>
     <div class="postDate">
-      <Icon name="date" size={30} />
+      <Icon class="avatar" name="date" size={30} />
       <p>
         Uverejnené: <strong>{frontmatter.pubDate}</strong>
       </p>
@@ -84,6 +84,7 @@ const { frontmatter } = Astro.props;
     top: 0;
     padding: 15px;
     margin-left: 15px;
+    z-index: -1;
 }
 .post-ratings-wrapper {
     display: flex;

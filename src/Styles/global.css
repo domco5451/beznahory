@@ -50,3 +50,6 @@ html.dark {
 .dark .hamburger {
     fill: white;
 }
+.dark .nav-item-dropdown .arrow-dropdown {
+    fill: white;
+}

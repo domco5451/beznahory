@@ -35,6 +35,7 @@ import Slovensko from "../../Components/Slovensko.astro";
     }
 
     const regions = svg.querySelectorAll("g[class]");
+    
 
     regions.forEach(region => {
       
@@ -42,7 +43,8 @@ import Slovensko from "../../Components/Slovensko.astro";
 
       region.addEventListener("mouseenter", function () {
       svg.appendChild(region);
+      });
     });
   });
-});
 </script>
+ 
