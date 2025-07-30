@@ -2,12 +2,12 @@
     padding: 0;
     margin: 0;
     box-sizing: border-box;
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: "Inter", Arial, Helvetica, sans-serif
 }
 
 html {
     scrollbar-gutter: stable;
-    background: #f2f2f2;
+    background: #ffffff;
 }
 
 img {
@@ -16,40 +16,78 @@ img {
 
 /* Dark-mode */
 
+/* Global */
+
 #themeToggle {
     cursor: pointer;
 }
 
 html.dark {
-    background: #273541;
-    color: white;
+    background: #1b1b1b;
+    color: rgb(255, 255, 255);
 }
+
+/* Header */
 
 .dark .main-nav {
-    background: #273541;
-    color: white;
-    border-block-end: 1px solid white;
+    background: #1b1b1b;
+    color: rgb(255, 255, 255);
+    border-block-end: 1px solid rgb(161, 161, 161);
 }
-
-.dark .main-ul a {
-    color: white;
+.dark .hamburger {
+    fill: rgb(161, 161, 161);
+}
+.dark .nav-item-dropdown .arrow-dropdown {
+    fill: rgb(161, 161, 161);
 }
 .dark .main-ul {
-    background: #273541;
+    background: #1b1b1b;
 }
-.dark .wrapper {
-    background-color: #725d5d;
-    box-shadow: 1px 1px 10px #242424;
+.dark .main-ul a {
+    color: rgb(209, 209, 209);
 }
+.dark .region-description {
+    color: rgb(255, 255, 255);
+}
+.dark .region-name {
+    color: rgb(255, 255, 255);
+}
+.dark .dropdown-item-link:hover {
+    background: #2b2b2b;
+}
+.dark .main-link:hover {
+    background: #2b2b2b;
+    color: rgb(245, 173, 255);
+}
+.dark .main-link:hover a {
+    background: #2b2b2b;
+    color: rgb(245, 173, 255);
+}
+
+/* MarkdownPostLayout */
+
 .dark .star-filled {
-    fill: #ffffff;
+    fill: rgb(255, 255, 255);
 }
 .dark .post-container, .dark .ratings {
     background: #725d5d;
 }
-.dark .hamburger {
-    fill: white;
+
+/* Blog */
+
+.dark .header-blog h2 a {
+    color: rgb(245, 173, 255);
 }
-.dark .nav-item-dropdown .arrow-dropdown {
-    fill: white;
+.dark .cursor-flex {
+    background: white;
+    color: #1b1b1b;
+}
+.dark .cursor-flex:hover {
+   background: rgb(201, 201, 201); 
+}
+.dark .cursor {
+    fill: rgb(0, 0, 0);   
+}
+.dark .wrapper {
+    border: 1px solid rgb(161, 161, 161);
 }

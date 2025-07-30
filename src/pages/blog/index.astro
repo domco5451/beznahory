@@ -1,104 +1,108 @@
 ---
 import { Image } from "astro:assets";
+import { Icon } from "Astro-icon/components";
 import PageLayout from "../../layouts/PageLayout.astro";
-const allPosts = Object.values(
-  import.meta.glob("../posts/*.mdx", { eager: true })
-);
+
+const allPosts = Object.values(import.meta.glob("../posts/*.mdx", { eager: true }))
 ---
 
 <PageLayout title="Blog">
   <div class="container">
-    <div class="filter-flex">
       <h1>Blog</h1>
-      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 1 1-3 0m3 0a1.5 1.5 0 1 0-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-9.75 0h9.75" />
-      </svg>
-    </div>
     <section class="main-grid">
       {
         allPosts.map((post: any, i: number) => (
           <article class="wrapper">
             <Image
-              class="thumbnail"
-              src={post.frontmatter.thumbnail.url}
-              alt={post.frontmatter.thumbnail.alt}
-              inferSize={true}
-              layout="constrained"
-              loading={i < 3 ? "eager" : "lazy"}
-              fetchpriority="high"
-            />
-            <div class="content-wrapper">
-              <div class="margin-nadpis">
-                <h2>{post.frontmatter.title}</h2>
-                <h3><i>"{post.frontmatter.description}"</i></h3>
-              </div>
-              <p class="excerpt">{post.frontmatter.excerpt}</p>
-              <div class="wrapper-flex">
-                <div class="author-flex">
-                  <Image
-                    width={50}
-                    class="pfp"
-                    src={post.frontmatter.pfp.url}
-                    alt={post.frontmatter.pfp.alt}
-                    inferSize={true}
-                    layout="constrained"
-                    loading={i < 3 ? "eager" : "lazy"}
-                  />
-                  <div>
-                    <p><strong>{post.frontmatter.author}</strong></p>
-                    <p>{post.frontmatter.pubDate}</p>
-                  </div>
+                  class="thumbnail"
+                  src={post.frontmatter.thumbnail.url}
+                  alt={post.frontmatter.thumbnail.alt}
+                  inferSize={true}
+                  layout="constrained"
+                  loading={i < 4 ? "eager" : "lazy"}
+                  fetchpriority="high"
+                />
+            <header class="header-blog">
+              <a href={post.url}>
+              </a>
+              <h2><a href={post.url}>{post.frontmatter.title}</a></h2>
+              <p>{post.frontmatter.minutesRead}</p>
+            </header>
+            <p class="description">{post.frontmatter.description}</p>
+            <footer class="wrapper-flex">
+              <div class="author-flex">
+                <Image
+                  width={50}
+                  class="pfp"
+                  src={post.frontmatter.pfp.url}
+                  alt={post.frontmatter.pfp.alt}
+                  inferSize={true}
+                  layout="constrained"
+                  loading={i < 2 ? "eager" : "lazy"}
+                />
+                <div>
+                  <p><strong>{post.frontmatter.author}</strong></p>
+                  <p>{post.frontmatter.pubDate}</p>
                 </div>
-                    <a class="arrow-flex" href={post.url}>
-                      <span>Čítať ďalej</span>
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="-5 0 24 24"
-                        stroke-width="1.5"
-                        stroke="currentColor"
-                        class="arrow"
-                      >
-                        <path
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          d="m8.25 4.5 7.5 7.5-7.5 7.5"
-                        />
-                      </svg>
-                    </a>
               </div>
-            </div>
+              <a class="cursor-flex" href={post.url}>
+                <span>Čítať ďalej</span>
+                <Icon class="cursor" name="cursor" size={15} />
+              </a>
+              </footer>
           </article>
         ))
       }
     </section>
   </div>
 </PageLayout>
-<style is:global>
-  .container {
-    max-width: 1300px;
+<style>
+.container {
+    max-width: 1400px;
     margin: auto;
 }
 .container h1 {
-    margin-block: 15px;
+    margin-block: 30px;
+    text-align: center;
 }
-.wrapper {
-    box-shadow: 1px 1px 10px rgb(175, 175, 175);
+:global(.cursor) {
+    margin-left: 5px;
+    fill: white;
+}
+header {
+  padding: 20px 30px 30px 30px;
+}
+header h2 {
+  margin-block-end: 20px;
+}
+header h2 a {
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 1.8rem;
+}
+header h2 a:hover {
+  text-decoration: underline;
+}
+.description {
+  padding-inline: 30px;
+}
+footer {
+  padding: 30px;
+}
+:global(.wrapper) {
     border-radius: 15px;
-}
-.wrapper:hover {
-    transform: scale(1.05);
-    transition-duration: 500ms;
+    border: 1px solid #b9b9b9;
 }
 .main-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 40px;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
 }
 .thumbnail {
     max-width: 100%;
-    height: 50%;
-    border-radius: 15px 15px 0 0;
+    height: 300px;
+    border-radius: 13px 13px 0 0;
+    object-fit: cover;
 }
 .author-flex {
     display: flex;
@@ -117,33 +121,20 @@ const allPosts = Object.values(
     object-fit: cover;
     border-radius: 100%;
 }
-.arrow-flex {
+:global(.cursor-flex) {
     display: flex;
     align-items: center;
     background: #000000;
-    padding-inline: 8px;
+    padding: 8px;
     color: white;
     text-decoration: none;
+    border-radius: 5px;
 }
-.arrow-flex:hover {
-    background-color: rgb(14, 136, 69);
+:global(.cursor-flex:hover) {
+    background-color: rgb(146, 146, 146);
 }
-.arrow-flex:hover .arrow{
-    transform: translateX(3px);
-    transition-duration: 300ms;
-}
-.arrow {
-    width: 30px;
-}
-
 .content-wrapper {
-    padding: 20px;
-}
-.tags {
-    display: flex;
-    gap: 20px;
-    list-style: none;
-    margin-block-end: 15px;
+    padding: 30px;
 }
 .filter-flex {
     display: flex;
@@ -158,18 +149,6 @@ const allPosts = Object.values(
 }
 .margin-nadpis h3 {
     font-weight: 300;
-}
-
-/* 3 lines */
-
-.excerpt {
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-          line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  line-height: 25px;
 }
 @media (max-width: 768px) {
     .main-grid {

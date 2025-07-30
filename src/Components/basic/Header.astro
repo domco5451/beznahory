@@ -3,14 +3,53 @@ import SwitchMode from "../darkmode/SwitchMode.astro";
 import { Icon } from "Astro-icon/components";
 
 const regions = [
-  { name: "Bratislavský", color: "#bfa900", href: "/" },
-  { name: "Trenčiansky", color: "#b7c0ee", href: "/" },
-  { name: "Košický", color: "rgb(255, 86, 86)", href: "/" },
-  { name: "Prešovský", color: "#6f9c76", href: "/" },
-  { name: "Žilinský", color: "#57cc99", href: "/" },
-  { name: "Nitriansky", color: "#b5ead7", href: "/" },
-  { name: "Banskobystrický", color: "#e5989b", href: "/" },
-  { name: "Trnavský", color: "#f7b267", href: "/" },
+  { name: "Bratislavský", color: "#bfa900", href: "/", description: "Túry pre Bratislavský kraj" },
+  { name: "Trenčiansky", color: "#b7c0ee", href: "/", description: "Túry pre Trenčiansky kraj" },
+  { name: "Košický", color: "rgb(255, 86, 86)", href: "/", description: "Túry pre Košický kraj" },
+  { name: "Prešovský", color: "#6f9c76", href: "/", description: "Túry pre Prešovský kraj" },
+  { name: "Žilinský", color: "#57cc99", href: "/", description: "Túry pre Žilinský kraj" },
+  { name: "Nitriansky", color: "#b5ead7", href: "/", description: "Túry pre Nitriansky kraj" },
+  { name: "Banskobystrický", color: "#e5989b", href: "/", description: "Túry pre Banskobystrický kraj" },
+  { name: "Trnavský", color: "#f7b267", href: "/", description: "Túry pre Trnavský kraj" },
+];
+
+const navItems = [
+  {
+    name: "Domov",
+    href: "/",
+    hasDropdown: false,
+  },
+  {
+    name: "Blog",
+    href: "/blog",
+    hasDropdown: false,
+  },
+  {
+    name: "Túry",
+    href: "/hikes",
+    hasDropdown: true,
+    dropdownItems: regions,
+  },
+  {
+    name: "Turistická mapa",
+    href: "/turistic-map",
+    hasDropdown: false,
+  },
+  {
+    name: "Plánovač túr",
+    href: "/planovac-tur",
+    hasDropdown: false,
+  },
+  {
+    name: "Kalendár akcií",
+    href: "/calendar",
+    hasDropdown: false,
+  },
+  {
+    name: "Odporúčanie",
+    href: "/odporucanie",
+    hasDropdown: false,
+  },
 ];
 ---
 
@@ -24,85 +63,106 @@ const regions = [
     </div>
     <div class="nav-flex">
       <ul class="main-ul">
-        <li
-          class:list={[
-            "nav-item",
-            Astro.url.pathname === "/" && "nav-item-active",
-          ]}
-        >
-          <a class="main-link" href="/">Domov</a>
-        </li>
-        <li
-          class:list={[
-            "nav-item",
-            Astro.url.pathname === "/blog" && "nav-item-active",
-          ]}
-        >
-          <a class="main-link" href="/blog">Blog</a>
-        </li>
-        <li
-          class:list={[
-            "nav-item",
-            Astro.url.pathname === "/hikes" && "nav-item-active",
-          ]}
-        >
-          <div class="nav-item-dropdown">
-            <a class="main-link" href="/hikes">Túry</a>
-            <Icon class="arrow-dropdown" name="arrow-down" size={20} />
-          </div>
-          <div class="nav-dropdown">
-            <ul class="nav-dropdown-content">
-              {
-                regions.map((region) => (
-                  <li class="nav-item-dropdown">
-                    <Icon
-                      name="line"
-                      size={40}
-                      stroke-width={3}
-                      stroke={region.color}
-                    />
-                    <div style="padding-block: 10px;">
-                      <a href={region.href}>{region.name}</a>
-                      <span style="font-size: 0.8rem;">
-                        Túry pre {region.name} kraj
-                      </span>
-                    </div>
-                  </li>
-                ))
-              }
-            </ul>
-          </div>
-        </li>
-        <li
-          class:list={[
-            "nav-item",
-            Astro.url.pathname === "/about" && "nav-item-active",
-          ]}
-        >
-          <a class="main-link" href="/about">O mne</a>
-        </li>
+        {
+          navItems.map((item) => (
+            <li
+              class:list={[
+                "nav-item",
+                Astro.url.pathname === item.href && "nav-item-active",
+              ]}
+            >
+              {item.hasDropdown ? (
+                <>
+                  <div class="nav-item-dropdown main-link">
+                    <a class="dropdown-link" href={item.href}>
+                      {item.name}
+                    </a>
+                    <Icon class="arrow-dropdown" name="arrow-down" size={20} />
+                  </div>
+                  <div class="nav-dropdown">
+                    <ul class="nav-dropdown-content">
+                      {item.dropdownItems?.map((region) => (
+                        <li>
+                          <a href={region.href} class="dropdown-item-link" style="margin: 8px;">
+                            <div style={{backgroundColor: region.color}} class="region-bar"></div>
+                            <div>
+                              <span style="margin-block: 3px;" class="region-name">{region.name}</span>
+                              <span class="region-description">
+                                {region.description}
+                              </span>
+                            </div>
+                          </a>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </>
+              ) : (
+                <a class="main-link" href={item.href}>
+                  {item.name}
+                </a>
+              )}
+            </li>
+          ))
+        }
       </ul>
       <SwitchMode />
     </div>
   </nav>
 </header>
 <style>
+  header {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+  }
+  .region-bar {
+    width: 4px;
+    height: 30px;
+    background: red;
+  }
   .nav-item-dropdown {
     display: flex;
     align-items: center;
     cursor: pointer;
+  }
+  .main-link {
+    padding-inline: 8px;
+    padding-block: 12px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  :global(.main-link:hover) {
+    background: rgb(236, 247, 255);
+    color: rgb(0, 149, 255);
+  }
+  .dropdown-link {
+    color: inherit;
+    text-decoration: none;
+  }
+  :global(.dropdown-item-link:hover) {
+    background: #f3f3f3;
+  }
+  .region-name {
+    font-weight: 500;
+    display: block;
+  }
+  :global(.region-description) {
+    font-size: 0.8rem;
+    color: #666;
+    display: block;
   }
   :global(.main-nav) {
     display: flex;
     justify-content: space-around;
     align-items: center;
     padding-inline: 100px;
-    background: #f2f2f2;
-    padding-block: 30px;
+    padding-block: 8px;
+    background: #ffffff;
     color: #273541;
-    border-block-end: 1px solid #273541;
-    position: sticky;
-    top: 0;
+    border-block-end: 1px solid #b9b9b9;
   }
   .nav-item-dropdown {
     display: flex;
@@ -118,25 +178,23 @@ const regions = [
     transition: opacity 0.3s ease;
     list-style: none;
     position: absolute;
-    background-color: #f2f2f2;
-    min-width: 240px;
-    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    background-color: #ffffff;
+    min-width: 245px;
+    box-shadow: 0px 0px 10px rgba(177, 177, 177, 0.2);
     z-index: 1;
-    top: 10px;
+    top: 3px;
     border-radius: 10px;
     border: 1px solid #b9b9b9;
   }
-  .nav-dropdown-content li {
-    margin: 5px;
+  :global(.dark .nav-dropdown-content) {
+    background-color: #1b1b1b;
+    border: 1px solid #ffffff;
   }
-  .nav-dropdown-content a {
-    color: #273541;
-    text-decoration: none;
-    display: block;
-    font-weight: 300;
+  .nav-dropdown-content li {
+    margin: 0;
   }
   .nav-dropdown-content li:hover {
-    background: rgb(218, 218, 218);
+    background: transparent;
   }
   .nav-item:hover .nav-dropdown-content {
     display: block;
@@ -148,14 +206,18 @@ const regions = [
     left: 0;
     right: 0;
     top: 100%;
-    height: 20px; /* výška medzery medzi textom a menu */
+    height: 5px; /* výška medzery medzi textom a menu */
     z-index: 9999;
   }
   .arrow-dropdown {
     transition: transform 0.3s ease;
   }
-  .nav-item:hover .arrow-dropdown {
+  :global(.nav-item:hover .arrow-dropdown) {
     transform: rotate(180deg);
+    fill: rgb(0, 149, 255);
+  }
+  :global(.dark .nav-item:hover .arrow-dropdown) {
+    fill: rgb(245, 173, 255);
   }
   .logo-container {
     display: flex;
@@ -165,7 +227,7 @@ const regions = [
   :global(.main-ul) {
     display: flex;
     list-style: none;
-    gap: 30px;
+    gap: 15px;
     font-size: 1.1rem;
     align-items: center;
   }
@@ -186,7 +248,16 @@ const regions = [
   .nav-item-active .main-link {
     font-weight: bold;
   }
-
+  .dropdown-item-link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+    text-decoration: none;
+    color: #273541;
+    border-radius: 8px;
+    margin: 2px;
+  }
   @media (max-width: 768px) {
     .hamburger {
       display: block;
@@ -198,16 +269,10 @@ const regions = [
       top: 70px;
       flex-direction: column;
       gap: 0;
-      background: #f2f2f2;
+      background: #ffffff;
       width: 100%;
       transition: left 0.3s;
       text-align: center;
-    }
-    :global(.dark .main-ul) {
-      background: #273541;
-    }
-    :global(.dark .main-ul a) {
-      color: white;
     }
     .nav-item {
       margin: 20px 0;

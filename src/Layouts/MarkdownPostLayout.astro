@@ -1,8 +1,11 @@
 ---
-import BlogLayout from "./BlogLayout.astro";
+import { Icon } from "Astro-icon/components";
 import BaseHead from "../Components/head/BaseHead.astro"
 import Header from "../Components/basic/Header.astro";
 import Footer from "../Components/basic/Footer.astro";
+import DifficultyRating from "../Components/ratings/DifficultyRating.astro";
+import ViewsRating from "../Components/ratings/ViewsRating.astro";
+import "../Styles/global.css";
 
 const { frontmatter } = Astro.props;
 ---
@@ -13,10 +16,127 @@ const { frontmatter } = Astro.props;
 <body>
   <Header />
   <main>
-    <BlogLayout {frontmatter}>
-        <slot />
-    </BlogLayout>
+    <div class="post-ratings-wrapper">
+      <section class="post-container">
+        <h1>{frontmatter.title}</h1>
+        <div class="postAuthor">
+          <Icon name="person" size={30} />
+          <p>Napísal: <strong>{frontmatter.author}</strong></p>
+        </div>
+        <div class="postDate">
+          <Icon class="avatar" name="date" size={30} />
+          <p>
+            Uverejnené: <strong>{frontmatter.pubDate}</strong>
+          </p>
+        </div>
+        <section class="content">
+          <slot />
+        </section>
+      </section>
+      {/* Ratings */}
+      <section id="hodnotenie" class="ratings">
+        <div class="rating-icons">
+          <Icon name="lock" size={35} />
+          <p>Obtiažnosť</p>
+        </div>
+        <DifficultyRating {frontmatter} />
+        <hr />
+        <div class="rating-icons">
+          <Icon name="camera" size={35} />
+          <p>Výhlady</p>
+        </div>
+        <ViewsRating {frontmatter} />
+        <hr />
+        <div class="rating-icons">
+          <Icon name="road" size={35} />
+          <p>Dĺžka</p>
+        </div>
+        <p class="rating-text">{frontmatter.ratings.length}</p>
+        <hr />
+        <div class="rating-icons">
+          <Icon name="clock" size={35} />
+          <p>Trvanie</p>
+        </div>
+        <p class="rating-text">{frontmatter.ratings.time}</p>
+        <hr />
+        <div class="rating-icons">
+          <Icon name="elevation" size={35} />
+          <p>Terén</p>
+        </div>
+        <p class="rating-text">{frontmatter.ratings.terrain}</p>
+      </section>
+    </div>
   </main>
   <Footer />
 </body>
 </html>
+
+<style>
+  .rating-text {
+    font-size: 1.5rem;
+    color: green;
+  }
+  .postAuthor, .postDate {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-block: 15px;
+  }
+  :global(.post-container) {
+    max-width: 1000px;
+    background: #ffffff;
+    padding: 15px;
+  }
+  :global(.ratings) {
+    width: 250px;
+    height: fit-content;
+    background: #ffffff;
+    position: sticky;
+    top: 0;
+    padding: 15px;
+    margin-left: 15px;
+    z-index: -1;
+  }
+  .post-ratings-wrapper {
+    display: flex;
+    justify-content: center;
+    margin-top: 50px;
+  }
+  :global(.star-filled) {
+    fill: #000000;
+  }
+  .ratings p {
+    font-size: 1.1rem;
+    font-weight: bold;
+    margin-block: 5px;
+  }
+  .rating-icons {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-block-end: 10px;
+  }
+  /* content */
+  :global(.content .image) {
+    width: 100%;
+    height: auto;
+    margin-block: 15px;
+  }
+  :global(.content h2) {
+    margin-block: 15px;
+  }
+  :global(.content p) {
+    line-height: 1.5rem;
+    margin-bottom: 0.8rem;
+  }
+  @media (max-width: 768px) {
+    .post-ratings-wrapper {
+      flex-direction: column;
+      align-items: center;
+    }
+    :global(.ratings) {
+      margin-left: 0;
+      margin-top: 20px;
+    }
+  }
+</style>
