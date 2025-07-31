@@ -64,16 +64,18 @@ const allPosts = Object.values(import.meta.glob("../posts/*.mdx", { eager: true 
 .container h1 {
     margin-block: 30px;
     text-align: center;
+    font-size: 2.5rem;
 }
-:global(.cursor) {
+.cursor {
     margin-left: 5px;
-    fill: white;
+    fill: var(--cursor-icon);
 }
 header {
   padding: 20px 30px 30px 30px;
 }
 header h2 {
   margin-block-end: 20px;
+  color: var(--nav-hover-text);
 }
 header h2 a {
   text-decoration: none;
@@ -89,9 +91,9 @@ header h2 a:hover {
 footer {
   padding: 30px;
 }
-:global(.wrapper) {
+.wrapper {
     border-radius: 15px;
-    border: 1px solid #b9b9b9;
+    border: 1px solid var(--border-color);
 }
 .main-grid {
     display: grid;
@@ -121,17 +123,21 @@ footer {
     object-fit: cover;
     border-radius: 100%;
 }
-:global(.cursor-flex) {
+.cursor-flex {
     display: flex;
     align-items: center;
-    background: #000000;
+    background: var(--cursor-bg);
     padding: 8px;
-    color: white;
+    color: var(--cursor-text);
     text-decoration: none;
     border-radius: 5px;
 }
-:global(.cursor-flex:hover) {
-    background-color: rgb(146, 146, 146);
+.cursor-flex:hover {
+    background-color: var(--nav-hover-bg);
+    color: var(--nav-hover-text);
+}
+.cursor-flex:hover .cursor {
+    fill: var(--nav-hover-text);
 }
 .content-wrapper {
     padding: 30px;

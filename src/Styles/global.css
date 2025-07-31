@@ -1,3 +1,6 @@
+@import "tailwindcss";
+@custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
+
 * {
     padding: 0;
     margin: 0;
@@ -7,87 +10,55 @@
 
 html {
     scrollbar-gutter: stable;
-    background: #ffffff;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+}
+
+body {
+    background: var(--bg-primary);
+    color: var(--text-primary);
 }
 
 img {
     display: block;
 }
 
-/* Dark-mode */
+/* dark-mode by: https://astro-tips.dev/recipes/dark-mode/ */
 
-/* Global */
-
-#themeToggle {
-    cursor: pointer;
-}
-
-html.dark {
-    background: #1b1b1b;
-    color: rgb(255, 255, 255);
-}
-
-/* Header */
-
-.dark .main-nav {
-    background: #1b1b1b;
-    color: rgb(255, 255, 255);
-    border-block-end: 1px solid rgb(161, 161, 161);
-}
-.dark .hamburger {
-    fill: rgb(161, 161, 161);
-}
-.dark .nav-item-dropdown .arrow-dropdown {
-    fill: rgb(161, 161, 161);
-}
-.dark .main-ul {
-    background: #1b1b1b;
-}
-.dark .main-ul a {
-    color: rgb(209, 209, 209);
-}
-.dark .region-description {
-    color: rgb(255, 255, 255);
-}
-.dark .region-name {
-    color: rgb(255, 255, 255);
-}
-.dark .dropdown-item-link:hover {
-    background: #2b2b2b;
-}
-.dark .main-link:hover {
-    background: #2b2b2b;
-    color: rgb(245, 173, 255);
-}
-.dark .main-link:hover a {
-    background: #2b2b2b;
-    color: rgb(245, 173, 255);
+/* Theme Variables */
+:root,
+:root[data-theme="light"] {
+  --bg-primary: #ffffff;
+  --bg-secondary: #f8f9fa;
+  --text-primary: #273541;
+  --text-secondary: #666;
+  --border-color: #b9b9b9;
+  --nav-bg: #ffffff;
+  --nav-hover-bg: rgb(236, 247, 255);
+  --nav-hover-text: rgb(0, 149, 255);
+  --dropdown-bg: #ffffff;
+  --dropdown-hover: #f3f3f3;
+  --cursor-bg: #000000;
+  --cursor-text: white;
+  --cursor-icon: white;
+  --wrapper-border: #b9b9b9;
+  color-scheme: light;
 }
 
-/* MarkdownPostLayout */
-
-.dark .star-filled {
-    fill: rgb(255, 255, 255);
-}
-.dark .post-container, .dark .ratings {
-    background: #725d5d;
-}
-
-/* Blog */
-
-.dark .header-blog h2 a {
-    color: rgb(245, 173, 255);
-}
-.dark .cursor-flex {
-    background: white;
-    color: #1b1b1b;
-}
-.dark .cursor-flex:hover {
-   background: rgb(201, 201, 201); 
-}
-.dark .cursor {
-    fill: rgb(0, 0, 0);   
-}
-.dark .wrapper {
-    border: 1px solid rgb(161, 161, 161);
+:root[data-theme="dark"] {
+  --bg-primary: #1b1b1b;
+  --bg-secondary: #2b2b2b;
+  --text-primary: #ffffff;
+  --text-secondary: #cccccc;
+  --border-color: #666;
+  --nav-bg: #1b1b1b;
+  --nav-hover-bg: #2a202c;
+  --nav-hover-text: #f5adff;
+  --dropdown-bg: #1b1b1b;
+  --dropdown-hover: #2b2b2b;
+  --cursor-bg: white;
+  --cursor-text: #1b1b1b;
+  --cursor-icon: black;
+  --wrapper-border: #666;
+  color-scheme: dark;
 }

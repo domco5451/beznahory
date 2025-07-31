@@ -1,16 +1,56 @@
 ---
-import SwitchMode from "../darkmode/SwitchMode.astro";
 import { Icon } from "Astro-icon/components";
+import ThemeToggle from "../theme/ThemeToggle.astro";
 
 const regions = [
-  { name: "Bratislavský", color: "#bfa900", href: "/", description: "Túry pre Bratislavský kraj" },
-  { name: "Trenčiansky", color: "#b7c0ee", href: "/", description: "Túry pre Trenčiansky kraj" },
-  { name: "Košický", color: "rgb(255, 86, 86)", href: "/", description: "Túry pre Košický kraj" },
-  { name: "Prešovský", color: "#6f9c76", href: "/", description: "Túry pre Prešovský kraj" },
-  { name: "Žilinský", color: "#57cc99", href: "/", description: "Túry pre Žilinský kraj" },
-  { name: "Nitriansky", color: "#b5ead7", href: "/", description: "Túry pre Nitriansky kraj" },
-  { name: "Banskobystrický", color: "#e5989b", href: "/", description: "Túry pre Banskobystrický kraj" },
-  { name: "Trnavský", color: "#f7b267", href: "/", description: "Túry pre Trnavský kraj" },
+  {
+    name: "Bratislavský",
+    color: "#bfa900",
+    href: "/",
+    description: "Túry pre Bratislavský kraj",
+  },
+  {
+    name: "Trenčiansky",
+    color: "#b7c0ee",
+    href: "/",
+    description: "Túry pre Trenčiansky kraj",
+  },
+  {
+    name: "Košický",
+    color: "rgb(255, 86, 86)",
+    href: "/",
+    description: "Túry pre Košický kraj",
+  },
+  {
+    name: "Prešovský",
+    color: "#6f9c76",
+    href: "/",
+    description: "Túry pre Prešovský kraj",
+  },
+  {
+    name: "Žilinský",
+    color: "#57cc99",
+    href: "/",
+    description: "Túry pre Žilinský kraj",
+  },
+  {
+    name: "Nitriansky",
+    color: "#b5ead7",
+    href: "/",
+    description: "Túry pre Nitriansky kraj",
+  },
+  {
+    name: "Banskobystrický",
+    color: "#e5989b",
+    href: "/",
+    description: "Túry pre Banskobystrický kraj",
+  },
+  {
+    name: "Trnavský",
+    color: "#f7b267",
+    href: "/",
+    description: "Túry pre Trnavský kraj",
+  },
 ];
 
 const navItems = [
@@ -54,7 +94,7 @@ const navItems = [
 ---
 
 <header>
-  <nav class="main-nav">
+  <nav>
     <div class="main-logo">
       <div class="logo-container">
         <Icon class="hamburger" name="hamburger" size={35} />
@@ -73,20 +113,32 @@ const navItems = [
             >
               {item.hasDropdown ? (
                 <>
-                  <div class="nav-item-dropdown main-link">
-                    <a class="dropdown-link" href={item.href}>
+                  <a href={item.href} class="nav-item-dropdown main-link">
+                    <span class="dropdown-link">
                       {item.name}
-                    </a>
+                    </span>
                     <Icon class="arrow-dropdown" name="arrow-down" size={20} />
-                  </div>
+                  </a>
                   <div class="nav-dropdown">
                     <ul class="nav-dropdown-content">
                       {item.dropdownItems?.map((region) => (
                         <li>
-                          <a href={region.href} class="dropdown-item-link" style="margin: 8px;">
-                            <div style={{backgroundColor: region.color}} class="region-bar"></div>
+                          <a
+                            href={region.href}
+                            class="dropdown-item-link"
+                            style="margin: 8px;"
+                          >
+                            <div
+                              style={{ backgroundColor: region.color }}
+                              class="region-bar"
+                            />
                             <div>
-                              <span style="margin-block: 3px;" class="region-name">{region.name}</span>
+                              <span
+                                style="margin-block: 3px;"
+                                class="region-name"
+                              >
+                                {region.name}
+                              </span>
                               <span class="region-description">
                                 {region.description}
                               </span>
@@ -106,7 +158,7 @@ const navItems = [
           ))
         }
       </ul>
-      <SwitchMode />
+      <ThemeToggle />
     </div>
   </nav>
 </header>
@@ -116,10 +168,45 @@ const navItems = [
     top: 0;
     z-index: 1000;
   }
+  nav {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding-inline: 100px;
+    padding-block: 8px;
+    background: var(--nav-bg);
+    color: var(--text-primary);
+    border-block-end: 1px solid var(--border-color);
+  }
+  .main-logo {
+    display: flex;
+  }
+  .logo-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .hamburger {
+    display: none;
+    fill: var(--text-primary);
+  }
+  h2 {
+    font-size: 1.5rem;
+  }
+  .nav-flex {
+    display: flex;
+    gap: 20px;
+  }
+  .main-ul {
+    display: flex;
+    list-style: none;
+    gap: 15px;
+    font-size: 1.1rem;
+    align-items: center;
+  }
   .region-bar {
     width: 4px;
-    height: 30px;
-    background: red;
+    height: 35px;
   }
   .nav-item-dropdown {
     display: flex;
@@ -134,41 +221,38 @@ const navItems = [
     align-items: center;
     gap: 5px;
   }
-  :global(.main-link:hover) {
-    background: rgb(236, 247, 255);
-    color: rgb(0, 149, 255);
+  nav .main-link:hover {
+    background: var(--nav-hover-bg);
+    color: var(--nav-hover-text);
   }
-  .dropdown-link {
-    color: inherit;
-    text-decoration: none;
+  nav .nav-item-dropdown:hover .dropdown-link {
+    color: var(--nav-hover-text);
   }
-  :global(.dropdown-item-link:hover) {
-    background: #f3f3f3;
+  .nav-dropdown-content li:hover {
+    background: var(--nav-hover-bg);
+  }
+  .nav-dropdown-content li {
+    margin: 7px;
+    border-radius: 5px;
   }
   .region-name {
     font-weight: 500;
     display: block;
   }
-  :global(.region-description) {
+  .region-description {
     font-size: 0.8rem;
-    color: #666;
+    color: var(--text-secondary);
     display: block;
-  }
-  :global(.main-nav) {
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    padding-inline: 100px;
-    padding-block: 8px;
-    background: #ffffff;
-    color: #273541;
-    border-block-end: 1px solid #b9b9b9;
   }
   .nav-item-dropdown {
     display: flex;
     align-items: center;
     gap: 5px;
     cursor: pointer;
+    text-decoration: none;
+  }
+  .dropdown-link {
+    color: inherit;
   }
   .nav-dropdown {
     position: relative;
@@ -178,23 +262,13 @@ const navItems = [
     transition: opacity 0.3s ease;
     list-style: none;
     position: absolute;
-    background-color: #ffffff;
-    min-width: 245px;
+    background-color: var(--dropdown-bg);
+    min-width: 250px;
     box-shadow: 0px 0px 10px rgba(177, 177, 177, 0.2);
     z-index: 1;
     top: 3px;
     border-radius: 10px;
-    border: 1px solid #b9b9b9;
-  }
-  :global(.dark .nav-dropdown-content) {
-    background-color: #1b1b1b;
-    border: 1px solid #ffffff;
-  }
-  .nav-dropdown-content li {
-    margin: 0;
-  }
-  .nav-dropdown-content li:hover {
-    background: transparent;
+    border: 1px solid var(--border-color);
   }
   .nav-item:hover .nav-dropdown-content {
     display: block;
@@ -211,50 +285,30 @@ const navItems = [
   }
   .arrow-dropdown {
     transition: transform 0.3s ease;
+    fill: var(--text-primary);
   }
-  :global(.nav-item:hover .arrow-dropdown) {
+  .nav-item:hover .arrow-dropdown {
     transform: rotate(180deg);
-    fill: rgb(0, 149, 255);
+    fill: var(--nav-hover-text);
   }
-  :global(.dark .nav-item:hover .arrow-dropdown) {
-    fill: rgb(245, 173, 255);
-  }
-  .logo-container {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-  :global(.main-ul) {
-    display: flex;
-    list-style: none;
-    gap: 15px;
-    font-size: 1.1rem;
-    align-items: center;
-  }
-  .main-logo {
-    display: flex;
-  }
-  :global(.main-ul a) {
-    color: #273541;
+  .main-ul a {
+    color: var(--text-primary);
     text-decoration: none;
   }
-  .nav-flex {
-    display: flex;
-    gap: 20px;
-  }
-  .hamburger {
-    display: none;
-  }
   .nav-item-active .main-link {
-    font-weight: bold;
+    color: var(--nav-hover-text);
   }
+  .nav-item-active .dropdown-link {
+    color: var(--nav-hover-text);
+  }
+
   .dropdown-item-link {
     display: flex;
     align-items: center;
     gap: 10px;
     padding: 10px;
     text-decoration: none;
-    color: #273541;
+    color: var(--text-primary);
     border-radius: 8px;
     margin: 2px;
   }
@@ -269,7 +323,7 @@ const navItems = [
       top: 70px;
       flex-direction: column;
       gap: 0;
-      background: #ffffff;
+      background: var(--nav-bg);
       width: 100%;
       transition: left 0.3s;
       text-align: center;
