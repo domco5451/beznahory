@@ -34,8 +34,8 @@ img {
   --text-secondary: #666;
   --border-color: #b9b9b9;
   --nav-bg: #ffffff;
-  --nav-hover-bg: rgb(236, 247, 255);
-  --nav-hover-text: rgb(0, 149, 255);
+  --nav-hover-bg: #ecf7ff;
+  --nav-hover-text: #0095ff;
   --dropdown-bg: #ffffff;
   --dropdown-hover: #f3f3f3;
   --cursor-bg: #000000;

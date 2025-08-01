@@ -1,45 +1,83 @@
 ---
+import StarRating from "../Components/ratings/StarRating.astro";
 import PageLayout from "./PageLayout.astro";
 import { Image } from "astro:assets";
-import TableOfContents from "../Components/TableOfContents.astro";
-const { headings } = Astro.props;
 
-const { frontmatter } = Astro.props;
+const { frontmatter, headings } = Astro.props;
 ---
 <PageLayout>
-    <TableOfContents pageHeadings={headings} />
-  <article>
-    <Image
-      class="thumbnail"
-      src={frontmatter.thumbnail.url}
-      alt="Thumbnail image for the Markdown post layout"
-      inferSize={true}
-      layout="constrained"
-    />
-    <h1>{frontmatter.title}</h1>
-    <header>
-      <div class="author-info">
-        <Image
-          class="pfp"
-          src={frontmatter.pfp.url}
-          alt="Thumbnail image for the Markdown post layout"
-          inferSize={true}
-          layout="constrained"
-        />
-        <p><strong>{frontmatter.author}</strong></p>
-      </div>
-      <p>{frontmatter.pubDate}</p>
-      <p>{frontmatter.minutesRead}</p>
-    </header>
-    <section class="markdown-content">
-      <slot />
-    </section>
-  </article>
+  <div class="markdown-post-layout">
+    <div class="aside-container">
+      <aside class="markdown-heading">
+          <h2 class="page-title">Obsah článku</h2>
+          {headings.map((heading: any) => (
+            <a href={`#${heading.slug}`} class="page-description-container">
+              <p class="page-description">
+                {heading.text}
+              </p>
+            </a>
+          ))}
+         <!--  <section class="ratings">
+            <div class="rating-container">
+              <span class="difficulty">Obtiažnosť: </span>
+              <StarRating score={frontmatter.ratings.difficulty} size={20} />
+            </div>
+            <div class="rating-container">
+              <span class="difficulty">Výhľady: </span>
+              <StarRating score={frontmatter.ratings.views} size={20} />
+            </div>
+            <div class="rating-container">
+              <span class="difficulty">Terén: </span>
+              <span>{frontmatter.ratings.terrain}</span>
+            </div>
+            <div class="rating-container">
+              <span class="difficulty">Dĺžka: </span>
+              <span>{frontmatter.ratings.length}</span>
+            </div>
+            <div class="rating-container">
+              <span class="difficulty">Čas: </span>
+              <span>{frontmatter.ratings.time}</span>
+            </div>
+          </section> -->
+      </aside>
+    </div>
+    <article>
+      <Image
+        class="thumbnail"
+        src={frontmatter.thumbnail.url}
+        alt={frontmatter.thumbnail.alt}
+        inferSize={true}
+        layout="constrained"
+        loading="eager"
+      />
+      <h1>{frontmatter.title}</h1>
+      <header>
+        <div class="author-info">
+          <Image
+            class="pfp"
+            src={frontmatter.pfp.url}
+            alt={frontmatter.pfp.alt}
+            inferSize={true}
+            layout="constrained"
+            loading="eager"
+          />
+          <p><strong>{frontmatter.author}</strong></p>
+        </div>
+        <p>{frontmatter.pubDate}</p>
+        <p>{frontmatter.minutesRead}</p>
+      </header>
+      <section class="markdown-content">
+        <slot />
+      </section>
+    </article>
+  </div>
 </PageLayout>
 <style>
+  html {
+    scroll-behavior: smooth; 
+  }
   article {
     max-width: 800px;
-    margin: 30px auto;
   }
   header {
     display: flex;
@@ -53,6 +91,14 @@ const { frontmatter } = Astro.props;
     margin-block: 20px;
     color: var(--nav-hover-text);
   }
+  .markdown-post-layout {
+    max-width: 1200px;
+    margin-block: 30px;
+    margin-inline: 250px auto;
+    display: flex;
+    gap: 60px;
+    position: relative;
+  }
 
   /* Markdown */
 
@@ -65,6 +111,7 @@ const { frontmatter } = Astro.props;
     font-weight: bold;
     color: var(--nav-hover-text);
     margin-block: 20px;
+    scroll-margin-top: 80px; {/* Podla headeru */} 
   }
   .author-info {
     display: flex;
@@ -83,4 +130,86 @@ const { frontmatter } = Astro.props;
     object-fit: cover;
     border-radius: 10px;
   }
+
+  /* TOC */
+
+  .aside-container {
+    position: sticky;
+    top: 100px;
+    width: fit-content;
+    height: fit-content;
+    align-items: start;
+  }
+  .markdown-heading .page-title {
+    font-size: 1.3rem;
+    color: var(--nav-hover-text);
+    margin-bottom: 10px;
+    letter-spacing: 2px;
+  }
+  .markdown-heading .page-description {
+    font-size: 0.85rem;
+    color: var(--text-primary);
+    padding-inline-end: 20px;
+    padding-inline-start: 10px;
+  }
+  .page-description-container {
+    height: 60px;
+    width: fit-content;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    border-radius: 0px 5px 5px 0px;
+    border-inline-start: 4px solid var(--text-primary);
+  }
+  .page-description-container:hover .page-description {
+    color: var(--nav-hover-text);
+  }
+  .page-description-container.active {
+    background: var(--nav-hover-bg);
+    border-inline-start: 4px solid var(--nav-hover-text);
+  }
+
+  /* Ratings */
+
+  .ratings {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 20px;
+    padding: 10px;
+    border: 1px solid var(--border-color);
+    border-radius: 5px;
+  }
+  .rating-container {
+    display: flex;
+    align-items: center;
+  }
+  .ratings .difficulty {
+    color: var(--nav-hover-text);
+    font-weight: bold;
+    margin-right: 10px;
+  }
 </style>
+<script>
+   const observer = new IntersectionObserver((entries) => {
+     entries.forEach(entry => {
+       const headingId = entry.target.id;
+       const tocLink = document.querySelector(`.markdown-heading a[href="#${headingId}"]`);
+       
+       if (tocLink) {
+         if (entry.isIntersecting) {
+           tocLink.classList.add('active');
+         } else {
+           tocLink.classList.remove('active');
+         }
+       }
+     });
+   }, {
+     rootMargin: "0px",
+     threshold: 1
+   });
+   
+   document.querySelectorAll('article h2').forEach(heading => {
+     observer.observe(heading);
+   });
+</script>

@@ -96,10 +96,11 @@ const navItems = [
 <header>
   <nav>
     <div class="main-logo">
-      <div class="logo-container">
         <Icon class="hamburger" name="hamburger" size={35} />
-        <h2>beznahory.sk</h2>
-      </div>
+        <a class="logo-container" href="/">
+          <Icon class="logo" name="logoSite" size={50} />
+          <h2>beznahory.sk</h2>
+        </a>
     </div>
     <div class="nav-flex">
       <ul class="main-ul">
@@ -181,10 +182,12 @@ const navItems = [
   .main-logo {
     display: flex;
   }
+  .logo {
+    fill: var(--text-primary);
+  }
   .logo-container {
     display: flex;
     align-items: center;
-    gap: 10px;
   }
   .hamburger {
     display: none;
@@ -316,11 +319,12 @@ const navItems = [
     .hamburger {
       display: block;
       cursor: pointer;
+      transition: transform 0.3s ease;
     }
     .main-ul {
       position: fixed;
       left: -100%;
-      top: 70px;
+      top: 80px;
       flex-direction: column;
       gap: 0;
       background: var(--nav-bg);
@@ -334,6 +338,9 @@ const navItems = [
     .main-ul.active {
       left: 0;
     }
+    .hamburger.active {
+      transform: rotate(90deg);
+    }
   }
 </style>
 <script>
@@ -341,6 +348,7 @@ const navItems = [
   const navMenu = document.querySelector(".main-ul");
 
   hamburger?.addEventListener("click", () => {
+    hamburger.classList.toggle("active");
     navMenu?.classList.toggle("active");
   });
 </script>
