@@ -1,8 +1,32 @@
 ---
-import PageLayout from "../Layouts/PageLayout.astro";
+import PageLayout from "../layouts/PageLayout.astro";
+import Aside from "../Components/markdown/Aside.astro";
 ---
-<PageLayout>
+<PageLayout title="Stránka sa nenašla">
 <section>
-  <h1>404</h1>
+  <h1>Stránka sa nenašla :(</h1>
+  <Aside title="Stránka, ktorú hľadáte, neexistuje. Ale môžete ju skúsiť nájsť:" type="tip"> - <a class="error" href="">bla bla bla</a></Aside>
+  <p><a href="/">Späť domov</a></p>
 </section>
 </PageLayout>
+<style>
+  section {
+    display: flex;
+    margin-block-start: 100px;
+    flex-direction: column;
+    align-items: center;
+    height: 100vh;
+  }
+  h1 {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+  }
+  .error {
+    color: black;
+    text-decoration: underline;
+  }
+  p a {
+    color: var(--text-primary);
+    text-decoration: underline;
+  }
+</style>

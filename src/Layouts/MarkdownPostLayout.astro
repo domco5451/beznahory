@@ -2,10 +2,11 @@
 import StarRating from "../Components/ratings/StarRating.astro";
 import PageLayout from "./PageLayout.astro";
 import { Image } from "astro:assets";
+import { Icon } from "Astro-icon/components";
 
 const { frontmatter, headings } = Astro.props;
 ---
-<PageLayout>
+<PageLayout title={frontmatter.title}>
   <div class="markdown-post-layout">
     <div class="aside-container">
       <aside class="markdown-heading">
@@ -17,6 +18,14 @@ const { frontmatter, headings } = Astro.props;
               </p>
             </a>
           ))}
+          {frontmatter.latitude && frontmatter.longitude ? (
+            <a class="map-link" href={`/map#${Astro.url.pathname.split('/').pop()}`}>
+              <Icon name="gps" size={30}/>
+              <p>
+                Zobraziť na mape
+              </p>
+            </a>
+          ) : null}
          <!--  <section class="ratings">
             <div class="rating-container">
               <span class="difficulty">Obtiažnosť: </span>
@@ -63,8 +72,14 @@ const { frontmatter, headings } = Astro.props;
           />
           <p><strong>{frontmatter.author}</strong></p>
         </div>
-        <p>{frontmatter.pubDate}</p>
-        <p>{frontmatter.minutesRead}</p>
+        <div class="flex-container">
+          <Icon name="date" size={20}/>
+          <p>{frontmatter.pubDate}</p>
+        </div>
+        <div class="flex-container">
+          <Icon name="read" size={20}/>
+          <p>{frontmatter.minutesRead}</p>
+        </div>
       </header>
       <section class="markdown-content">
         <slot />
@@ -130,6 +145,11 @@ const { frontmatter, headings } = Astro.props;
     object-fit: cover;
     border-radius: 10px;
   }
+  .flex-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
 
   /* TOC */
 
@@ -159,7 +179,7 @@ const { frontmatter, headings } = Astro.props;
     align-items: center;
     gap: 15px;
     border-radius: 0px 5px 5px 0px;
-    border-inline-start: 4px solid var(--text-primary);
+    border-inline-start: 4px solid var(--toc-border);
   }
   .page-description-container:hover .page-description {
     color: var(--nav-hover-text);
@@ -168,7 +188,23 @@ const { frontmatter, headings } = Astro.props;
     background: var(--nav-hover-bg);
     border-inline-start: 4px solid var(--nav-hover-text);
   }
-
+  
+  /* Map link styling */
+  
+  .map-link{
+    color: var(--nav-hover-text);
+    background-color: var(--nav-hover-bg);
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 10px;
+    border-radius: 5px;
+    margin-block-start: 20px;
+  }
+  .map-link:hover {
+    text-decoration: underline;
+  }
+  
   /* Ratings */
 
   .ratings {

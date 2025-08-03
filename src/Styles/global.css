@@ -42,6 +42,7 @@ img {
   --cursor-text: white;
   --cursor-icon: white;
   --wrapper-border: #b9b9b9;
+  --toc-border: #b9b9b9;
   color-scheme: light;
 }
 
@@ -60,5 +61,6 @@ img {
   --cursor-text: #1b1b1b;
   --cursor-icon: black;
   --wrapper-border: #666;
+  --toc-border: #b9b9b9;
   color-scheme: dark;
 }
