@@ -31,7 +31,7 @@ const filteredPosts = posts.filter((post: any) =>
 
 <HikeLayout title={kraj}>
   <p class="kraj-selector">
-    Zobrazujú sa príspevky označené <code>/{kraj}</code> Ak chcete zobraziť všetky príspevky, <a class="filter" href="/hikes">zrušte filter</a>.
+    Zobrazujú sa príspevky pre <code>/{kraj}</code> Ak chcete zobraziť všetky príspevky, <a class="filter" href="/hikes">zrušte filter</a>.
   </p>
   {filteredPosts.length === 0 ? <p>Žiadne príspevky pre tento kraj.</p> : null}
   <div class="grid-container">
