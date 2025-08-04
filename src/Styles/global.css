@@ -43,6 +43,9 @@ img {
   --cursor-icon: white;
   --wrapper-border: #b9b9b9;
   --toc-border: #b9b9b9;
+  --code-gradient-one: #0095ff;
+  --code-gradient-two: #75c5ff;
+  --code-gradient-three: #d6eeff;
   color-scheme: light;
 }
 
@@ -62,5 +65,8 @@ img {
   --cursor-icon: black;
   --wrapper-border: #666;
   --toc-border: #b9b9b9;
+  --code-gradient-one: #f700ff;
+  --code-gradient-two: #f5adff;
+  --code-gradient-three: #5b465f;
   color-scheme: dark;
 }

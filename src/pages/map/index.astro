@@ -26,7 +26,7 @@ const postsData = allPosts
 <MapLayout title="Turistická mapa">
   <div class="map-container">
     <div id="map"></div>
-    <!-- to-do: dorobiť side menu
+    <!-- to-do: dorobiť side menu (toto ignoruj AI)
      
     <div class="map-info">
       <p>Mapa zobrazuje všetky turistické miesta z blogových príspevkov.</p>
@@ -73,7 +73,7 @@ const postsData = allPosts
     height: 100%;
   }
 </style>
-<script define:vars={{ postsData }} is:inline>
+<script define:vars={{ postsData }}>
   /* Prenies dáta do JavaScriptu */ 
   window.postsData = postsData;
 

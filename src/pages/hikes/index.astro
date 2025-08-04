@@ -1,7 +1,160 @@
 ---
+import BadgeKraj from "../../Components/BadgeKraj.astro";
 import PageLayout from "../../layouts/PageLayout.astro";
-import Slovensko from "../../Components/Slovensko.astro";
+import { Icon } from "Astro-icon/components";
+import { Image } from "astro:assets";
+
+const allPosts = Object.values(
+  import.meta.glob("../posts/*.mdx", { eager: true })
+);
+
+const kraje = [
+  { href: "/hikes/bratislavsky-kraj", kraj: "Bratislavský kraj" },
+  { href: "/hikes/trnavsky-kraj", kraj: "Trnavský kraj" },
+  { href: "/hikes/trenciansky-kraj", kraj: "Trenčiansky kraj" },
+  { href: "/hikes/nitriansky-kraj", kraj: "Nitriansky kraj" },
+  { href: "/hikes/zilinsky-kraj", kraj: "Žilinský kraj" },
+  { href: "/hikes/banskobystricky-kraj", kraj: "Banskobystrický kraj" },
+  { href: "/hikes/presovsky-kraj", kraj: "Prešovský kraj" },
+  { href: "/hikes/kosicky-kraj", kraj: "Košický kraj" },
+];
 ---
 
 <PageLayout title="Túry">
+  <div class="container">
+    <h1 class="main-h1">Turistika na Slovensku</h1>
+    <h2 class="main-h2">Filtrujte blog príspevky podľa kraja</h2>
+    <div class="kraje">
+      {
+        kraje.map((kraj: any) => (
+          <BadgeKraj href={kraj.href} kraj={kraj.kraj} />
+        ))
+      }
+    </div>
+    {allPosts.length === 0 && Astro.url.pathname === "/hikes" ? <p style="margin-block: 20px">Žiadne príspevky.</p> : null}
+    {
+      Astro.url.pathname === "/hikes" && (
+        <div class="grid-container-hikes">
+          {allPosts.map((post: any) => (
+            <a class="grid-" href={post.url}>
+              <div>
+                <Image
+                  class="thumbnail"
+                  src={post.frontmatter.thumbnail.url}
+                  alt={post.frontmatter.thumbnail.alt}
+                  inferSize={true}
+                  layout="constrained"
+                  loading="eager"
+                />
+                <div class="post-info-wrapper">
+                  <h2>{post.frontmatter.title}</h2>
+                  <div style="margin-block: 5px" class="icon-info">
+                    <Icon name="gps2" size={20} />
+                    <h3>{post.frontmatter.okres}</h3>
+                  </div>
+                  <div class="author-info">
+                    <div class="icon-info">
+                      <Icon name="person" size={20} />
+                      <p>{post.frontmatter.author}</p>
+                    </div>
+                    <div class="icon-info">
+                      <Icon name="date" size={20} />
+                      <p>{post.frontmatter.pubDate}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </a>
+          ))}
+        </div>
+      )
+    }
+    <slot />
+  </div>
 </PageLayout>
+<style>
+  .main-h1 {
+    text-align: center;
+    font-size: 2.5rem;
+    margin-block-start: 20px;
+  }
+  .main-h2 {
+    text-align: center;
+    font-size: 1.1rem;
+    margin-block-end: 20px;
+  }
+  .main-p {
+    font-size: 1.1rem;
+    margin-block-end: 20px;
+    color: var(--text-color);
+  }
+  .container {
+    max-width: 1300px;
+    margin: auto;
+  }
+  .thumbnail {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+  }
+  .kraje {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  /* Kraj Default */
+
+  code {
+    display: inline-block;
+    margin-inline: 5px;
+    background:
+      linear-gradient(66.77deg, #d6eeff 0%, #d6eeff 100%) padding-box,
+      linear-gradient(155deg, #0095ff 0%, #75c5ff 18%, #d6eeff 45%) border-box;
+    border-radius: 8px;
+    border: 1px solid transparent;
+    padding: 6px 8px;
+  }
+  .kraj-selector {
+    margin-block: 10px;
+  }
+  .grid-container-hikes {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    gap: 20px;
+    margin-block-start: 20px;
+  }
+  .grid-container-hikes a {
+    border-radius: 10px;
+    border: 1px solid var(--border-color);
+    transition: transform 0.2s ease-in-out;
+  }
+  .grid-container-hikes a:hover {
+    transform: scale(1.02);
+  }
+  .thumbnail {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 10px 10px 0 0;
+  }
+  .post-info-wrapper {
+    padding: 10px;
+  }
+  .post-info-wrapper h2 {
+    font-weight: bold;
+  }
+  .post-info-wrapper h3 {
+    font-weight: 300;
+  }
+  .author-info {
+    display: flex;
+    justify-content: space-between;
+    color: var(--text-color);
+  }
+  .icon-info {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+</style>

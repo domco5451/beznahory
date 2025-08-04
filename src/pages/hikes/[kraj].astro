@@ -1,0 +1,130 @@
+---
+import HikeLayout from "./index.astro";
+import { Icon } from "Astro-icon/components";
+import { Image } from "astro:assets";
+
+export async function getStaticPaths() {
+  // Načítaj všetky príspevky z posts adresára
+  const allPosts = Object.values(
+    import.meta.glob("../posts/*.mdx", { eager: true })
+  );
+  {
+    return [
+      { params: { kraj: "bratislavsky-kraj" }, props: { posts: allPosts } },
+      { params: { kraj: "trnavsky-kraj" }, props: { posts: allPosts } },
+      { params: { kraj: "trenciansky-kraj" }, props: { posts: allPosts } },
+      { params: { kraj: "nitriansky-kraj" }, props: { posts: allPosts } },
+      { params: { kraj: "zilinsky-kraj" }, props: { posts: allPosts } },
+      { params: { kraj: "banskobystricky-kraj" }, props: { posts: allPosts } },
+      { params: { kraj: "presovsky-kraj" }, props: { posts: allPosts } },
+      { params: { kraj: "kosicky-kraj" }, props: { posts: allPosts } },
+    ];
+  }
+}
+
+const { kraj } = Astro.params;
+const { posts } = Astro.props;
+const filteredPosts = posts.filter((post: any) =>
+  post.frontmatter.kraj?.includes(kraj)
+);
+---
+
+<HikeLayout title={kraj}>
+  <p class="kraj-selector">
+    Zobrazujú sa príspevky označené <code>/{kraj}</code> Ak chcete zobraziť všetky príspevky, <a class="filter" href="/hikes">zrušte filter</a>.
+  </p>
+  {filteredPosts.length === 0 ? <p>Žiadne príspevky pre tento kraj.</p> : null}
+  <div class="grid-container">
+    {
+      filteredPosts.map((post: any) => (
+        <a class="grid-" href={post.url}>
+          <div>
+            <Image
+              class="thumbnail"
+              src={post.frontmatter.thumbnail.url}
+              alt={post.frontmatter.thumbnail.alt}
+              inferSize={true}
+              layout="constrained"
+              loading="eager"
+            />
+            <div class="post-info-wrapper">
+              <h2>{post.frontmatter.title}</h2>
+              <div style="margin-block: 5px" class="icon-info">
+                <Icon name="gps2" size={20}/>
+                <h3>{post.frontmatter.okres}</h3>
+              </div>
+              <div class="author-info">
+                <div class="icon-info">
+                  <Icon name="person" size={20} />
+                  <p>{post.frontmatter.author}</p>
+                </div>
+                <div class="icon-info">
+                  <Icon name="date" size={20} />
+                  <p>{post.frontmatter.pubDate}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </a>
+      ))
+    }
+  </div>
+</HikeLayout>
+<style>
+  code {
+    display: inline-block;
+    margin-inline: 5px;
+    background:
+      linear-gradient(66.77deg, var(--code-gradient-three) 0%, var(--code-gradient-three) 100%) padding-box,
+      linear-gradient(155deg, var(--code-gradient-one) 0%, var(--code-gradient-two) 18%, var(--code-gradient-three) 45%) border-box;
+    border-radius: 8px;
+    border: 1px solid transparent;
+    padding: 6px 8px;
+    color: var(--nav-hover-text);
+  }
+  .kraj-selector {
+    margin-block: 10px;
+  }
+  .grid-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    gap: 20px;
+  }
+  .grid-container a {
+    border-radius: 10px;
+    border: 1px solid var(--border-color);
+    transition: transform 0.2s ease-in-out;
+  }
+  .grid-container a:hover {
+    transform: scale(1.02);
+  }
+  .thumbnail {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 10px 10px 0 0;
+  }
+  .post-info-wrapper {
+    padding: 10px;
+  }
+  .post-info-wrapper h2 {
+    font-weight: bold;
+  }
+  .post-info-wrapper h3 {
+    font-weight: 300;
+  }
+  .author-info {
+    display: flex;
+    justify-content: space-between;
+    color: var(--text-color);
+  }
+  .icon-info {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .filter {
+    color: var(--nav-hover-text);
+    text-decoration: underline;
+  }
+</style>
