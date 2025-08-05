@@ -4,6 +4,8 @@ import PageLayout from "../../layouts/PageLayout.astro";
 import { Icon } from "astro-icon/components";
 import { Image } from "astro:assets";
 
+const currentPath = Astro.url.pathname;
+
 const allPosts = Object.values(
   import.meta.glob("../posts/*.mdx", { eager: true })
 );
@@ -31,9 +33,13 @@ const kraje = [
         ))
       }
     </div>
-    {allPosts.length === 0 && Astro.url.pathname === "/hikes" ? <p style="margin-block: 20px">Žiadne príspevky.</p> : null}
     {
-      Astro.url.pathname === "/hikes" && (
+      allPosts.length === 0 && Astro.url.pathname === "/hikes" ? (
+        <p style="margin-block: 20px">Žiadne príspevky.</p>
+      ) : null
+    }
+    {
+      currentPath === "/hikes/" && (
         <div class="grid-container-hikes">
           {allPosts.map((post: any) => (
             <a class="grid-" href={post.url}>

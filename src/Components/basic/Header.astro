@@ -2,6 +2,8 @@
 import { Icon } from "astro-icon/components";
 import ThemeToggle from "../theme/ThemeToggle.astro";
 
+const currentPath = Astro.url.pathname;
+
 const regions = [
   {
     name: "Bratislavský",
@@ -96,11 +98,11 @@ const navItems = [
 <header>
   <nav>
     <div class="main-logo">
-        <Icon class="hamburger" name="hamburger" size={35} />
-        <a class="logo-container" href="/">
-          <Icon class="logo" name="logoSite" size={50} />
-          <h2>beznahory.sk</h2>
-        </a>
+      <Icon class="hamburger" name="hamburger" size={35} />
+      <a class="logo-container" href="/">
+        <Icon class="logo" name="logoSite" size={50} />
+        <h2>beznahory.sk</h2>
+      </a>
     </div>
     <div class="nav-flex">
       <ul class="main-ul">
@@ -109,15 +111,15 @@ const navItems = [
             <li
               class:list={[
                 "nav-item",
-                Astro.url.pathname === item.href && "nav-item-active",
+                (currentPath === item.href ||
+                  currentPath.startsWith(item.href + "/")) &&
+                  "nav-item-active",
               ]}
             >
               {item.hasDropdown ? (
                 <>
                   <a href={item.href} class="nav-item-dropdown main-link">
-                    <span class="dropdown-link">
-                      {item.name}
-                    </span>
+                    <span class="dropdown-link">{item.name}</span>
                     <Icon class="arrow-dropdown" name="arrow-down" size={20} />
                   </a>
                   <div class="nav-dropdown">

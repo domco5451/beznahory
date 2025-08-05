@@ -13,6 +13,7 @@
     "@astrojs/react": "^4.3.0",
     "@tailwindcss/vite": "^4.1.11",
     "astro": "^5.12.4",
+    "astro-compress": "^2.3.8",
     "astro-icon": "^1.1.5",
     "leaflet": "^1.9.4",
     "mdast-util-to-string": "^4.0.0",
