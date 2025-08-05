@@ -7,8 +7,7 @@ import { Image } from "astro:assets";
 const currentPath = Astro.url.pathname;
 
 const allPosts = Object.values(
-  import.meta.glob("../posts/*.mdx", { eager: true })
-);
+  import.meta.glob("../posts/*.mdx", { eager: true })).filter((post: any) => post.frontmatter?.latitude && post.frontmatter?.longitude);
 
 const kraje = [
   { href: "/hikes/bratislavsky-kraj", kraj: "Bratislavský kraj" },
@@ -39,7 +38,7 @@ const kraje = [
       ) : null
     }
     {
-      currentPath === "/hikes/" && (
+      currentPath === "/hikes" && (
         <div class="grid-container-hikes">
           {allPosts.map((post: any) => (
             <a class="grid-" href={post.url}>
