@@ -7,93 +7,226 @@ const allPosts = Object.values(
   import.meta.glob("../posts/*.mdx", { eager: true })
 );
 
-const postData = allPosts.map((post: any) => ({
-  title: post.frontmatter.title,
-  description: post.frontmatter.description,
-  autor: post.frontmatter.author,
-  date: post.frontmatter.pubDate,
+const postData = allPosts
+.filter((post: any )=> post.frontmatter?.thumbnail?.url)
+.map((post: any) => ({
+  title: post.frontmatter?.title,
+  description: post.frontmatter?.description,
+  autor: post.frontmatter?.author,
+  date: post.frontmatter?.pubDate,
   url: post.url,
   image: post.frontmatter.thumbnail.url,
-  imageAlt: post.frontmatter.thumbnail.alt,
-  type: post.frontmatter.type,
+  imageAlt: post.frontmatter?.thumbnail.alt,
+  type: post.frontmatter?.type,
 }));
 console.log(postData);
 ---
 
 <PageLayout title="O mne">
   <div class="container">
-    <h1>Blog časová os</h1>
-    <h2>Tu sa nachádzajú všetky príspevky!</h2>
-    <h3 class="year">2025</h3>
-      <ul class="grid">
-        {
-          postData.map((post: any, i: number) => (
-            <li>
-              <div class="timeline-card">
-                <Image
-                  class="thumbnail"
-                  src={post.image}
-                  alt={post.imageAlt}
-                  inferSize={true}
-                  layout="constrained"
-                  loading={i < 4 ? "eager" : "lazy"}
-                  fetchpriority="high"
-                />
-                <div class="post-content">
-                  <h2>{post.title}</h2>
-                  <p class="description">{post.description}</p>
-                  <div class="author-date">
-                    <p class="author">Autor: {post.autor}</p>
-                    <p class="date">{post.date}</p>
+    <h1 class="main-title">Časová os príspekov</h1>
+    <h2 class="posts-count">
+      Počet všetkých príspevkov: <span class="total-posts"
+        >{postData.length}</span>
+    </h2>
+    <ul>
+      {
+        postData.map((post: any, i: number) => (
+          <li class="post-card">
+            <div class="empty-space">
+              {post.type === "hike" && (
+                <a class="post-link" href={post.url}>
+                  <div class="post-content">
+                    <Image
+                      class="thumbnail"
+                      src={post.image}
+                      alt={post.imageAlt}
+                      inferSize={true}
+                      layout="constrained"
+                      loading={i < 3 ? "eager" : "lazy"}
+                      fetchpriority="high"
+                    />
+                    <div class="post-content-text">
+                      <h2 class="title">{post.title}</h2>
+                      <p class="description">{post.description}</p>
+                      <div class="autor-date">
+                        <div class="icon-info">
+                          <Icon name="person" size={15} />
+                          <p>{post.autor}</p>
+                        </div>
+                        <div class="icon-info">
+                          <Icon name="date" size={15} />
+                          <p>{post.date}</p>
+                        </div>
+                      </div>
+                    </div>
                   </div>
-                </div>
-              </div>
-            </li>
-          ))
-        }
-      </ul>
+                </a>
+              )}
+            </div>
+            <div class="circle-line">
+              <div class="circle">{post.date}</div>
+              <div class="line" />
+            </div>
+            <div class="empty-space">
+              {post.type !== "hike" && (
+                <a href={post.url}>
+                  <div class="post-content">
+                    <Image
+                      class="thumbnail"
+                      src={post.image}
+                      alt={post.imageAlt}
+                      inferSize={true}
+                      layout="constrained"
+                      loading={i < 4 ? "eager" : "lazy"}
+                      fetchpriority="high"
+                    />
+                    <div class="post-content-text">
+                      <h2 class="title">{post.title}</h2>
+                      <p class="description">{post.description}</p>
+                      <div class="autor-date">
+                        <div class="icon-info">
+                          <Icon name="person" size={15} />
+                          <p>{post.autor}</p>
+                        </div>
+                        <div class="icon-info">
+                          <Icon name="date" size={15} />
+                          <p>{post.date}</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </a>
+              )}
+            </div>
+          </li>
+        ))
+      }
+    </ul>
   </div>
 </PageLayout>
 <style>
-  .container {
-    max-width: 1200px;
-    margin: 50px auto;
-    color: black;
+  .line {
+    width: 1px;
+    height: 230px;
+    background-color: var(--border-color);
   }
-  .grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 100px;
-  }
-  .author-date {
+  .circle {
     display: flex;
-    justify-content: space-between;
-    font-size: 14px;
-    color: var(--text-secondary);
-  }
-  .timeline-card {
+    text-align: center;
+    align-items: center;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
     border: 1px solid var(--border-color);
-    border-radius: 15px;
-    aspect-ratio: 1 / 1;
   }
-  .timeline-card:nth-child(odd) {
-    grid-column: 1;
-
+  .circle-line {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
-  .timeline-card:nth-child(even) {
-    grid-column: 2;
-
+  .main-title {
+    text-align: center;
+    font-size: 2.5rem;
+    margin-block-start: 20px;
+    color: var(--nav-hover-text);
+  }
+  .post-content:hover {
+    transform: scale(1.02);
+    box-shadow: 0 4px 8px var(--shadow);
+  }
+  .main-subtitle {
+    text-align: center;
+    font-size: 1.1rem;
+    margin-block-end: 20px;
+  }
+  .posts-count {
+    text-align: center;
+    font-size: 1.2rem;
+    margin-block-end: 20px;
+  }
+  .total-posts {
+    font-weight: bold;
+    font-size: 1.5rem;
+    color: var(--nav-hover-text);
+    display: inline-block;
+    margin-inline: 10px;
+    background:
+      linear-gradient(
+          66.77deg,
+          var(--code-gradient-three) 0%,
+          var(--code-gradient-three) 100%
+        )
+        padding-box,
+      linear-gradient(
+          155deg,
+          var(--code-gradient-one) 0%,
+          var(--code-gradient-two) 18%,
+          var(--code-gradient-three) 45%
+        )
+        border-box;
+    border-radius: 8px;
+    border: 1px solid transparent;
+    padding: 7px 16px;
+    color: var(--nav-hover-text);
+  }
+  .post-card {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
   }
   .post-content {
-    padding: 20px;
-  }
-  .description {
-    margin-block: 10px;
+    width: 400px;
+    height: auto;
+    border: 1px solid var(--border-color);
+    border-radius: 15px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
   }
   .thumbnail {
     width: 100%;
-    height: auto;
+    height: 130px;
+    object-fit: cover;
     border-radius: 15px 15px 0 0;
-    margin-bottom: 10px;
+  }
+  .empty-space {
+    width: 400px;
+    margin-block-end: 30px;
+    height: auto;
+  }
+  .description {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2; /* number of lines to show */
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    margin-block: 5px;
+    font-size: 300;
+    line-height: 1.5rem;
+  }
+  .autor-date {
+    display: flex;
+    justify-content: space-between;
+    color: var(--nav-hover-text);
+    font-weight: 300;
+  }
+  .title {
+    font-size: 1.5rem;
+    font-weight: 500;
+    color: var(--nav-hover-text);
+  }
+  .post-content-text {
+    padding: 15px;
+  }
+  .icon-info {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .container {
+    max-width: 1300px;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
 </style>

@@ -46,6 +46,7 @@ img {
   --code-gradient-one: #0095ff;
   --code-gradient-two: #75c5ff;
   --code-gradient-three: #d6eeff;
+  --shadow: rgba(0, 0, 0, 0.11);
   color-scheme: light;
 }
 
@@ -68,5 +69,6 @@ img {
   --code-gradient-one: #f700ff;
   --code-gradient-two: #f5adff;
   --code-gradient-three: #5b465f;
+  --shadow: rgb(49, 49, 49);
   color-scheme: dark;
 }
