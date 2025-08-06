@@ -1,6 +1,141 @@
 ---
+import { Image } from "astro:assets";
+import { Icon } from "astro-icon/components";
 import PageLayout from "../../layouts/PageLayout.astro";
+
+const allPosts = Object.values(import.meta.glob("../posts/*.mdx", { eager: true}))
+
+const postData = allPosts.map((post: any) => (
+  {
+    title: post.frontmatter.title,
+    description: post.frontmatter.description,
+    autor: post.frontmatter.author,
+    date: post.frontmatter.pubDate,
+    url: post.url,
+    image: post.frontmatter.thumbnail.url,
+    imageAlt: post.frontmatter.thumbnail.alt,
+  }
+))
+console.log(postData);
+
 ---
 <PageLayout title="O mne">
-  <h1>About Page!</h1>
+  <div class="os-container">
+    <h1>Blog časová os</h1>
+    <h2>Tu sa nachádzajú všetky príspevky!</h2>
+    <h3 class="year">2025</h3>
+    {postData.map((post: any, i: number) => (
+      <div class="post-item">
+        <a href={post.url} class="post-card">
+          <Image
+            class="thumbnail"
+            src={post.image}
+            alt={post.imageAlt}
+            inferSize={true}
+            layout="constrained"
+            loading={i < 4 ? "eager" : "lazy"}
+            fetchpriority="high"
+          />
+          <div class="post-content">
+            <h2 class="title">{post.title}</h2>
+            <p class="description">{post.description}</p>
+            <div class="autor-date">
+              <div class="info-icon">
+                <Icon name="person" size={20} />
+                <p>{post.autor}</p>
+              </div>
+              <div class="info-icon">
+                <Icon name="date" size={20} />
+                <p>{post.date}</p>
+              </div>
+            </div>
+          </div>
+        </a>
+        <div class="circle-line">
+          <div class="circle">{post.date}</div>
+          <div class="line"></div>
+        </div>
+      </div>
+    ))}
+  </div>
 </PageLayout>
+<style>
+.os-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-block-start: 50px;
+}
+h1 {
+  font-size: 2rem;
+}
+.circle {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  width: 80px;
+  height: 80px;
+  border-radius: 100%;
+  border: 1px solid var(--border-color);
+}
+.line {
+  width: 1px;
+  height: 200px;
+  background: var(--border-color);
+}
+.circle-line {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.post-item {
+  display: flex;
+  gap: 20px;
+}
+.thumbnail {
+  width: 100%;
+  height: 130px;
+  object-fit: cover;
+  border-radius: 15px 15px 0 0;
+}
+.post-card {
+  width: 450px;
+  height: 100%;
+  border: 1px solid var(--border-color);
+  border-radius: 15px;
+}
+.post-content {
+  padding: 15px;
+}
+.description {
+   overflow: hidden;
+   display: -webkit-box;
+   -webkit-line-clamp: 2; /* number of lines to show */
+           line-clamp: 2; 
+   -webkit-box-orient: vertical;
+   margin-block: 5px;
+}
+.autor-date {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.9rem;
+  color: var(--border-text);
+  font-weight: bold;
+}
+.title {
+  font-weight: bold;
+  color: var(--border-text);
+}
+.info-icon {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.year {
+  margin-block: 30px;
+  text-align: center;
+  font-size: 2.5rem;
+  color: var(--nav-hover-text);
+}
+</style>
