@@ -29,6 +29,7 @@ console.log(postData);
       Počet všetkých príspevkov: <span class="total-posts"
         >{postData.length}</span>
     </h2>
+       <h3 class="year">2025</h3>
     <ul>
       {
         postData.map((post: any, i: number) => (
@@ -131,6 +132,12 @@ console.log(postData);
     margin-block-start: 20px;
     color: var(--nav-hover-text);
   }
+  .year {
+    text-align: center;
+    font-size: 2rem;
+    color: var(--nav-hover-text);
+    margin-block-end: 20px;
+  }
   .post-content:hover {
     transform: scale(1.02);
     box-shadow: 0 4px 8px var(--shadow);
@@ -143,7 +150,6 @@ console.log(postData);
   .posts-count {
     text-align: center;
     font-size: 1.2rem;
-    margin-block-end: 20px;
   }
   .total-posts {
     font-weight: bold;
