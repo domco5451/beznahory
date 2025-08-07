@@ -35,9 +35,9 @@ const { frontmatter, headings } = Astro.props;
           ) : null}
           {frontmatter.gpx ? (
             <div id="map"></div>
-            <a href="../../gpx/2025/demo.gpx" download="demo.gpx" class="gpx-link">
+            <a href={frontmatter.gpx} class="gpx-link">
               <Icon name="download" size={30} />
-              Stiahnuť GPX
+              Stiahnuť trasu (.gpx)
             </a>
           ) : null}
          <!--  <section class="ratings">
@@ -288,10 +288,6 @@ document.addEventListener("DOMContentLoaded", () => {
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
     }).addTo(map);
 
-    if (lat && lng) {
-      const marker = L.marker([lat, lng]).addTo(map);
-    }
-
     if (gpxPath && window.L.GPX) {
       try {
         new L.GPX(gpxPath, {
@@ -303,6 +299,63 @@ document.addEventListener("DOMContentLoaded", () => {
           }
         }).on('loaded', function(e) {
           map.fitBounds(e.target.getBounds());
+
+      const distance = (e.target.get_distance() / 1000).toFixed(2); // km
+      
+      // Vypočítaj tempo v ms/km
+      const paceMs = e.target.get_moving_pace();
+      const totalSeconds = Math.floor(paceMs / 1000);
+      const minutes = Math.floor(totalSeconds / 60);
+      const seconds = totalSeconds % 60;
+      const paceFormatted = `${minutes}:${seconds.toString().padStart(2, '0')}/km`;
+
+      const elevationGain = Math.round(e.target.get_elevation_gain());
+      const elevationMin = Math.round(e.target.get_elevation_min());
+      const elevationMax = Math.round(e.target.get_elevation_max());
+      const time = e.target.get_total_time();
+      const duration = e.target.get_duration_string(time);
+
+      // Vlož info do DOMu pod mapu
+      let infoDiv = document.getElementById('gpx-info');
+      if (!infoDiv) {
+        infoDiv = document.createElement('div');
+        infoDiv.id = 'gpx-info';
+        infoDiv.style.marginTop = '10px';
+        mapElement.parentNode.insertBefore(infoDiv, mapElement.nextSibling);
+      }
+      infoDiv.innerHTML = `
+        <div style="
+          background-color: var(--nav-hover-bg);
+          border-radius: 15px;
+          margin-bottom: 20px;
+        ">
+          <div style="
+            color: var(--nav-hover-bg);
+            background-color: var(--nav-hover-text);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            padding: 10px;
+            border-radius: 15px 15px 0 0;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+              <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3c7.2 0 9 1.8 9 9s-1.8 9-9 9s-9-1.8-9-9s1.8-9 9-9m0 5v4m0 4h.01"/>
+            </svg>
+            <h3>
+              Informácie o trase
+            </h3>
+          </div>
+          <div style="
+            padding: 15px;
+          ">
+            <p style="margin-bottom: 5px; color: var(--nav-hover-text)"><strong>Tempo</strong>: ${paceFormatted}</p>
+            <p style="margin-bottom: 5px; color: var(--nav-hover-text)"><strong>Dĺžka</strong>: ${distance} km</p>
+            <p style="margin-bottom: 5px; color: var(--nav-hover-text)"><strong>Prevýšenie</strong>: ${elevationGain} m</p>
+            <p style="margin-bottom: 5px; color: var(--nav-hover-text)"><strong>Najnižší bod</strong>: ${elevationMin} m</p>
+            <p style="margin-bottom: 5px; color: var(--nav-hover-text)"><strong>Najvyšší bod</strong>: ${elevationMax} m</p>
+            <p style="margin-bottom: 5px; color: var(--nav-hover-text)"><strong>Trvanie</strong>: ${duration}</p>
+          </div>
+        </div>
+      `;
         }).addTo(map);
       } catch (e) {
         console.error('Chyba pri načítaní GPX', e);
