@@ -10,34 +10,25 @@ const { frontmatter, headings } = Astro.props;
 <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" defer></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-gpx/2.1.2/gpx.min.js" defer></script>
-<script src='https://api.mapbox.com/mapbox.js/plugins/leaflet-fullscreen/v1.0.1/Leaflet.fullscreen.min.js'></script>
-<link href='https://api.mapbox.com/mapbox.js/plugins/leaflet-fullscreen/v1.0.1/leaflet.fullscreen.css' rel='stylesheet' />
 
 <PageLayout title={frontmatter.title}>
   <div class="markdown-post-layout">
-    <div class="aside-container">
-      <aside class="markdown-heading">
-          <h2 class="page-title">Obsah článku</h2>
-          {headings.map((heading: any) => (
-            <a href={`#${heading.slug}`} class="page-description-container">
-              <p class="page-description">
-                {heading.text}
-              </p>
+    <div class="aside-container-left">
+      <aside>
+        <div id="gpx-info"></div>
+      {frontmatter.gpx ? (
+            <div id="map"></div>
+            <a href={frontmatter.gpx} class="gpx-link">
+              <Icon name="download" size={20} />
+              Stiahnuť trasu (.gpx)
             </a>
-          ))}
+          ) : null}
           {frontmatter.latitude && frontmatter.longitude ? (
             <a class="map-link" href={`/map#${Astro.url.pathname.split('/').pop()}`}>
-              <Icon name="gps" size={30}/>
+              <Icon name="gps" size={20}/>
               <p>
                 Zobraziť na mape
               </p>
-            </a>
-          ) : null}
-          {frontmatter.gpx ? (
-            <div id="map"></div>
-            <a href={frontmatter.gpx} class="gpx-link">
-              <Icon name="download" size={30} />
-              Stiahnuť trasu (.gpx)
             </a>
           ) : null}
          <!--  <section class="ratings">
@@ -99,6 +90,18 @@ const { frontmatter, headings } = Astro.props;
         <slot />
       </section>
     </article>
+    <div class="aside-container">
+      <aside class="markdown-heading">
+           <h2 class="page-title">Obsah článku</h2>
+            {headings.map((heading: any) => (
+              <a href={`#${heading.slug}`} class="page-description-container">
+                <p class="page-description">
+                  {heading.text}
+                </p>
+              </a>
+            ))}
+        </aside>
+    </div>
   </div>
 </PageLayout>
 <style>
@@ -106,7 +109,7 @@ const { frontmatter, headings } = Astro.props;
     scroll-behavior: smooth; 
   }
   article {
-    max-width: 800px;
+    flex: 1;
   }
   header {
     display: flex;
@@ -121,12 +124,12 @@ const { frontmatter, headings } = Astro.props;
     color: var(--nav-hover-text);
   }
   .markdown-post-layout {
-    max-width: 1200px;
-    margin-block: 30px;
-    margin-inline: 250px auto;
+    max-width: 1500px;
+    margin: 50px auto;
     display: flex;
     gap: 60px;
     position: relative;
+    padding: 0 20px;
   }
 
   /* Markdown */
@@ -170,9 +173,10 @@ const { frontmatter, headings } = Astro.props;
   .aside-container {
     position: sticky;
     top: 100px;
-    width: fit-content;
+    width: 200px;
     height: fit-content;
     align-items: start;
+    flex-shrink: 0;
   }
   .markdown-heading .page-title {
     font-size: 1.3rem;
@@ -205,7 +209,7 @@ const { frontmatter, headings } = Astro.props;
   
   /* Map link styling */
   
-  .map-link{
+  .map-link {
     color: var(--nav-hover-text);
     background-color: var(--nav-hover-bg);
     display: flex;
@@ -213,7 +217,6 @@ const { frontmatter, headings } = Astro.props;
     gap: 5px;
     padding: 10px;
     border-radius: 5px;
-    margin-block-start: 20px;
   }
   .map-link:hover {
     text-decoration: underline;
@@ -240,11 +243,19 @@ const { frontmatter, headings } = Astro.props;
     margin-right: 10px;
   }
   /* Gpx */
+  .aside-container-left {
+    position: sticky;
+    top: 100px;
+    width: 200px;
+    height: fit-content;
+    flex-shrink: 0;
+  }
   .gpx-link {
     color: var(--nav-hover-text);
     background-color: var(--nav-hover-bg);
     display: flex;
     align-items: center;
+    margin-block-end: 20px;
     gap: 5px;
     padding: 10px;
     border-radius: 5px;
@@ -253,7 +264,10 @@ const { frontmatter, headings } = Astro.props;
     width: 200px;
     height: 200px;
     border-radius: 10px;
-    margin-block: 20px;
+    margin-block-end: 20px;
+  }
+  #gpx-info {
+    margin-block-end: 20px;
   }
 </style>
 <script 
@@ -279,10 +293,15 @@ document.addEventListener("DOMContentLoaded", () => {
     const initialLat = lat || 49.1;  // Default Slovensko 
     const initialLng = lng || 19.5;
     const map = L.map("map", {
-      fullscreenControl: {
-        pseudoFullscreen: true, // Použije pseudo fullscreen pre Leaflet
-      },
+      fullscreenControl: true,
+      fullscreenControlOptions: {
+        position: 'topright',
+      }
     }).setView([initialLat, initialLng], 12); 
+
+    map.on('enterFullscreen', function () {
+	    console.log('entered fullscreen');
+    });
 
     L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
@@ -317,17 +336,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
       // Vlož info do DOMu pod mapu
       let infoDiv = document.getElementById('gpx-info');
-      if (!infoDiv) {
-        infoDiv = document.createElement('div');
-        infoDiv.id = 'gpx-info';
-        infoDiv.style.marginTop = '10px';
-        mapElement.parentNode.insertBefore(infoDiv, mapElement.nextSibling);
-      }
       infoDiv.innerHTML = `
         <div style="
           background-color: var(--nav-hover-bg);
           border-radius: 15px;
           margin-bottom: 20px;
+          position: sticky;
+          top: 0px;
         ">
           <div style="
             color: var(--nav-hover-bg);
