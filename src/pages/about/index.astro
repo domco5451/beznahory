@@ -19,26 +19,35 @@ const postData = allPosts
   imageAlt: post.frontmatter?.thumbnail.alt,
   type: post.frontmatter?.type,
 }));
-console.log(postData);
 ---
 
 <PageLayout title="O mne">
   <div class="container">
-    <h1>O mne</h1>
-    <section>
-      <p>
-        Ahoj, volám sa Martin a som vášnivý milovník prírody a outdoorových
-        aktivít. Môj život je plný dobrodružstiev, ktoré ma vedú do krásnych
-        hôr, lesov a riek. Rád trávim čas v prírode, objavujem nové miesta a
-        zdieľam svoje zážitky s ostatnými.
-      </p>
-      <p>
-        Na tejto stránke nájdete moje najnovšie príspevky o turistike, kempovaní,
-        horolezectve a ďalších outdoorových aktivitách. Dúfam, že vás moje
-        zážitky inšpirujú k vlastným dobrodružstvám v prírode!
-      </p>
+    <section class="profile">
+          <Image
+            class="profile-image"
+            src="https://images.unsplash.com/photo-1463453091185-61582044d556?fm=jpg&q=60&w=3000&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTV8fHJhbmRvbSUyMHBlcnNvbnxlbnwwfHwwfHx8MA%3D%3D"
+            alt="Martin's smirking"
+            inferSize={true}
+            layout="constrained"
+            loading="eager"
+            fetchpriority="high"
+          />
+      <div>
+        <h1>Čaute ja som Martin!</h1>
+        <p>
+          Ahoj, volám sa Martin a som vášnivý milovník prírody a outdoorových
+          aktivít. Môj život je plný dobrodružstiev, ktoré ma vedú do krásnych
+          hôr, lesov a riek. Rád trávim čas v prírode, objavujem nové miesta a
+          zdieľam svoje zážitky s ostatnými.
+        </p>
+        <p>
+          Na tejto stránke nájdete moje najnovšie príspevky o turistike, kempovaní,
+          horolezectve a ďalších outdoorových aktivitách. Dúfam, že vás moje
+          zážitky inšpirujú k vlastným dobrodružstvám v prírode!
+        </p>
+      </div>
     </section>
-
     <h2 class="main-title">Časová os príspekov</h2>
     <h2 class="posts-count">
       Počet všetkých príspevkov: <span class="total-posts"
@@ -59,7 +68,7 @@ console.log(postData);
                       alt={post.imageAlt}
                       inferSize={true}
                       layout="constrained"
-                      loading={i < 3 ? "eager" : "lazy"}
+                      loading={i < 1 ? "eager" : "lazy"}
                       fetchpriority="high"
                     />
                     <div class="post-content-text">
@@ -245,9 +254,42 @@ console.log(postData);
   }
   .container {
     max-width: 1300px;
-    margin: auto;
+    margin: 50px auto;
     display: flex;
     flex-direction: column;
     align-items: center;
+  }
+  /* Profile */
+  .profile {
+    display: flex;
+    padding: 50px;
+    gap: 50px;
+  }
+  .profile h1 {
+    font-size: 2rem;
+    margin-bottom: 20px;
+    font-weight: 500;
+  }
+  .profile p {
+    font-size: 1.2rem;
+    line-height: 1.6;
+    color: var(--primary-text);
+    margin-block-end: 20px;
+  }
+  .profile-image-wrapper {
+    display: flex;
+    
+  }
+  .profile-line {
+    height: 50px;
+    width: 10px;
+    background: red;
+  }
+  .profile-image {
+    width: 300px;
+    height: 300px;
+    border-radius: 50%;
+    margin-right: 20px;
+    object-fit: cover;
   }
 </style>

@@ -10,6 +10,9 @@ const { frontmatter, headings } = Astro.props;
 <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" defer></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-gpx/2.1.2/gpx.min.js" defer></script>
+<script src='https://api.mapbox.com/mapbox.js/plugins/leaflet-fullscreen/v1.0.1/Leaflet.fullscreen.min.js'></script>
+<link href='https://api.mapbox.com/mapbox.js/plugins/leaflet-fullscreen/v1.0.1/leaflet.fullscreen.css' rel='stylesheet' />
+
 
 <PageLayout title={frontmatter.title}>
   <div class="markdown-post-layout">
@@ -24,7 +27,7 @@ const { frontmatter, headings } = Astro.props;
             </a>
           ) : null}
           {frontmatter.latitude && frontmatter.longitude ? (
-            <a class="map-link" href={`/map#${Astro.url.pathname.split('/').pop()}`}>
+            <a class="map-link" href={`/map#${Astro.url.pathname.replace(/\/$/, '').split('/').pop()}`}>
               <Icon name="gps" size={20}/>
               <p>
                 Zobraziť na mape
@@ -103,6 +106,12 @@ const { frontmatter, headings } = Astro.props;
         </aside>
     </div>
   </div>
+  <div class="map-modal-overlay" id="mapModal">
+    <div class="map-modal-container">
+      <div class="map-modal-close" id="closeMapModal" aria-label="Zavrieť mapu">&times;</div>
+      <div id="modal-map"></div>
+    </div>
+</div>
 </PageLayout>
 <style>
   html {
@@ -265,10 +274,63 @@ const { frontmatter, headings } = Astro.props;
     height: 200px;
     border-radius: 10px;
     margin-block-end: 20px;
+    z-index: 1;
   }
   #gpx-info {
     margin-block-end: 20px;
   }
+   /* Modal Window */
+
+  .map-modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .map-modal-container {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    width: 80%;
+    height: 80%;
+    max-width: 1000px;
+    position: relative;
+  }
+  
+  .map-modal-close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 24px;
+    background: white;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 1010;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  }
+  
+  #modal-map {
+    width: 100%;
+    height: 100%;
+    border-radius: 5px;
+  }
+
+  /* Accessibility */
+
+/* Zväčšenie dotykových cieľov pre ovládacie prvky mapy */
+
 </style>
 <script 
   define:vars={{ 
@@ -292,16 +354,34 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const initialLat = lat || 49.1;  // Default Slovensko 
     const initialLng = lng || 19.5;
-    const map = L.map("map", {
-      fullscreenControl: true,
-      fullscreenControlOptions: {
-        position: 'topright',
-      }
-    }).setView([initialLat, initialLng], 12); 
 
-    map.on('enterFullscreen', function () {
-	    console.log('entered fullscreen');
-    });
+    // Inicializácia malej mapy
+    const map = L.map("map", {}).setView([initialLat, initialLng], 12); 
+
+    // Vytvor vlastné tlačidlo pre zobrazenie v modali namiesto fullscreen
+  const modalButton = L.Control.extend({
+    options: {
+      position: 'topright'
+    },
+    onAdd: function(map) {
+      const container = L.DomUtil.create('div', 'leaflet-bar leaflet-control');
+      container.innerHTML = `<a href="#" title="Zobraziť väčšiu mapu" style="display:flex; align-items:center; justify-content:center;">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24">
+          <path d="M15 3h6v6h-2V5h-4V3M3 3h6v2H5v4H3V3m6 18H3v-6h2v4h4v2m10-2v-4h2v6h-6v-2h4z"/>
+        </svg>
+      </a>`;
+      
+      container.onclick = function(e) {
+        e.preventDefault();
+        openMapModal(gpxPath, initialLat, initialLng);
+      };
+      
+      return container;
+    }
+  });
+
+  map.addControl(new modalButton());
+
 
     L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
@@ -355,7 +435,7 @@ document.addEventListener("DOMContentLoaded", () => {
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
               <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3c7.2 0 9 1.8 9 9s-1.8 9-9 9s-9-1.8-9-9s1.8-9 9-9m0 5v4m0 4h.01"/>
             </svg>
-            <h3>
+            <h3 style="font-weight: bold">
               Informácie o trase
             </h3>
           </div>
@@ -377,6 +457,94 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     }
 })
+
+function openMapModal(gpxPath, lat, lng) {
+    const modalOverlay = document.getElementById('mapModal');
+    const modalMapContainer = document.getElementById('modal-map');
+    const closeButton = document.getElementById('closeMapModal');
+    
+    // Zobraz modal
+    modalOverlay.style.display = 'flex';
+    
+    // Inicializuj mapu v modali
+    const modalMap = L.map("modal-map").setView([lat, lng], 12);
+    
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+    }).addTo(modalMap);
+    
+    // Ak máme GPX, spracuj ho pre modálnu mapu
+    if (gpxPath && window.L.GPX) {
+      new L.GPX(gpxPath, {
+        async: true,
+        polyline_options: {
+          color: '#3388ff',
+          weight: 3,
+          opacity: 0.8
+        }
+      }).on('loaded', function(e) {
+        modalMap.fitBounds(e.target.getBounds());
+      }).addTo(modalMap);
+    }
+    
+    // Zavri modal po kliknutí na krížik
+    closeButton.onclick = function() {
+      modalOverlay.style.display = 'none';
+      modalMap.remove(); // Odstráň mapu aby sa uvoľnila pamäť
+    };
+    
+    // Zavri modal po kliknutí mimo mapu
+    modalOverlay.onclick = function(e) {
+      if (e.target === modalOverlay) {
+        modalOverlay.style.display = 'none';
+        modalMap.remove();
+      }
+    };
+    
+    // Vyvolaj resize event pre Leaflet mapu, aby sa správne prispôsobila
+    setTimeout(function() {
+      modalMap.invalidateSize();
+    }, 10);
+  }
+  
+  // Inicializuj event listenery pre modal
+  document.getElementById('closeMapModal').addEventListener('click', function() {
+    document.getElementById('mapModal').style.display = 'none';
+  });
+  
+  // Zavri po kliknutí mimo
+  window.addEventListener('click', function(e) {
+    const modal = document.getElementById('mapModal');
+    if (e.target === modal) {
+      modal.style.display = 'none';
+    }
+  });
+
+  // Zavri modal po stlačení klávesy Escape
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') {
+    const modal = document.getElementById('mapModal');
+    if (modal.style.display === 'flex') {
+      modal.style.display = 'none';
+      
+      // Ak modal obsahuje inicializovanú mapu, odstráň ju pre uvoľnenie pamäte
+      const modalMapElement = document.getElementById('modal-map');
+      if (modalMapElement._leaflet_id) {
+        const modalMap = L.DomUtil.get('modal-map')._leaflet;
+        if (modalMap) {
+          modalMap.remove();
+        }
+      }
+    }
+  }
+});
+// Zavri modal po stlačení Enter alebo Space na close button
+document.getElementById('closeMapModal').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter' || e.key === ' ') {
+    e.preventDefault();
+    document.getElementById('mapModal').style.display = 'none';
+  }
+});
 
 /* Observer */
   const observer = new IntersectionObserver((entries) => {

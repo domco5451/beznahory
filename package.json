@@ -16,7 +16,6 @@
     "astro-compress": "^2.3.8",
     "astro-icon": "^1.1.5",
     "leaflet": "^1.9.4",
-    "leaflet.fullscreen": "^4.0.0",
     "mdast-util-to-string": "^4.0.0",
     "reading-time": "^1.5.0",
     "tailwindcss": "^4.1.11"
