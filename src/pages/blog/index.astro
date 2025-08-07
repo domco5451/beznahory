@@ -3,7 +3,7 @@ import { Image } from "astro:assets";
 import { Icon } from "astro-icon/components";
 import PageLayout from "../../layouts/PageLayout.astro";
 
-const allPosts = Object.values(import.meta.glob("../posts/*.mdx", { eager: true }))
+const allPosts = Object.values(import.meta.glob("./posts/*.mdx", { eager: true }))
 ---
 {/* Dorobiť Image nech nie je nad header */}
 <PageLayout title="Blog">

@@ -4,7 +4,7 @@ import { Icon } from "astro-icon/components";
 import PageLayout from "../../layouts/PageLayout.astro";
 
 const allPosts = Object.values(
-  import.meta.glob("../posts/*.mdx", { eager: true })
+  import.meta.glob("../blog/posts/*.mdx", { eager: true })
 );
 
 const postData = allPosts
@@ -24,7 +24,22 @@ console.log(postData);
 
 <PageLayout title="O mne">
   <div class="container">
-    <h1 class="main-title">Časová os príspekov</h1>
+    <h1>O mne</h1>
+    <section>
+      <p>
+        Ahoj, volám sa Martin a som vášnivý milovník prírody a outdoorových
+        aktivít. Môj život je plný dobrodružstiev, ktoré ma vedú do krásnych
+        hôr, lesov a riek. Rád trávim čas v prírode, objavujem nové miesta a
+        zdieľam svoje zážitky s ostatnými.
+      </p>
+      <p>
+        Na tejto stránke nájdete moje najnovšie príspevky o turistike, kempovaní,
+        horolezectve a ďalších outdoorových aktivitách. Dúfam, že vás moje
+        zážitky inšpirujú k vlastným dobrodružstvám v prírode!
+      </p>
+    </section>
+
+    <h2 class="main-title">Časová os príspekov</h2>
     <h2 class="posts-count">
       Počet všetkých príspevkov: <span class="total-posts"
         >{postData.length}</span>

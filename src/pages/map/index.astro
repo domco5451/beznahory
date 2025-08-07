@@ -1,7 +1,7 @@
 ---
 import MapLayout from "../../layouts/MapLayout.astro";
 const allPosts = Object.values(
-  import.meta.glob("../posts/*.mdx", { eager: true })
+  import.meta.glob("../blog/posts/*.mdx", { eager: true })
 );
 
 // Priprav dáta pre JavaScript - extrahuj len potrebné údaje z frontmatteru

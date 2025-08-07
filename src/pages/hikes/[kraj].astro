@@ -6,7 +6,7 @@ import { Image } from "astro:assets";
 export async function getStaticPaths() {
   // Načítaj všetky príspevky z posts adresára
   const allPosts = Object.values(
-    import.meta.glob("../posts/*.mdx", { eager: true })
+    import.meta.glob("../blog/posts/*.mdx", { eager: true })
   );
   {
     return [
