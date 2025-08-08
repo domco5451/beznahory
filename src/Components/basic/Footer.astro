@@ -1,13 +1,146 @@
 ---
+import { Icon } from "astro-icon/components";
+
+const footerLinks = [
+  { section: "Domov", url: "/" },
+  { section: "Blog", url: "/blog" },
+  { section: "Túry", url: "/hikes" },
+  { section: "Turistická mapa", url: "/map" },
+  { section: "Kalendár akcií", url: "/calendar" },
+  { section: "O mne", url: "/about" },
+];
 ---
+
 <footer>
-    <p class="p-footer">
-        &copy Copyright - Runhills - All Rights Reserved
-    </p>
+  <div class="p-footer">
+    <div class="footer-logo">
+      <div class="logo-text">
+        <Icon name="logoSite" size={50} />
+        <div>
+          <Icon name="logo-text" width="200" height="30" />
+          <Icon name="slogan" width="100" height="20" />
+        </div>
+      </div>
+      <p>
+        Blog venovaný horskému behu – hill run. Nájdeš tu tipy na tréning do
+        kopcov, recenzie trás, vybavenie, zážitky z behov a inšpirácie pre
+        každého, kto miluje beh v prírode a výzvy strmých stúpaní.
+      </p>
+    </div>
+    <div class="footer-links">
+      <h2>Sekcie</h2>
+      <ul>
+        {
+          footerLinks.map((link: any) => (
+            <li>
+              <div class="icon-link">
+                <Icon name="roundet-arrow-left" size={20} />
+                <a href={link.url}>{link.section}</a>
+              </div>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+    <div class="footer-links">
+      <h2>Sledujte nás</h2>
+      <div style="display: flex; flex-direction: column; gap: 20px;">
+        <p>
+          Sledujte nás na sociálnych sieťach, kde zdieľame tipy, trasy a
+          inšpirácie pre horský beh.
+        </p>
+        <div style="display: flex; gap: 10px; color: var(--nav-hover-text);">
+          <Icon name="instagram" size={30} />
+        </div>
+      </div>
+    </div>
+    <div class="footer-links">
+      <h2>Kontakt</h2>
+      <div class="icon-mail">
+        <Icon name="mail" size={20} />
+        <p>beznahory@gmail.com</p>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <hr />
+    <div
+      style="display: flex; justify-content: space-between; align-items: center;"
+    >
+      <p>&copy Copyright - beznahory.sk 2025</p>
+      <a href="/">Privacy Policy</a>
+    </div>
+  </div>
 </footer>
 <style>
-    .p-footer {
-    margin-block: 20px;
-    text-align: center;
-} 
+  footer {
+    border-block-start: 1px solid var(--border-color);
+    margin-block-start: 15px;
+  }
+  .p-footer {
+    max-width: 1300px;
+    margin: auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    padding: 20px;
+    gap: 100px;
+  }
+  .footer-bottom {
+    max-width: 1300px;
+    margin: auto;
+    padding-inline: 20px;
+  }
+  .icon-link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--nav-hover-text);
+    margin-block: 5px;
+  }
+  .footer-bottom hr {
+    border: none;
+    height: 1px;
+    background-color: var(--border-color);
+  }
+  .footer-bottom p {
+    color: var(--text-secondary);
+    font-size: 0.8rem;
+    padding-block: 10px;
+  }
+  .footer-bottom a {
+    color: var(--text-secondary);
+    font-size: 0.8rem;
+  }
+  .footer-links {
+    display: flex;
+    flex-direction: column;
+    margin-block: 5px;
+  }
+  .logo-text {
+    color: var(--nav-hover-text);
+    display: flex;
+    align-items: center;
+    margin-block-end: 20px;
+  }
+  h2 {
+    font-size: 1.5rem;
+    color: var(--nav-hover-text);
+    line-height: 25px;
+    margin-block-end: 20px;
+  }
+  .icon-mail {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .p-footer p,
+  .p-footer li a {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    font-weight: 300;
+    line-height: 25px;
+  }
+  a:hover {
+    text-decoration: underline;
+  }
 </style>
