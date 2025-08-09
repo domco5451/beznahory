@@ -1,9 +1,9 @@
 ---
 layout: ../../../layouts/MarkdownPostLayout.astro
 type: "hike"
-title: "Tajomný výstup na Skalku"
+title: "Prírodná pamiatka Bosmany"
 pubDate: "2. Aug 2025"
-description: "Jedného letného popoludnia som sa rozhodol uniknúť z mesta a objaviť turistickú trasu vedúcu na Skalku pri Kremnici. Výlet ma zaviedol cez lesy, skalnaté úseky a pokojné lúky až na vyhliadkový hrebeň s nádherným výhľadom na Kremnické vrchy. Hoci trasa nebola náročná, poskytla mi presne to, čo som hľadal – pokoj, krásnu prírodu a ticho. Ideálne miesto pre každého, kto túži vypnúť a na chvíľu sa stratiť v horách."
+description: "Jedným z miest, ktoré by mal navštíviť každý, kto zavíta k známejšej Manínskej tiesňave, je prírodná pamiatka Bosmany. Nachádza sa za obcou Kostolec, v nadmorskej výške približne 650 m n. m. Ide o menej náročnú túru, ktorá zaujme výhľadmi na okolité dediny, vrchy ako Veľký a Malý Manín, Manínec, ako aj na samotnú Manínsku a Kostoleckú tiesňavu."
 author: "Radoslav Koiš"
 kraj: "zilinsky-kraj"
 okres: "Púchov"
@@ -16,43 +16,70 @@ pfp:
   alt: "Fotka Radoslava Koiša"
 latitude: 48.742736
 longitude: 18.997842
-gpx: "../../../../gpx/2025/demo.gpx"
+gpx: "../../../../gpx/2025/bosmany.gpx"
 ratings:
-  difficulty: 4
-  views: 4.0
-  length: "7 km"
-  time: "2 h"
+  difficulty: 1
+  views: 4
+  length: "3 km"
+  time: "25-35min"
   terrain: "lesný, kamenistý"
 ---
+
 import { Image } from "astro:assets";
+import hora1200 from "../../../assets/optimized/hora1200.avif";
+import znacka1200 from "../../../assets/optimized/hora-2-1200.avif";
+import vyhlad1200 from "../../../assets/optimized/hora-5-1200.avif";
+import zastavka1200 from "../../../assets/optimized/hora-4-1200.avif";
 import Aside from "../../../components/markdown/Aside.astro";
 
 ## Výlet začína
 
-Jedného letného popoludnia som sa rozhodol, že musím konečne navštíviť Skalku pri Kremnici. Hoci je známa skôr ako bežkársky raj, veľa ľudí nevie, že v lete ponúka pokojné a krásne trasy lesom a skalami. Zbalil som si ľahký batoh – voda, niečo na zahryznutie a tenká bunda pre istotu.
+Jedným z miest, ktoré by mal navštíviť každý, kto zavíta k známejšej Manínskej tiesňave, je prírodná pamiatka Bosmany. Nachádza sa za obcou Kostolec, v nadmorskej výške približne 650 m n. m. Ide o menej náročnú túru, ktorá zaujme výhľadmi na okolité dediny, vrchy ako Veľký a Malý Manín, Manínec, ako aj na samotnú Manínsku a Kostoleckú tiesňavu.
 
-Zaparkoval som neďaleko lyžiarskeho strediska a vydal sa po turistickej značke, ktorá vedie cez hustý les.
+<Image 
+  src={hora1200}
+  alt="Výhľad zo Skalky pri Kremnici"
+  inferSize={true}
+  layout="constrained"
+  loading="eager"
+/>
 
-<Aside title="Rada pre Vás" type="tip">
-  Ak idete v lete, odporúčam repelent – v lesných úsekoch býva veľa komárov, najmä po daždi.
+## Umiestnenie
+
+Výstup na Bosmany je možné začať v obci Kostolec, kde sa už po niekoľkých minútach naskytne pohľad na samotné skalnaté bradlo. Parkovanie je možné pri autobusovej zastávke priamo v obci, odkiaľ sa v priebehu pár minút dostanete na otvorené lúčne priestranstvá. Trasa nevedie po turistickom značení, no orientácia je možná podľa informačných tabúľ v obci. Následne je cesta intuitívna a nevyžaduje ďalšie značenie.
+
+<Image 
+  src={znacka1200}
+  alt="Výhľad zo Skalky pri Kremnici"
+  inferSize={true}
+  layout="constrained"
+  loading="lazy"
+/>
+
+Postupne sa lúčne priestranstvá menia na lesné úseky, ktoré nás v závere zavedú k menšiemu skalnému výstupu s dĺžkou približne 300 metrov. Odtiaľ sa nám už otvárajú výhľady, pre ktoré sa sem rozhodne oplatí prísť. Celá trasa vám nezaberie viac než 30 minút – záleží len na tom, ako dlho sa budete kochať okolím. Celková dĺžka túry je približne 3 km s prevýšením 180 metrov.
+
+ <Aside title="Upozornenie" type="danger">
+  V záverečnej časti turistiky sa dostávate do strmého terénu, kde najmä v nepriaznivom počasí hrozí pošmyknutie alebo zakopnutie o kameň či koreň stromu. Po dosiahnutí vrcholu je potrebné zvýšiť opatrnosť – za kamennou masou sa nachádza priepasť bez predchádzajúceho varovania, ktorá predstavuje riziko pádu.
 </Aside>
 
-Trasa sa mierne vlnila, striedali sa úseky s výhľadmi a lesné chodníky plné koreňov a machu. Slnko sa občas predralo cez koruny stromov a vytváralo nádherné svetelné efekty.
+<Image 
+  src={vyhlad1200}
+  alt="Výhľad zo Skalky pri Kremnici"
+  inferSize={true}
+  layout="constrained"
+  loading="lazy"
+/>
 
-## Výhľad, ktorý stojí za to
+V prípade, že sa rozhodnete trasu absolvovať behom, odporúča sa použiť kvalitnú trailovú bežeckú obuv a zvoliť vhodné počasie. V zimnom období alebo počas dažďa je terén strmý a klzký. Zvýšená opatrnosť je potrebná najmä v skalnatom úseku, kde hrozí riziko pádu. Pri dobrej kondícii trvá výbeh na vrchol približne 10 minút.
 
-Po asi hodine som dorazil k skalnatému úseku. Tam som si musel dať krátku pauzu – jednak kvôli nádhernému výhľadu, jednak kvôli tomu, že kamenistý chodník bol strmší a vyžadoval viac sústredenia.
+## Parkovanie
 
-<Aside title="Pozor!" type="danger">
-  Úsek na hrebeni je miestami úzky a klzký, najmä po daždi. Dávajte si pozor, kam šliapete – nie je tu žiadne zábradlie.
-</Aside>
+Parkovanie je možné pri autobusovej zástavke priamo v dedine, kde je niekoľko vyhradených miest pre tento účel. Pri zastavení si dávajte pozor na dopravné značenie, ktoré zakazuje parkovanie v určitej vzdialenosti od samotnej zástavky. 
 
-Keď som sa dostal na samotný vrchol s krížom, otvoril sa predo mnou panoramatický výhľad na okolité kopce a Kremnické vrchy. Bol tam úplný pokoj – len jemný vietor a ticho prerušované spevom vtákov.
-
-## Záver a návrat
-
-Na mieste som si oddýchol, naobedoval sa a zapísal sa do vrcholovej knihy. Zápis predomnou bol od turistu z Poľska – zjavne ide o obľúbené miesto aj za hranicami.
-
-Cestu späť som zvolil inú trasu cez lúky, ktoré boli rozkvitnuté a plné motýľov. Výlet som zakončil krátkou zastávkou pri Chate Skalka, kde som si dal čaj a koláč.
-
-Bol to deň, na ktorý budem dlho spomínať – pokojná, nenáročná, ale nádherná túra, ideálna na vypnutie a načerpanie novej energie.
+<Image 
+  src={zastavka1200}
+  alt="Výhľad zo Skalky pri Kremnici"
+  inferSize={true}
+  layout="constrained"
+  loading="lazy"
+/>

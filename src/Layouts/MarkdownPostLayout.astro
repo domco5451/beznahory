@@ -3,6 +3,8 @@ import StarRating from "../components/ratings/StarRating.astro";
 import PageLayout from "./PageLayout.astro";
 import { Image } from "astro:assets";
 import { Icon } from "astro-icon/components";
+import thumbnail1200 from "../assets/optimized/thumbnail-blog.avif";
+import pfp from "../assets/optimized/pfp-sm.avif";
 
 const { frontmatter, headings } = Astro.props;
 
@@ -61,7 +63,7 @@ const { frontmatter, headings } = Astro.props;
     <article>
       <Image
         class="thumbnail"
-        src={frontmatter.thumbnail.url}
+        src={thumbnail1200}
         alt={frontmatter.thumbnail.alt}
         inferSize={true}
         layout="constrained"
@@ -72,7 +74,7 @@ const { frontmatter, headings } = Astro.props;
         <div class="author-info">
           <Image
             class="pfp"
-            src={frontmatter.pfp.url}
+            src={pfp}
             alt={frontmatter.pfp.alt}
             inferSize={true}
             layout="constrained"

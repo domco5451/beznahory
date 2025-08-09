@@ -2,6 +2,8 @@
 import { Image } from "astro:assets";
 import { Icon } from "astro-icon/components";
 import PageLayout from "../../layouts/PageLayout.astro";
+import thumbnail800 from "../../assets/optimized/thumbnail-blog-posts.avif";
+import pfp from "../../assets/optimized/pfp-sm.avif";
 
 const allPosts = Object.values(import.meta.glob("./posts/*.mdx", { eager: true }))
 ---
@@ -16,7 +18,7 @@ const allPosts = Object.values(import.meta.glob("./posts/*.mdx", { eager: true }
             <a href={post.url}>
               <Image
                   class="thumbnail"
-                  src={post.frontmatter.thumbnail.url}
+                  src={thumbnail800}
                   alt={post.frontmatter.thumbnail.alt}
                   inferSize={true}
                   layout="constrained"
@@ -34,7 +36,7 @@ const allPosts = Object.values(import.meta.glob("./posts/*.mdx", { eager: true }
                 <Image
                   width={50}
                   class="pfp"
-                  src={post.frontmatter.pfp.url}
+                  src={pfp}
                   alt={post.frontmatter.pfp.alt}
                   inferSize={true}
                   layout="constrained"
