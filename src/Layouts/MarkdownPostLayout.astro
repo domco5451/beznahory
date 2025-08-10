@@ -3,11 +3,8 @@ import StarRating from "../components/ratings/StarRating.astro";
 import PageLayout from "./PageLayout.astro";
 import { Image } from "astro:assets";
 import { Icon } from "astro-icon/components";
-import thumbnail1200 from "../assets/optimized/thumbnail-blog.avif";
-import pfp from "../assets/optimized/pfp-sm.avif";
 
-const { frontmatter, headings } = Astro.props;
-
+const { frontmatter, headings, remarkPluginFrontmatter } = Astro.props;
 ---
 <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" defer></script>
@@ -29,7 +26,7 @@ const { frontmatter, headings } = Astro.props;
             </a>
           ) : null}
           {frontmatter.latitude && frontmatter.longitude ? (
-            <a class="map-link" href={`/map#${Astro.url.pathname.replace(/\/$/, '').split('/').pop()}`}>
+            <a class="map-link" href={`/map#${Astro.url.pathname.split('/').filter(Boolean).pop()}`}>
               <Icon name="gps" size={20}/>
               <p>
                 Zobraziť na mape
@@ -63,8 +60,8 @@ const { frontmatter, headings } = Astro.props;
     <article>
       <Image
         class="thumbnail"
-        src={thumbnail1200}
-        alt={frontmatter.thumbnail.alt}
+        src={frontmatter.thumbnail}
+        alt={frontmatter.thumbnailAlt}
         inferSize={true}
         layout="constrained"
         loading="eager"
@@ -74,8 +71,8 @@ const { frontmatter, headings } = Astro.props;
         <div class="author-info">
           <Image
             class="pfp"
-            src={pfp}
-            alt={frontmatter.pfp.alt}
+            src={frontmatter.pfp}
+            alt={frontmatter.pfpAlt}
             inferSize={true}
             layout="constrained"
             loading="eager"
@@ -84,11 +81,11 @@ const { frontmatter, headings } = Astro.props;
         </div>
         <div class="flex-container">
           <Icon name="date" size={20}/>
-          <p>{frontmatter.pubDate}</p>
+          <p>{frontmatter.pubDate.toLocaleDateString()}</p>
         </div>
         <div class="flex-container">
           <Icon name="read" size={20}/>
-          <p>{frontmatter.minutesRead}</p>
+          <p>{remarkPluginFrontmatter.minutesRead}</p>
         </div>
       </header>
       <section class="markdown-content">
@@ -112,9 +109,10 @@ const { frontmatter, headings } = Astro.props;
     <div class="map-modal-container">
       <div class="map-modal-close" id="closeMapModal" aria-label="Zavrieť mapu">&times;</div>
       <div id="modal-map"></div>
-    </div>
+  </div>
 </div>
 </PageLayout>
+
 <style>
   html {
     scroll-behavior: smooth; 
@@ -331,8 +329,7 @@ const { frontmatter, headings } = Astro.props;
 
   /* Accessibility */
 
-/* Zväčšenie dotykových cieľov pre ovládacie prvky mapy */
-
+/* Carousel */
 </style>
 <script 
   define:vars={{ 
@@ -414,7 +411,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const elevationMin = Math.round(e.target.get_elevation_min());
       const elevationMax = Math.round(e.target.get_elevation_max());
       const time = e.target.get_total_time();
-      const duration = e.target.get_duration_string(time);
+      const duration = e.target.get_duration_string_iso(time);
 
       // Vlož info do DOMu pod mapu
       let infoDiv = document.getElementById('gpx-info');

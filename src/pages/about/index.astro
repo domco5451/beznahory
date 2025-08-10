@@ -1,26 +1,11 @@
 ---
+import { getCollection, render } from 'astro:content';
 import { Image } from "astro:assets";
 import { Icon } from "astro-icon/components";
 import PageLayout from "../../layouts/PageLayout.astro";
 
-const allPosts = Object.values(
-  import.meta.glob("../blog/posts/*.mdx", { eager: true })
-);
-
-const postData = allPosts
-.filter((post: any )=> post.frontmatter?.thumbnail?.url)
-.map((post: any) => ({
-  title: post.frontmatter?.title,
-  description: post.frontmatter?.description,
-  autor: post.frontmatter?.author,
-  date: post.frontmatter?.pubDate,
-  url: post.url,
-  image: post.frontmatter.thumbnail.url,
-  imageAlt: post.frontmatter?.thumbnail.alt,
-  type: post.frontmatter?.type,
-}));
+const allPosts = await getCollection('blog');
 ---
-
 <PageLayout title="O mne">
   <div class="container">
     <section class="profile">
@@ -51,56 +36,53 @@ const postData = allPosts
     <h2 class="main-title">Časová os príspekov</h2>
     <h2 class="posts-count">
       Počet všetkých príspevkov: <span class="total-posts"
-        >{postData.length}</span>
+        >{allPosts.length}</span>
     </h2>
        <h3 class="year">2025</h3>
     <ul>
       {
-        postData.map((post: any, i: number) => (
+        allPosts.map((post: any, i: number) => (
           <li class="post-card">
             <div class="empty-space">
-              {post.type === "hike" && (
-                <a class="post-link" href={post.url}>
+                <a class="post-link" href={`/blog/${post.slug}`}>
                   <div class="post-content">
                     <Image
                       class="thumbnail"
-                      src={post.image}
-                      alt={post.imageAlt}
-                      inferSize={true}
+                      src={post.data.thumbnail}
+                      alt={post.data.thumbnailAlt}
                       layout="constrained"
                       loading={i < 1 ? "eager" : "lazy"}
                       fetchpriority="high"
                     />
                     <div class="post-content-text">
-                      <h2 class="title">{post.title}</h2>
-                      <p class="description">{post.description}</p>
+                      <h2 class="title">{post.data.title}</h2>
+                      <p class="description">{post.data.description}</p>
                       <div class="autor-date">
                         <div class="icon-info">
                           <Icon name="person" size={15} />
-                          <p>{post.autor}</p>
+                          <p>{post.data.author}</p>
                         </div>
                         <div class="icon-info">
                           <Icon name="date" size={15} />
-                          <p>{post.date}</p>
+                          <p>{post.data.pubDate.toLocaleDateString()}</p>
                         </div>
                       </div>
                     </div>
                   </div>
                 </a>
-              )}
             </div>
             <div class="circle-line">
-              <div class="circle">{post.date}</div>
+              <div class="circle">{post.data.pubDate.toLocaleDateString()}</div>
               <div class="line" />
             </div>
             <div class="empty-space">
-              {post.type !== "hike" && (
-                <a href={post.url}>
+               {/* (
+                <a href={`/blog/${post.slug}`}>
                   <div class="post-content">
                     <Image
                       class="thumbnail"
-                      src={post.image}
-                      alt={post.imageAlt}
+                      src={post.thumbnail}
+                      alt={post.thumbnailAlt}
                       inferSize={true}
                       layout="constrained"
                       loading={i < 4 ? "eager" : "lazy"}
@@ -121,8 +103,7 @@ const postData = allPosts
                       </div>
                     </div>
                   </div>
-                </a>
-              )}
+                </a> */}
             </div>
           </li>
         ))

@@ -1,13 +1,11 @@
 ---
+import { getCollection } from "astro:content";
 import HikeLayout from "./index.astro";
 import  { Icon }  from "astro-icon/components";
 import { Image } from "astro:assets";
 
 export async function getStaticPaths() {
-  // Načítaj všetky príspevky z posts adresára
-  const allPosts = Object.values(
-    import.meta.glob("../blog/posts/*.mdx", { eager: true })
-  );
+  const allPosts = await getCollection("blog");
   {
     return [
       { params: { kraj: "bratislavsky-kraj" }, props: { posts: allPosts } },
@@ -25,7 +23,7 @@ export async function getStaticPaths() {
 const { kraj } = Astro.params;
 const { posts } = Astro.props;
 const filteredPosts = posts.filter((post: any) =>
-  post.frontmatter.kraj?.includes(kraj)
+  post.data.kraj?.includes(kraj)
 );
 ---
 
@@ -37,30 +35,29 @@ const filteredPosts = posts.filter((post: any) =>
   <div class="grid-container">
     {
       filteredPosts.map((post: any) => (
-        <a class="grid-" href={post.url}>
+        <a href={`/blog/${post.slug}`}>
           <div>
             <Image
               class="thumbnail"
-              src={post.frontmatter.thumbnail.url}
-              alt={post.frontmatter.thumbnail.alt}
-              inferSize={true}
+              src={post.data.thumbnail}
+              alt={post.data.thumbnailAlt}
               layout="constrained"
               loading="eager"
             />
             <div class="post-info-wrapper">
-              <h2>{post.frontmatter.title}</h2>
+              <h2>{post.data.title}</h2>
               <div style="margin-block: 5px" class="icon-info">
                 <Icon name="gps2" size={20}/>
-                <h3>{post.frontmatter.okres}</h3>
+                <h3>{post.data.okres}</h3>
               </div>
               <div class="author-info">
                 <div class="icon-info">
                   <Icon name="person" size={20} />
-                  <p>{post.frontmatter.author}</p>
+                  <p>{post.data.author}</p>
                 </div>
                 <div class="icon-info">
                   <Icon name="date" size={20} />
-                  <p>{post.frontmatter.pubDate}</p>
+                  <p>{post.data.pubDate.toLocaleDateString()}</p>
                 </div>
               </div>
             </div>
@@ -77,7 +74,7 @@ const filteredPosts = posts.filter((post: any) =>
     background:
       linear-gradient(66.77deg, var(--code-gradient-three) 0%, var(--code-gradient-three) 100%) padding-box,
       linear-gradient(155deg, var(--code-gradient-one) 0%, var(--code-gradient-two) 18%, var(--code-gradient-three) 45%) border-box;
-    border-radius: 8px;
+    border-radius: 10px;
     border: 1px solid transparent;
     padding: 6px 8px;
     color: var(--nav-hover-text);
@@ -91,7 +88,7 @@ const filteredPosts = posts.filter((post: any) =>
     gap: 20px;
   }
   .grid-container a {
-    border-radius: 10px;
+    border-radius: 11px;
     border: 1px solid var(--border-color);
     transition: transform 0.2s ease-in-out;
   }

@@ -1,4 +1,5 @@
 ---
+import { getCollection } from "astro:content";
 import BadgeKraj from "../../components/customComponents/BadgeKraj.astro";
 import PageLayout from "../../layouts/PageLayout.astro";
 import { Icon } from "astro-icon/components";
@@ -6,8 +7,7 @@ import { Image } from "astro:assets";
 
 const currentPath = Astro.url.pathname;
 
-const allPosts = Object.values(
-  import.meta.glob("../blog/posts/*.mdx", { eager: true })).filter((post: any) => post.frontmatter?.latitude && post.frontmatter?.longitude);
+const allPosts = await getCollection("blog");
 
 const kraje = [
   { href: "/hikes/bratislavsky-kraj", kraj: "Bratislavský kraj" },
@@ -41,30 +41,30 @@ const kraje = [
       currentPath === "/hikes/" && (
         <div class="grid-container-hikes">
           {allPosts.map((post: any) => (
-            <a class="grid-" href={post.url}>
+            <a href={`/blog/${post.slug}`}>
               <div>
                 <Image
                   class="thumbnail"
-                  src={post.frontmatter.thumbnail.url}
-                  alt={post.frontmatter.thumbnail.alt}
+                  src={post.data.thumbnail}
+                  alt={post.data.thumbnailAlt}
                   inferSize={true}
                   layout="constrained"
                   loading="eager"
                 />
                 <div class="post-info-wrapper">
-                  <h2>{post.frontmatter.title}</h2>
+                  <h2>{post.data.title}</h2>
                   <div style="margin-block: 5px" class="icon-info">
                     <Icon name="gps2" size={20} />
-                    <h3>{post.frontmatter.okres}</h3>
+                    <h3>{post.data.okres}</h3>
                   </div>
                   <div class="author-info">
                     <div class="icon-info">
                       <Icon name="person" size={20} />
-                      <p>{post.frontmatter.author}</p>
+                      <p>{post.data.author}</p>
                     </div>
                     <div class="icon-info">
                       <Icon name="date" size={20} />
-                      <p>{post.frontmatter.pubDate}</p>
+                      <p>{post.data.pubDate.toLocaleDateString()}</p>
                     </div>
                   </div>
                 </div>

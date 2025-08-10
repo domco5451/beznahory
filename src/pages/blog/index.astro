@@ -1,11 +1,21 @@
 ---
+import { getCollection } from "astro:content";
 import { Image } from "astro:assets";
 import { Icon } from "astro-icon/components";
 import PageLayout from "../../layouts/PageLayout.astro";
-import thumbnail800 from "../../assets/optimized/thumbnail-blog-posts.avif";
-import pfp from "../../assets/optimized/pfp-sm.avif";
 
-const allPosts = Object.values(import.meta.glob("./posts/*.mdx", { eager: true }))
+const allPosts = await getCollection("blog");
+
+const postsWithReadingTime = await Promise.all(
+  allPosts.map(async (post) => {
+    const { remarkPluginFrontmatter } = await post.render();
+    return {
+      ...post,
+      minutesRead: remarkPluginFrontmatter.minutesRead
+    };
+  })
+);
+
 ---
 {/* Dorobiť Image nech nie je nad header */}
 <PageLayout title="Blog">
@@ -13,41 +23,36 @@ const allPosts = Object.values(import.meta.glob("./posts/*.mdx", { eager: true }
       <h1>Blog</h1>
     <section class="main-grid">
       {
-        allPosts.map((post: any, i: number) => (
+        postsWithReadingTime.map((post: any, i: number) => (
           <article class="wrapper">
-            <a href={post.url}>
+            <a href={`/blog/${post.slug}`}>
               <Image
                   class="thumbnail"
-                  src={thumbnail800}
-                  alt={post.frontmatter.thumbnail.alt}
-                  inferSize={true}
-                  layout="constrained"
+                  src={post.data.thumbnail}
+                  alt={post.data.thumbnailAlt}
                   loading={i < 4 ? "eager" : "lazy"}
-                  fetchpriority="high"
                 />
             </a>
             <header class="header-blog">
-              <h2><a href={post.url}>{post.frontmatter.title}</a></h2>
-              <p>{post.frontmatter.minutesRead}</p>
+              <h2><a href={`/blog/${post.slug}`}>{post.data.title}</a></h2>
+              <p>{post.minutesRead}</p>
             </header>
-            <p class="description">{post.frontmatter.description}</p>
+            <p class="description">{post.data.description}</p>
             <footer class="wrapper-flex">
               <div class="author-flex">
                 <Image
-                  width={50}
                   class="pfp"
-                  src={pfp}
-                  alt={post.frontmatter.pfp.alt}
-                  inferSize={true}
-                  layout="constrained"
+                  width={50}
+                  src={post.data.pfp}
+                  alt={post.data.pfpAlt}
                   loading={i < 2 ? "eager" : "lazy"}
                 />
                 <div>
-                  <p><strong>{post.frontmatter.author}</strong></p>
-                  <p>{post.frontmatter.pubDate}</p>
+                  <p><strong>{post.data.author}</strong></p>
+                  <p>{post.data.pubDate.toLocaleDateString()}</p>
                 </div>
               </div>
-              <a class="cursor-flex" href={post.url}>
+              <a class="cursor-flex" href={`/blog/${post.slug}`}>
                 <span>Čítať ďalej</span>
                 <Icon class="cursor" name="cursor" size={15} />
               </a>

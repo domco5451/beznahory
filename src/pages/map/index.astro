@@ -1,39 +1,37 @@
 ---
+import { getCollection } from 'astro:content';
 import MapLayout from "../../layouts/MapLayout.astro";
-const allPosts = Object.values(
-  import.meta.glob("../blog/posts/*.mdx", { eager: true })
-);
+
+const allPosts = await getCollection('blog');
 
 // Priprav dáta pre JavaScript - extrahuj len potrebné údaje z frontmatteru
 const postsData = allPosts
-  .map((post: any) => ({
-    title: post.frontmatter?.title,
-    description: post.frontmatter?.description,
-    thumbnail: post.frontmatter?.thumbnail?.url,
-    rating: post.frontmatter?.rating,
-    difficulty: post.frontmatter?.difficulty || 
-      (post.frontmatter?.ratings?.difficulty <= 2 ? 'ľahká' : 
-       post.frontmatter?.ratings?.difficulty <= 3.5 ? 'stredná' : 'ťažká'),
-    latitude: post.frontmatter?.latitude,
-    longitude: post.frontmatter?.longitude,
-    url: post.url,
-    slug: post.url?.split('/').pop() || post.frontmatter?.title?.toLowerCase().replace(/[^a-z0-9]/g, '-') || 'post'
-  }))
-  .filter((post: any) => post.latitude && post.longitude); // Len posty so súradnicami
+  .filter((post) => post.data?.latitude && post.data?.longitude)
+  .map((post) => {
+    // Vytvor správnu cestu k obrázku
+    // Post slug obsahuje adresár, napr. "bosmany", thumbnail je "./thumbnail-blog.avif"
+    const thumbnailPath = post.data.thumbnail?.src || "";
+    
+    return {
+      title: post.data.title,
+      description: post.data.description,
+      thumbnailPath: thumbnailPath, // Použijeme vygenerovanú cestu od Astra
+      thumbnailAlt: post.data.thumbnailAlt || "Obrázok túry",
+      latitude: post.data.latitude,
+      longitude: post.data.longitude,
+      url: `/blog/${post.slug}`,
+      slug: post.slug
+    };
+  });
 ---
 <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
 
 <MapLayout title="Turistická mapa">
   <div class="map-container">
     <div id="map"></div>
-    <!-- to-do: dorobiť side menu (toto ignoruj AI)
-     
-    <div class="map-info">
-      <p>Mapa zobrazuje všetky turistické miesta z blogových príspevkov.</p>
-      <p>Kliknite na marker pre viac informácií o výlete.</p>
-    </div> -->
   </div>
 </MapLayout>
+
 <style is:inline>
   body {
     overflow: hidden;
@@ -41,28 +39,22 @@ const postsData = allPosts
   .leaflet-popup-content-wrapper {
     padding: 0;
   }
-  .leaflet-popup-content-wrapper a{
-    color: white;
-    background: black;
-    padding: 5px;
-  }
-  .leaflet-popup-content-wrapper .difficultyColor {
-    padding-block-end: 5px;
+  .leaflet-container a.leaflet-popup-close-button {
+    display: none
   }
   .leaflet-popup-content-wrapper a:hover {
-    background-color: rgb(209, 209, 209);  
+        background-color: rgb(131, 131, 131);
   }
-  .leaflet-popup-close-button {
-    display: none;
+  .leaflet-popup-content-wrapper a {
+    color: white;
+    padding: 5px;
+    background: rgb(0, 0, 0);
   }
   .leaflet-popup-content {
     margin: 0;
     padding: 0;
-  }
-  .map-info {
-    padding: 20px;
-    z-index: 1;
-    border-left: 1px solid var(--border-color);
+    max-width: 300px;
+    line-height: 1.5;
   }
   .map-container {
     display: flex;
@@ -73,158 +65,112 @@ const postsData = allPosts
     height: 100%;
   }
 </style>
-<script define:vars={{ postsData }}>
-  /* Prenies dáta do JavaScriptu */ 
-  window.postsData = postsData;
 
+<script define:vars={{ postsData }}>
   // Zabráň duplicitnému načítaniu Leaflet
   if (window.L) {
-    console.log("Leaflet už je načítaný");
     initializeMap();
   } else {
-    // Čakaj na načítanie DOM
     document.addEventListener("DOMContentLoaded", function () {
-      // Vytvor skript pre načítanie Leaflet JS z CDN
       const script = document.createElement("script");
-      script.src = "https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"; // Konkrétna verzia pre stabilitu
-
-      // Error handling pri načítavaní
+      script.src = "https://unpkg.com/leaflet@1.9.4/dist/leaflet.js";
+      
       script.onerror = function () {
         console.error("Nepodarilo sa načítať Leaflet JS");
         document.getElementById("map").innerHTML =
           '<p style="text-align:center;padding:20px;">Chyba pri načítavaní mapy</p>';
       };
-
-      // Po načítaní Leaflet JS inicializuj mapu
+      
       script.onload = function () {
         initializeMap();
       };
-
-      // Pridaj skript do hlavičky stránky, aby sa načítal
+      
       document.head.appendChild(script);
     });
   }
 
   function initializeMap() {
-    // Kontrola, či existuje map element
     const mapElement = document.getElementById("map");
-    if (!mapElement) {
-      console.error("Map element neexistuje");
-      return;
-    }
+    if (!mapElement) return;
 
-    // Získaj dáta postov
-    const posts = window.postsData || [];
-
-    // Vytvor mapu - ak máme posty, centruj na prvý, inak default pozícia
-    let centerLat = 49.2125578;
-    let centerLng = 16.62662018;
+    // Vytvor mapu - default pozícia na Slovensko
+    let centerLat = 48.7;
+    let centerLng = 19.5;
     let zoom = 7;
 
-    if (posts.length > 0) {
-      centerLat = posts[0].latitude;
-      centerLng = posts[0].longitude;
+    if (postsData.length > 0) {
+      centerLat = postsData[0].latitude;
+      centerLng = postsData[0].longitude;
       zoom = 10;
     }
 
-    const map = window.L.map("map").setView([centerLat, centerLng], zoom);
+    const map = L.map("map").setView([centerLat, centerLng], zoom);
 
-    // Pridaj dlaždice OpenStreetMap do mapy
-    window.L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-      attribution:
-        '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+    // Pridaj dlaždice OpenStreetMap
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
     }).addTo(map);
-
-    // Funkcia na získanie farby podľa obtiažnosti
-    function getDifficultyColor(difficulty) {
-      if (!difficulty) return "#6c757d"; // šedá pre neznámu obtiažnosť
-      
-      const difficultyLower = difficulty.toLowerCase();
-      if (difficultyLower.includes("ľahká") || difficultyLower.includes("easy")) {
-        return "#28a745"; // zelená pre ľahkú obtiažnosť
-      } else if (difficultyLower.includes("stredná") || difficultyLower.includes("medium")) {
-        return "#fd7e14"; // oranžová pre strednú obtiažnosť
-      } else if (difficultyLower.includes("ťažká") || difficultyLower.includes("hard")) {
-        return "#dc3545"; // červená pre ťažkú obtiažnosť
-      }
-      return "#6c757d"; // šedá pre neznámu obtiažnosť
-    }
 
     // Pridaj markery pre každý post
     const markers = [];
-    posts.forEach((post, index) => {
-      const {
-        title,
-        description,
-        thumbnail,
-        rating,
-        latitude,
-        longitude,
-        url,
-        slug,
-        difficulty,
-      } = post;
-
+    
+    postsData.forEach((post) => {
       // Vytvor marker pre post
-      const marker = window.L.marker([latitude, longitude], {
-        title: title
+      const marker = L.marker([post.latitude, post.longitude], {
+        title: post.title
       }).addTo(map);
 
-      // Uložíme marker s jeho slug-om pre neskoršie použitie
-      marker.postSlug = slug;
+      // Ulož POSLEDNÝ SEGMENT slugu pre neskoršie použitie
+      marker.postSlug = post.slug.split('/').pop();
       markers.push(marker);
 
-      // Vytvor popup obsah s farebnou obtiažnosťou
-      const difficultyColor = getDifficultyColor(difficulty);
-      
       const popupContent = `
-        <div style="height: auto; min-width: auto;">
+        <div style="height: auto; min-width: 200px; max-width: 300px;">
+          ${post.thumbnailPath ? `
           <div>
-            <img src="${thumbnail}" alt="${title}" style="
+            <img src="${post.thumbnailPath}" alt="${post.thumbnailAlt}" style="
               border-radius: 12px 12px 0 0;
               width: 100%;
-              height: 120px;
+              height: 150px;
               object-fit: cover;
             "/>
-          </div>
-          <div style="padding: 20px;">
-            <h2 style="font-weight: bold; color: var(--nav-hover-text)">${title}</h2>
-          <p style="
-            text-align: justify;
-            overflow: hidden; 
-            display: -webkit-box; 
-            -webkit-line-clamp: 3; 
-            line-clamp: 3; 
-            -webkit-box-orient: 
-            vertical;
-            ">${description}</p>
-            <p class="difficultyColor" style="color: ${difficultyColor}; font-weight: bold;">Obtiažnosť: ${difficulty}</p>
-            <a href="${url}">Čítať blog &#8594</a>
+          </div>` : ''}
+          <div style="padding: 15px;">
+            <h2 style="font-weight: bold; margin-bottom: 10px;">${post.title}</h2>
+            <p style="
+              text-align: justify;
+              overflow: hidden; 
+              display: -webkit-box; 
+              -webkit-line-clamp: 3; 
+              -webkit-box-orient: vertical;
+              margin-bottom: 10px;
+            ">${post.description}</p>
+            <a href="${post.url}">Čítať blog &#8594;</a>
           </div>
         </div>
-      `
+      `;
+      
       marker.bindPopup(popupContent);
     });
 
     // Skontroluj hash v URL a vycentruj mapu na príslušný marker
     const hash = window.location.hash.replace('#', '');
     if (hash) {
-      const targetPost = posts.find(p => p.slug === hash);
+      // Porovnávaj s posledným segmentom cesty
+      const targetPost = postsData.find(p => p.slug.split('/').pop() === hash);
       const targetMarker = markers.find(m => m.postSlug === hash);
       
       if (targetPost && targetMarker) {
+        // Vycentruj a otvor popup
         map.setView([targetPost.latitude, targetPost.longitude], 13);
         targetMarker.openPopup();
+      } else {
+        console.warn(`Marker pre slug "${hash}" nebol nájdený`);
       }
-    }
-
-    // Ak máme viac postov a nie je hash v URL, prispôsob zoom aby boli všetky viditeľné
-    if (posts.length > 1 && !hash) {
-      const group = new window.L.featureGroup();
-      posts.forEach((post) => {
-        group.addLayer(window.L.marker([post.latitude, post.longitude]));
-      });
+    } else if (markers.length > 1) {
+      // Prispôsob zoom aby boli všetky markery viditeľné
+      const group = new L.featureGroup(markers);
       map.fitBounds(group.getBounds().pad(0.1));
-    }
   }
+}
 </script>
