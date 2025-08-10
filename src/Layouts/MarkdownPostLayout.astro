@@ -548,26 +548,51 @@ document.getElementById('closeMapModal').addEventListener('keydown', function(e)
   }
 });
 
-/* Observer */
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      const headingId = entry.target.id;
-      const tocLink = document.querySelector(`.markdown-heading a[href="#${headingId}"]`);
-       
-      if (tocLink) {
-        if (entry.isIntersecting) {
-          tocLink.classList.add('active');
-        } else {
-          tocLink.classList.remove('active');
-        }
+const headingEls = Array.from(document.querySelectorAll('article h2[id]'));
+const visibility = new Map(); // id => boolean
+let lastActiveId = null;
+
+
+function applyClasses() {
+  const visibleIds = headingEls.filter(h => visibility.get(h.id)).map(h => h.id);
+  if (visibleIds.length) {
+    // add active to visible, remove from others
+    headingEls.forEach(h => {
+      const link = document.querySelector(`.markdown-heading a[href="#${h.id}"]`);
+      if (!link) return;
+      if (visibility.get(h.id)) {
+        link.classList.add('active');
+      } else {
+        link.classList.remove('active');
       }
     });
+    // Last active - posledný vo vizuálnom (dokumentovom) poradí spomedzi viditeľných
+    lastActiveId = visibleIds[visibleIds.length - 1];
+  } else if (lastActiveId) {
+    // Žiadny aktuálne nevidno - nechaj svietiť len lastActiveId
+    headingEls.forEach(h => {
+      const link = document.querySelector(`.markdown-heading a[href="#${h.id}"]`);
+      if (!link) return;
+      if (h.id === lastActiveId) link.classList.add('active'); else link.classList.remove('active');
+    })
+  }
+}
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      visibility.set(entry.target.id, entry.isIntersecting);
+      if (entry.isIntersecting) {
+        if (entry.isIntersecting) {
+          // Update candidate immediately (v poradí dokumentu sa upraví applyClasses)
+          lastActiveId = entry.target.id;
+        } 
+      }
+    });
+    applyClasses();
   }, {
     rootMargin: "0px",
-    threshold: 1
+    threshold: 1 // Fully visible
   });
    
-  document.querySelectorAll('article h2').forEach(heading => {
-    observer.observe(heading);
-  });
+  headingEls.forEach(h => {visibility.set(h.id, false);observer.observe(h);});
 </script>
