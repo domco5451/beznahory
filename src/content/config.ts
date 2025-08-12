@@ -26,6 +26,13 @@ const blogCollection = defineCollection({
           terrain: z.string().optional(),
         })
         .optional(),
+      gallery: z
+        .array(
+          z.object({
+            url: image(),
+            alt: z.string(),
+          })
+        ).optional(),
     }),
 });
 

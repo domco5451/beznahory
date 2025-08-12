@@ -6,6 +6,7 @@ import { Icon } from "astro-icon/components";
 
 const { frontmatter, headings, remarkPluginFrontmatter } = Astro.props;
 
+const images = frontmatter.gallery || [];
 ---
 <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" defer></script>
@@ -92,6 +93,28 @@ const { frontmatter, headings, remarkPluginFrontmatter } = Astro.props;
       <section class="markdown-content">
         <slot />
       </section>
+      {/* Image Carousel */}
+      {frontmatter.gallery && 
+        <swiper-container>
+          <div class="swiper">
+            <div class="swiper-wrapper">
+              {images.map((image: any) => (
+                <div class="swiper-slide">
+                  <Image
+                    src={image.url}
+                    alt={image.alt}
+                    layout="constrained"
+                    loading="lazy"
+                  />
+                </div>
+              ))}
+            </div>
+            <div class="swiper-button-prev"></div>
+            <div class="swiper-button-next"></div>
+          </div>
+          <div class="swiper-pagination"></div>
+        </swiper-container>
+      }
     </article>
     <div class="aside-container">
       <aside class="markdown-heading">
@@ -120,6 +143,7 @@ const { frontmatter, headings, remarkPluginFrontmatter } = Astro.props;
   }
   article {
     flex: 1;
+    min-width: 600px;
   }
   header {
     display: flex;
@@ -328,10 +352,50 @@ const { frontmatter, headings, remarkPluginFrontmatter } = Astro.props;
     border-radius: 5px;
   }
 
-  /* Accessibility */
+  .gallery {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--nav-hover-text);
+  }
 
-/* Carousel */
+  /* Carousel */
+
+  :root {
+  --swiper-pagination-color: black;
+  --swiper-pagination-bullet-size: 8px;
+  --swiper-pagination-bullet-width: 8px;
+  --swiper-pagination-bullet-height: 8px;
+  --swiper-pagination-bullet-inactive-color: rgb(88, 88, 88);
+  --swiper-pagination-bullet-inactive-opacity: 0.4;
+  --swiper-pagination-bullet-opacity: 1;
+  --swiper-pagination-bullet-horizontal-gap: 4px;
+  --swiper-pagination-bullet-vertical-gap: 6px;
+  }
+  .swiper {
+    width: 100%;
+    height: 300px;
+    margin-block: 20px;
+  }
+  .swiper-slide {
+    position: relative;
+  }
+  .swiper-slide img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 30px;
+    }
+  .swiper-button-prev, .swiper-button-next {
+    color: white;
+  }
+  .swiper-pagination {
+    --swiper-pagination-bottom: -10px;
+  }
 </style>
+
+<script src="../scripts/slider.js"></script>
+
 <script 
   define:vars={{ 
     hasGpx: !!frontmatter.gpx, 
