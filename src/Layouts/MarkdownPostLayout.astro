@@ -14,7 +14,6 @@ const images = frontmatter.gallery || [];
 <script src='https://api.mapbox.com/mapbox.js/plugins/leaflet-fullscreen/v1.0.1/Leaflet.fullscreen.min.js'></script>
 <link href='https://api.mapbox.com/mapbox.js/plugins/leaflet-fullscreen/v1.0.1/leaflet.fullscreen.css' rel='stylesheet' />
 
-
 <PageLayout title={frontmatter.title}>
   <div class="markdown-post-layout">
     <div class="aside-container-left">
@@ -94,19 +93,20 @@ const images = frontmatter.gallery || [];
         <slot />
       </section>
       {/* Image Carousel */}
-      {frontmatter.gallery && 
+      {frontmatter.gallery && frontmatter.gallery.length > 0 &&
         <swiper-container>
           <div class="swiper">
             <div class="swiper-wrapper">
               {images.map((image: any) => (
                 <div class="swiper-slide">
-                  <Image
-                    src={image.url}
-                    alt={image.alt}
-                    layout="constrained"
-                    loading="lazy"
-                  />
-                </div>
+                    <Image
+                      src={image.url}
+                      alt={image.alt}
+                      layout="constrained"
+                      loading="lazy"
+                    />
+                    <p>{image.alt}</p>
+                  </div>
               ))}
             </div>
             <div class="swiper-button-prev"></div>
@@ -133,6 +133,7 @@ const images = frontmatter.gallery || [];
     <div class="map-modal-container">
       <div class="map-modal-close" id="closeMapModal" aria-label="Zavrieť mapu">&times;</div>
       <div id="modal-map"></div>
+    </div>
   </div>
 </div>
 </PageLayout>
@@ -327,7 +328,7 @@ const images = frontmatter.gallery || [];
     height: 80%;
     max-width: 1000px;
     position: relative;
-  }
+  } 
   
   .map-modal-close {
     position: absolute;
@@ -361,7 +362,7 @@ const images = frontmatter.gallery || [];
   /* Carousel */
 
   :root {
-  --swiper-pagination-color: black;
+  --swiper-pagination-color: var(--text-primary);
   --swiper-pagination-bullet-size: 8px;
   --swiper-pagination-bullet-width: 8px;
   --swiper-pagination-bullet-height: 8px;
@@ -384,13 +385,22 @@ const images = frontmatter.gallery || [];
     width: 100%;
     height: 100%;
     object-fit: cover;
-    border-radius: 30px;
     }
   .swiper-button-prev, .swiper-button-next {
     color: white;
   }
   .swiper-pagination {
     --swiper-pagination-bottom: -10px;
+  }
+  .swiper-slide p {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    color: white;
+    background-color: rgba(0, 0, 0, 0.5);
+    padding: 5px;
+    border-radius: 5px;
+    font-size: 0.9rem;
   }
 </style>
 

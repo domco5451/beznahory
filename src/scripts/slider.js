@@ -5,19 +5,11 @@ document.addEventListener("DOMContentLoaded", () => {
   const swiper = new Swiper(".swiper", {
     direction: "horizontal",
     grabCursor: true,
-    effect: "coverflow",
     centeredSlides: true,
     speed: 900,
     loop: true,
-    slidesPerView: "1.5",
-    coverflowEffect: {
-      rotate: 0,
-      stretch: 80,
-      depth: 250,
-      modifier: 1,
-      slideShadows: false,
-    },
-    spaceBetween: 0,
+    slidesPerView: "3",
+    spaceBetween: 5,
     pagination: {
       el: ".swiper-pagination",
       dynamicBullets: true,
