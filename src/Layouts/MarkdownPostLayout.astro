@@ -100,6 +100,7 @@ const images = frontmatter.gallery || [];
               {images.map((image: any) => (
                 <div class="swiper-slide">
                     <Image
+                      class="zoomable-image"
                       src={image.url}
                       alt={image.alt}
                       layout="constrained"
@@ -127,6 +128,12 @@ const images = frontmatter.gallery || [];
               </a>
             ))}
         </aside>
+    </div>
+  </div>
+  <div id="image-modal" class="modal">
+    <span class="close">&times;</span>
+    <div class="image-modal-content">
+      <img id="imgOne" src="" alt="" class="img-modal">
     </div>
   </div>
   <div class="map-modal-overlay" id="mapModal">
@@ -201,6 +208,10 @@ const images = frontmatter.gallery || [];
     display: flex;
     align-items: center;
     gap: 10px;
+  }
+
+  :global(.markdown-content img) {
+    cursor: pointer;
   }
 
   /* TOC */
@@ -402,6 +413,44 @@ const images = frontmatter.gallery || [];
     border-radius: 5px;
     font-size: 0.9rem;
   }
+  
+  /* Image Modal */
+
+  .modal {
+  display: none;
+  position: fixed;
+  z-index: 1000; /* Vyšší z-index */
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.9); /* Tmavšie pozadie */
+}
+
+.image-modal-content {
+  position: relative;
+  margin: 10% auto; /* Centrovanie */
+  display: block;
+  width: 80%;
+  max-width: 900px;
+}
+
+.img-modal {
+  width: 100%;
+  max-height: 80vh;
+  object-fit: contain;
+}
+
+.close {
+  position: absolute;
+  top: -40px;
+  right: 0;
+  color: white;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+}
 </style>
 
 <script src="../scripts/slider.js"></script>
@@ -612,7 +661,9 @@ document.addEventListener('keydown', function(e) {
     }
   }
 });
+
 // Zavri modal po stlačení Enter alebo Space na close button
+
 document.getElementById('closeMapModal').addEventListener('keydown', function(e) {
   if (e.key === 'Enter' || e.key === ' ') {
     e.preventDefault();
@@ -620,10 +671,56 @@ document.getElementById('closeMapModal').addEventListener('keydown', function(e)
   }
 });
 
+// Image Modale
+
+document.addEventListener("DOMContentLoaded", () => {
+  const modal = document.getElementById("image-modal");
+  const modalImg = document.getElementById("imgOne");
+  const images = document.querySelectorAll(".zoomable-image");
+  const imagesBlog = document.querySelectorAll(".markdown-content img");
+  
+  // prejsť cez všetky zoomable obrázky
+  images.forEach(img => {
+    img.addEventListener("click", function() {
+      modal.style.display = "block";
+      modalImg.src = this.src;
+      modalImg.alt = this.alt || "";
+    });
+  });
+
+  imagesBlog.forEach(img => {
+    img.addEventListener("click", function() {
+      modal.style.display = "block";
+      modalImg.src = this.src;
+      modalImg.alt = this.alt || "";
+    });
+  });
+  
+  const span = document.getElementsByClassName("close")[0];
+  
+  span.addEventListener("click", () => {
+    modal.style.display = "none";
+  });
+  
+  // Pridať zatváranie po kliknutí mimo obrázka
+  modal.addEventListener("click", (e) => {
+    if (e.target === modal) {
+      modal.style.display = "none";
+    }
+  });
+
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && modal.style.display === "block") {
+      modal.style.display = "none";
+    }
+  });
+});
+
+// TOC
+
 const headingEls = Array.from(document.querySelectorAll('article h2[id]'));
 const visibility = new Map(); // id => boolean
 let lastActiveId = null;
-
 
 function applyClasses() {
   const visibleIds = headingEls.filter(h => visibility.get(h.id)).map(h => h.id);
