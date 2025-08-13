@@ -21,6 +21,7 @@ const blogCollection = defineCollection({
         .object({
           difficulty: z.number().optional(),
           views: z.number().optional(),
+          accessibility: z.number().optional(),
           length: z.string().optional(),
           time: z.string().optional(),
           terrain: z.string().optional(),

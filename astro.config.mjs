@@ -15,6 +15,9 @@ import compress from "astro-compress";
 
 // https://astro.build/config
 export default defineConfig({
+  site: "https://beznahory.sk",
+  base: "/",
+  trailingSlash: "never",
   integrations: [
     react(),
     mdx(),
