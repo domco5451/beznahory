@@ -19,8 +19,16 @@ const postsWithReadingTime = await Promise.all(
 ---
 {/* Dorobiť Image nech nie je nad header */}
 <PageLayout title="Blog">
+  <div class="blog-header">
+    <div class="blog-wrapper">
+      <div>
+        <h1>Blog</h1>
+        <h2>Moje príbehy z behu na horách</h2>
+      </div>
+      <Icon name="blog" size={200}/>
+    </div>
+  </div>
   <div class="container">
-      <h1>Blog</h1>
     <section class="main-grid">
       {
         postsWithReadingTime.map((post: any, i: number) => (
@@ -63,19 +71,34 @@ const postsWithReadingTime = await Promise.all(
     </section>
   </div>
 </PageLayout>
+{/* <a href="https://www.svgbackgrounds.com/set/free-svg-backgrounds-and-patterns/">Free SVG Backgrounds and Patterns by SVGBackgrounds.com</a> */}
 <style>
 .container {
-    max-width: 1400px;
-    margin: auto;
+  max-width: 1400px;
+  margin: 50px auto;
 }
-.container h1 {
-    margin-block: 30px;
-    text-align: center;
-    font-size: 2.5rem;
+.blog-header h1 {
+  font-size: 4rem;
+  font-weight: bolder;
+}
+.blog-header h2 {
+  font-size: 1.5rem;
+}
+.blog-header {
+  background-image: url('../../icons/pozadie.svg');
+  background-size: cover;
+  padding-inline: 20%;
+  padding-block: 35px;
+}
+.blog-wrapper {
+  max-width: 1200px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 .cursor {
-    margin-left: 5px;
-    fill: var(--cursor-icon);
+  margin-left: 5px;
+  fill: var(--cursor-icon);
 }
 header {
   padding: 20px 30px 30px 30px;
@@ -168,4 +191,5 @@ footer {
       grid-template-columns: 1fr;
       padding: 15px;
     }
+}
 </style>

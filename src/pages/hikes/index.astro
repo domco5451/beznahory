@@ -22,9 +22,16 @@ const kraje = [
 ---
 
 <PageLayout title="Túry">
+  <div class="blog-header">
+    <div class="blog-wrapper">
+      <div>
+        <h1>Turistika</h1>
+        <h2>Filtrujte blog príspevky podľa kraja</h2>
+      </div>
+      <Icon name="mountain" size={200} />
+    </div>
+  </div>
   <div class="container">
-    <h1 class="main-h1">Turistika na Slovensku</h1>
-    <h2 class="main-h2">Filtrujte blog príspevky podľa kraja</h2>
     <div class="kraje">
       {
         kraje.map((kraj: any) => (
@@ -78,16 +85,6 @@ const kraje = [
   </div>
 </PageLayout>
 <style>
-  .main-h1 {
-    text-align: center;
-    font-size: 2.5rem;
-    margin-block-start: 20px;
-  }
-  .main-h2 {
-    text-align: center;
-    font-size: 1.1rem;
-    margin-block-end: 20px;
-  }
   .main-p {
     font-size: 1.1rem;
     margin-block-end: 20px;
@@ -95,7 +92,7 @@ const kraje = [
   }
   .container {
     max-width: 1300px;
-    margin: auto;
+    margin: 50px auto;
   }
   .thumbnail {
     width: 100%;
@@ -106,6 +103,25 @@ const kraje = [
     display: flex;
     gap: 10px;
     flex-wrap: wrap;
+  }
+  .blog-header h1 {
+    font-size: 4rem;
+    font-weight: bolder;
+  }
+  .blog-header h2 {
+    font-size: 1.5rem;
+  }
+  .blog-header {
+    background-image: url("../../icons/pozadieHikes.svg");
+    background-size: cover;
+    padding-inline: 20%;
+    padding-block: 35px;
+  }
+  .blog-wrapper {
+    max-width: 1200px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
   }
 
   /* Kraj Default */

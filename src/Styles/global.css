@@ -7,13 +7,13 @@
   padding: 0;
   margin: 0;
   box-sizing: border-box;
-  font-family: "Inter", Arial, Helvetica, sans-serif;
 }
 
 html {
   scrollbar-gutter: stable;
   background: var(--bg-primary);
   color: var(--text-primary);
+  font-family: "Inter", Arial, Helvetica, sans-serif;
 }
 
 body {

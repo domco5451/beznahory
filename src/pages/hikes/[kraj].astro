@@ -32,40 +32,40 @@ const filteredPosts = posts.filter((post: any) =>
     Zobrazujú sa príspevky pre <code>/{kraj}</code> Ak chcete zobraziť všetky príspevky, <a class="filter" href="/hikes">zrušte filter</a>.
   </p>
   {filteredPosts.length === 0 ? <p>Žiadne príspevky pre tento kraj.</p> : null}
-  <div class="grid-container">
-    {
-      filteredPosts.map((post: any) => (
-        <a href={`/blog/${post.slug}`}>
-          <div>
-            <Image
-              class="thumbnail"
-              src={post.data.thumbnail}
-              alt={post.data.thumbnailAlt}
-              layout="constrained"
-              loading="eager"
-            />
-            <div class="post-info-wrapper">
-              <h2>{post.data.title}</h2>
-              <div style="margin-block: 5px" class="icon-info">
-                <Icon name="gps2" size={20}/>
-                <h3>{post.data.okres}</h3>
-              </div>
-              <div class="author-info">
-                <div class="icon-info">
-                  <Icon name="person" size={20} />
-                  <p>{post.data.author}</p>
+    <div class="grid-container">
+      {
+        filteredPosts.map((post: any) => (
+          <a href={`/blog/${post.slug}`}>
+            <div>
+              <Image
+                class="thumbnail"
+                src={post.data.thumbnail}
+                alt={post.data.thumbnailAlt}
+                layout="constrained"
+                loading="eager"
+              />
+              <div class="post-info-wrapper">
+                <h2>{post.data.title}</h2>
+                <div style="margin-block: 5px" class="icon-info">
+                  <Icon name="gps2" size={20}/>
+                  <h3>{post.data.okres}</h3>
                 </div>
-                <div class="icon-info">
-                  <Icon name="date" size={20} />
-                  <p>{post.data.pubDate.toLocaleDateString()}</p>
+                <div class="author-info">
+                  <div class="icon-info">
+                    <Icon name="person" size={20} />
+                    <p>{post.data.author}</p>
+                  </div>
+                  <div class="icon-info">
+                    <Icon name="date" size={20} />
+                    <p>{post.data.pubDate.toLocaleDateString()}</p>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        </a>
-      ))
-    }
-  </div>
+          </a>
+        ))
+      }
+    </div>
 </HikeLayout>
 <style>
   code {
@@ -80,7 +80,7 @@ const filteredPosts = posts.filter((post: any) =>
     color: var(--nav-hover-text);
   }
   .kraj-selector {
-    margin-block: 10px;
+    margin-block: 30px;
   }
   .grid-container {
     display: grid;
