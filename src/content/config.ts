@@ -5,14 +5,14 @@ const blogCollection = defineCollection({
     z.object({
       title: z.string(),
       pubDate: z.coerce.date(),
-      description: z.string().optional(),
+      description: z.string(),
       author: z.string(),
-      kraj: z.string().optional(),
-      okres: z.string().optional(),
       thumbnail: image(),
       thumbnailAlt: z.string(),
-      pfp: image(),
-      pfpAlt: z.string(),
+      kraj: z.string().optional(),
+      okres: z.string().optional(),
+      pfp: image().optional(),
+      pfpAlt: z.string().optional(),
       tags: z.array(z.string()).optional(),
       latitude: z.number().optional(),
       longitude: z.number().optional(),
@@ -37,4 +37,4 @@ const blogCollection = defineCollection({
     }),
 });
 
-export const collections = { blog: blogCollection };
+export const collections = { blog: blogCollection, };

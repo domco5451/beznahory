@@ -18,7 +18,8 @@ const images = frontmatter.gallery || [];
   <div class="markdown-post-layout">
     <div class="aside-container-left">
       <aside>
-        <div id="gpx-info"></div>
+        {frontmatter.gpx && <div id="gpx-info"></div>}
+          {frontmatter.ratings && 
           <section class="ratings">
             <div class="ratings-header">
               <Icon name="tip" size={24}/>
@@ -50,7 +51,7 @@ const images = frontmatter.gallery || [];
                 <span>{frontmatter.ratings.time}</span>
               </div>
             </div>
-          </section>
+          </section>}
       {frontmatter.gpx ? (
             <div id="map"></div>
             <a href={frontmatter.gpx} class="gpx-link">
