@@ -15,12 +15,6 @@ html {
   color: var(--text-primary);
   font-family: "Inter", Arial, Helvetica, sans-serif;
 }
-
-body {
-  background: var(--bg-primary);
-  color: var(--text-primary);
-}
-
 img {
   display: block;
 }
