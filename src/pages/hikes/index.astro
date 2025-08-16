@@ -10,6 +10,7 @@ const currentPath = Astro.url.pathname;
 const allPosts = await getCollection("blog", ({ data }) => {
   return data.type === "tura";
 });
+console.log(allPosts);
 
 const kraje = [
   { href: "/hikes/bratislavsky-kraj", kraj: "Bratislavský kraj" },
