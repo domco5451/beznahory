@@ -69,7 +69,7 @@ const images = frontmatter.gallery || [];
           ) : null}
       </aside>
     </div>
-    <article>
+    <article class="markdown-post-article">
       <Image
         class="thumbnail"
         src={frontmatter.thumbnail}
@@ -160,9 +160,8 @@ const images = frontmatter.gallery || [];
   html {
     scroll-behavior: smooth; 
   }
-  article {
-    flex: 1;
-    min-width: 600px;
+  .markdown-post-article {
+    max-width: 850px;
   }
   header {
     display: flex;
@@ -180,6 +179,7 @@ const images = frontmatter.gallery || [];
     max-width: 1500px;
     margin: 50px auto;
     display: flex;
+    justify-content: center;
     gap: 60px;
     position: relative;
     padding: 0 20px;
@@ -230,7 +230,7 @@ const images = frontmatter.gallery || [];
   .aside-container {
     position: sticky;
     top: 100px;
-    width: 200px;
+    width: fit-content;
     height: fit-content;
     align-items: start;
     flex-shrink: 0;
@@ -317,9 +317,6 @@ const images = frontmatter.gallery || [];
   }
   /* Gpx */
   .aside-container-left {
-    position: sticky;
-    top: 100px;
-    width: 230px;
     height: fit-content;
     flex-shrink: 0;
   }
