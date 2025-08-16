@@ -1,0 +1,122 @@
+---
+import { getCollection } from 'astro:content';
+import { Icon } from "astro-icon/components";
+
+const allPosts = await getCollection('blog');
+
+const hikes = await getCollection("blog", ({ data }) => {
+  return data.type === "tura";
+});
+const akcie = await getCollection("blog", ({ data }) => {
+  return data.type === "akcia";
+});
+const tips = await getCollection("blog", ({ data }) => {
+  return data.type === "tip";
+});
+---
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/odometer.js/0.4.8/themes/odometer-theme-default.min.css" integrity="sha512-jHurNV8IL4Q4DRHzlRaIboSWZqnA3KU6KTiRQrtU+jxE1MHxdiveHrztuHhyna6PWTE427SxNDDUqjaruirB2A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/odometer.js/0.4.8/odometer.min.js" integrity="sha512-51WDTV7haD9BBDc8RWH2r5TnuSiRyAqEnbGyuKHYn+qpYCrCckxFeqlr1I5UoOULijyLV2vnHO9LS4MrAzHxwQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+
+<div class="achievements-container">
+  <div class="achievements">
+    <Icon name="odoAkcia" size={50} class="odoIcon"/>
+    <p class="odometer" id="akcie-count"></p>
+    <h2>AKCIÍ</h2>
+  </div>
+  <div class="achievements">
+    <Icon name="odoKompas" size={50} class="odoIcon"/>
+    <p class="odometer" id="tury-count"></p>
+    <h2>TÚR PO SLOVENSKU</h2>
+  </div>
+  <div class="achievements">
+    <Icon name="odoInfo" size={58} class="odoIcon"/>
+    <p class="odometer" id="tip-count"></p>
+    <h2>TIPY A TRIKY</h2>
+  </div>
+  <div class="achievements">
+    <Icon name="odoGlobal" size={50} class="odoIcon"/>
+    <p class="odometer" id="allPosts-count"></p>
+    <h2>VŠETKÝCH PRÍSPEVKOV</h2>
+  </div>
+</div>
+<style>
+  .achievements-container {
+    display: flex;
+    justify-content: center;
+    grid-template-columns: 20% 20% 20%;
+    gap: 7%;
+    background: #172238;
+    mask-image: linear-gradient(to bottom, #bae1ff, #eabdba);
+  }
+  .achievements {
+    width: 300px;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 30px;
+  }
+  .achievements h2 {
+    font-size: 1rem;
+    margin-bottom: 10px;
+    font-weight: 300;
+    color: #bfc7d0;
+  }
+  .odometer {
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin-block: 5px;
+    font-family: monospace;
+    color: #ffffff;
+  }
+    .odoIcon {
+        color: #f7c948;
+    }
+</style>
+<script define:vars={{ allPosts, hikes, akcie, tips }}>
+
+    const createOdometer = (el, value) => {
+    const odometer = new Odometer({
+      el: el,
+      value: 0,
+    });
+
+    const options = {
+      threshold: [0, 0.9],
+    };
+
+    let hasRun = false;
+
+    const callback = (entries, observer) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          if (!hasRun) {
+            odometer.update(value);
+            hasRun = true;
+          }
+        }
+      });
+    };
+
+    const observer = new IntersectionObserver(callback, options);
+    observer.observe(el);
+  };
+
+  const akcieCount = document.getElementById("akcie-count");
+  createOdometer(akcieCount, akcie.length);
+
+  const turyCount = document.getElementById("tury-count");
+  createOdometer(turyCount, hikes.length);
+
+  const tipCount = document.getElementById("tip-count");
+  createOdometer(tipCount, tips.length);
+
+  const allPostsCount = document.getElementById("allPosts-count");
+  createOdometer(allPostsCount, allPosts.length);
+
+// src: https://www.youtube.com/watch?v=p2rV9tKvjFg
+
+</script>
