@@ -1,0 +1,111 @@
+---
+import { getCollection } from "astro:content";
+import { Image } from "astro:assets";
+import { Icon } from "astro-icon/components";
+
+const allPosts = await getCollection("blog", ({ data }) => {
+  return data.type === "tip";
+});
+---
+
+<div class="container">
+  {
+    allPosts.map((post: any) => (
+      <div class="post-container">
+        <Image
+          class="thumbnail"
+          src={post.data.thumbnail}
+          alt={post.data.thumbnailAlt}
+          loading="eager"
+        />
+        <div class="content-wrapper">
+            <div>
+                <a href={`/blog/${post.slug}`} class="post-title">{post.data.title}</a>
+                <p class="post-description">{post.data.description}</p>
+            </div>
+            <div class="meta-info">
+                <div class="pfp-author">
+                    <Image
+                      class="pfp"
+                      src={post.data.pfp}
+                      alt={post.data.pfpAlt}
+                      loading="eager"
+                    />
+                    <p>{post.data.author}</p>
+                </div>
+                <div class="icon-date">
+                    <Icon name="date" size={30} />
+                    <p>{post.data.pubDate.toLocaleDateString()}</p>
+                </div>
+            </div>
+        </div>
+      </div>
+    ))
+  }
+</div>
+<style>
+  .container {
+    max-width: 1300px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    margin-block: 20px;
+  }
+  .post-container {
+    display: flex;
+    width: 1000px;
+    height: 225px;
+    border: 1px solid #ccc;
+    border-radius: 12px;
+  }
+  .thumbnail {
+    width: 300px;
+    height: auto;
+    object-fit: cover;
+    border-radius: 10px 0 0 10px;
+    /* border-inline-start: 10px solid #ff7a7a; */
+    mask-image: linear-gradient(to right,#000 50%,rgba(0, 0, 0, 0) 100%
+);
+  }
+  .pfp {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    border-radius: 50%;
+  }
+  .icon-date {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .pfp-author {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .meta-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .content-wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 20px;
+  }
+  .post-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+  }
+  .post-title:hover {
+    text-decoration: underline;
+  }
+  .post-description {
+    line-height: 1.6rem;
+    color: #555;
+    margin-block: 10px;
+  }
+</style>
