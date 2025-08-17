@@ -1,6 +1,6 @@
 ---
 import { Icon } from "astro-icon/components";
-const { blogTitle, blogDescription, iconName } = Astro.props;
+const { blogTitle, blogDescription, iconName, size = 200 } = Astro.props;
 ---
 <div class="blog-header">
   <div class="blog-wrapper">
@@ -8,7 +8,7 @@ const { blogTitle, blogDescription, iconName } = Astro.props;
       <h1>{blogTitle}</h1>
       <h2>{blogDescription}</h2>
     </div>
-    <Icon name={iconName} size={200} />
+    <Icon name={iconName} {size} />
   </div>
 </div>
 <style>
@@ -20,7 +20,7 @@ const { blogTitle, blogDescription, iconName } = Astro.props;
     font-size: 1.5rem;
   }
   .blog-header {
-    background-image: url("../../icons/pozadie.svg");
+    background-image: url("../../icons/pozadieAbout.svg");
     background-size: cover;
     padding-inline: 20%;
     padding-block: 35px;
