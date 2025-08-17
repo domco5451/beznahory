@@ -1,12 +1,17 @@
-@import "tailwindcss";
-@custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
-
 *,
 *::before,
 *::after {
   padding: 0;
   margin: 0;
   box-sizing: border-box;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+li {
+  list-style: none;
 }
 
 html {
@@ -19,54 +24,16 @@ img {
   display: block;
 }
 
-/* dark-mode by: https://astro-tips.dev/recipes/dark-mode/ */
-
-/* Theme Variables */
-:root,
-:root[data-theme="light"] {
+:root {
   --bg-primary: #ffffff;
-  --bg-secondary: #f8f9fa;
-  --text-primary: #273541;
-  --text-secondary: #666;
-  --border-color: #b9b9b9;
-  --nav-bg: #ffffff;
-  --nav-hover-bg: #ecf7ff;
-  --nav-hover-text: #0057b8;
-  --dropdown-bg: #e0f0ff;
-  --dropdown-hover: #f3f3f3;
-  --cursor-bg: #000000;
-  --cursor-text: white;
-  --cursor-icon: white;
-  --wrapper-border: #b9b9b9;
-  --toc-border: #b9b9b9;
-  --code-gradient-one: #0095ff;
-  --code-gradient-two: #75c5ff;
-  --code-gradient-three: #d6eeff;
-  --shadow: rgba(0, 0, 0, 0.11);
-  color-scheme: light;
-}
+  --text-primary: #172238;
+  --border-color: #bfc7d0;
+  --hover-bg: #ffe79e;
+  --hover-bg-secondary: #f1f1f1;
+  --hover-bg-secondary-2: #4a5c7c;
+  --hover-text: #172238;
+  --description-text: #666;
 
-:root[data-theme="dark"] {
-  --bg-primary: #1b1b1b;
-  --bg-secondary: #2b2b2b;
-  --text-primary: #ffffff;
-  --text-secondary: #cccccc;
-  --border-color: #666;
-  --nav-bg: #1b1b1b;
-  --nav-hover-bg: #2a202c;
-  --nav-hover-text: #f5adff;
-  --dropdown-bg: #1b1b1b;
-  --dropdown-hover: #2b2b2b;
-  --cursor-bg: white;
-  --cursor-text: #1b1b1b;
-  --cursor-icon: black;
-  --wrapper-border: #666;
-  --toc-border: #b9b9b9;
-  --code-gradient-one: #f700ff;
-  --code-gradient-two: #f5adff;
-  --code-gradient-three: #5b465f;
-  --shadow: rgb(49, 49, 49);
-  color-scheme: dark;
 }
 
 /* 

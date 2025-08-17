@@ -1,6 +1,5 @@
 ---
 import { Icon } from "astro-icon/components";
-import ThemeToggle from "../theme/ThemeToggle.astro";
 
 const currentPath = Astro.url.pathname;
 
@@ -161,11 +160,14 @@ const navItems = [
           ))
         }
       </ul>
-      <ThemeToggle />
     </div>
   </nav>
 </header>
 <style>
+  a {
+    text-decoration: none;
+    color: var(--text-primary);
+  }
   header {
     position: sticky;
     top: 0;
@@ -177,7 +179,7 @@ const navItems = [
     align-items: center;
     padding-inline: 100px;
     padding-block: 8px;
-    background: var(--nav-bg);
+    background: var(--bg-primary);
     color: var(--text-primary);
     border-block-end: 1px solid var(--border-color);
   }
@@ -225,16 +227,17 @@ const navItems = [
     display: flex;
     align-items: center;
     gap: 5px;
+    position: relative;
   }
   nav .main-link:hover {
-    background: var(--nav-hover-bg);
-    color: var(--nav-hover-text);
+    background: var(--hover-bg);
+    color: var(--hover-text);
   }
   nav .nav-item-dropdown:hover .dropdown-link {
-    color: var(--nav-hover-text);
+    color: var(--hover-text);
   }
   .nav-dropdown-content li:hover {
-    background: var(--nav-hover-bg);
+    background: var(--hover-bg-secondary);
   }
   .nav-dropdown-content li {
     margin: 7px;
@@ -246,7 +249,7 @@ const navItems = [
   }
   .region-description {
     font-size: 0.8rem;
-    color: var(--text-secondary);
+    color: var(--description-text);
     display: block;
   }
   .nav-item-dropdown {
@@ -294,17 +297,26 @@ const navItems = [
   }
   .nav-item:hover .arrow-dropdown {
     transform: rotate(180deg);
-    fill: var(--nav-hover-text);
+    fill: var(--hover-text);
   }
   .main-ul a {
     color: var(--text-primary);
     text-decoration: none;
   }
-  .nav-item-active .main-link {
-    color: var(--nav-hover-text);
+  .main-link::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0px;
+    width: 100%;
+    height: 2px;
+    background-color: transparent;
+  }
+  .nav-item-active .main-link::after {
+    background-color: var(--border-color);
   }
   .nav-item-active .dropdown-link {
-    color: var(--nav-hover-text);
+    color: var(--hover-text);
   }
 
   .dropdown-item-link {

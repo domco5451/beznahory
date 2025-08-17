@@ -24,12 +24,12 @@ const allPosts = await getCollection("blog");
             <h3 class="post-title">{post.data.title}</h3>
             {post.data.type === "tura" ? (
               <div class="icon-info">
-                <Icon name="gps2" size={20} />
+                <Icon class="icon" name="gps2" size={20} />
                 <p>{post.data.okres}</p>
               </div>
             ) : (
               <div class="icon-info">
-                <Icon name="odoInfo" size={20} />
+                <Icon class="icon" name="odoInfo" size={20} />
                 <p>{post.data.type}</p>
               </div>
             )}
@@ -43,6 +43,7 @@ const allPosts = await getCollection("blog");
   .container {
     max-width: 1500px;
     margin: 0 auto;
+    color: var(--text-primary);
   }
   .post-grid {
     display: grid;
@@ -91,7 +92,6 @@ const allPosts = await getCollection("blog");
   }
   .posts-title {
     font-size: 2.3rem;
-    color: #172238;
     padding-block-start: 40px;
     font-weight: bolder;
   }
@@ -100,5 +100,8 @@ const allPosts = await getCollection("blog");
     display: flex;
     align-items: start;
     padding-inline-start: 40px;
+  }
+  .icon {
+    color: blue;
   }
 </style>

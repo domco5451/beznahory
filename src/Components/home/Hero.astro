@@ -107,6 +107,7 @@ const allPosts = await getCollection("blog");
     background: rgba(94, 94, 94, 0.308);
     border-radius: 50%;
     color: #172238;
+    transition: color 0.1s ease;
   }
   .swiper-button-prev:hover,
   .swiper-button-next:hover {
@@ -142,9 +143,10 @@ const allPosts = await getCollection("blog");
     font-weight: 600;
     text-decoration: none;
     border-radius: 50px;
+    transition: background 0.3s ease, color 0.3s ease;
   }
   .post-link:hover {
-    background: var(--text-primary);
+    background: var(--hover-bg-secondary-2);
     color: white;
   }
   .post-link-blog {

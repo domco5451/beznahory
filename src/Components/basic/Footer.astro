@@ -35,7 +35,7 @@ const footerLinks = [
             <li>
               <div class="icon-link">
                 <Icon name="roundet-arrow-left" size={20} />
-                <a href={link.url}>{link.section}</a>
+                <h3><a href={link.url}>{link.section}</a></h3>
               </div>
             </li>
           ))
@@ -93,7 +93,7 @@ const footerLinks = [
     display: flex;
     align-items: center;
     gap: 10px;
-    color: var(--nav-hover-text);
+    color: var(--text-primary);
     margin-block: 5px;
   }
   .footer-bottom hr {
@@ -102,12 +102,12 @@ const footerLinks = [
     background-color: var(--border-color);
   }
   .footer-bottom p {
-    color: var(--text-secondary);
+    color: var(--description-text);
     font-size: 0.8rem;
     padding-block: 10px;
   }
   .footer-bottom a {
-    color: var(--text-secondary);
+    color: var(--description-text);
     font-size: 0.8rem;
   }
   .footer-links {
@@ -116,14 +116,14 @@ const footerLinks = [
     margin-block: 5px;
   }
   .logo-text {
-    color: var(--nav-hover-text);
+    color: var(--text-primary);
     display: flex;
     align-items: center;
     margin-block-end: 20px;
   }
   h2 {
     font-size: 1.5rem;
-    color: var(--nav-hover-text);
+    color: var(--text-primary);
     line-height: 25px;
     margin-block-end: 20px;
   }
@@ -134,7 +134,7 @@ const footerLinks = [
   }
   .p-footer p,
   .p-footer li a {
-    color: var(--text-secondary);
+    color: var(--text-primary);
     font-size: 0.9rem;
     font-weight: 300;
     line-height: 25px;

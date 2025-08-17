@@ -41,30 +41,32 @@ const postsWithReadingTime = await Promise.all(
                   loading={i < 4 ? "eager" : "lazy"}
                 />
             </a>
-            <header class="header-blog">
-              <h2><a href={`/blog/${post.slug}`}>{post.data.title}</a></h2>
-              <p>{post.minutesRead}</p>
-            </header>
-            <p class="description">{post.data.description}</p>
-            <footer class="wrapper-flex">
-              <div class="author-flex">
-                <Image
-                  class="pfp"
-                  width={50}
-                  src={post.data.pfp}
-                  alt={post.data.pfpAlt}
-                  loading={i < 2 ? "eager" : "lazy"}
-                />
-                <div>
-                  <p><strong>{post.data.author}</strong></p>
-                  <p>{post.data.pubDate.toLocaleDateString()}</p>
-                </div>
-              </div>
-              <a class="cursor-flex" href={`/blog/${post.slug}`}>
-                <span>Čítať ďalej</span>
-                <Icon class="cursor" name="cursor" size={15} />
-              </a>
-              </footer>
+            <div class="content-wrapper">
+              <header class="header-blog">
+                <h2><a href={`/blog/${post.slug}`}>{post.data.title}</a></h2>
+                <p>{post.minutesRead}</p>
+              </header>
+                <p class="description">{post.data.description}</p>
+                <footer class="wrapper-flex">
+                  <div class="author-flex">
+                    <Image
+                      class="pfp"
+                      width={50}
+                      src={post.data.pfp}
+                      alt={post.data.pfpAlt}
+                      loading={i < 2 ? "eager" : "lazy"}
+                    />
+                    <div>
+                      <p><strong>{post.data.author}</strong></p>
+                      <p>{post.data.pubDate.toLocaleDateString()}</p>
+                    </div>
+                  </div>
+                  <a class="cursor-flex" href={`/blog/${post.slug}`}>
+                    <span>Čítať ďalej</span>
+                    <Icon class="cursor" name="cursor" size={15} />
+                  </a>
+                  </footer>
+            </div>
           </article>
         ))
       }
@@ -98,14 +100,12 @@ const postsWithReadingTime = await Promise.all(
 }
 .cursor {
   margin-left: 5px;
-  fill: var(--cursor-icon);
-}
-header {
-  padding: 20px 30px 30px 30px;
+  fill: var(--bg-primary);
+  transition: transform 0.2s ease-in-out;
 }
 header h2 {
-  margin-block-end: 20px;
-  color: var(--nav-hover-text);
+  color: blue;
+  margin-block-end: 15px;
 }
 header h2 a {
   text-decoration: none;
@@ -115,15 +115,11 @@ header h2 a {
 header h2 a:hover {
   text-decoration: underline;
 }
-.description {
-  padding-inline: 30px;
-}
-footer {
-  padding: 30px;
-}
 .wrapper {
     border-radius: 15px;
     border: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
 }
 .main-grid {
     display: grid;
@@ -147,6 +143,9 @@ footer {
     align-items: center;
     margin-block-start: 15px;
 }
+.description {
+  line-height: 1.8;
+}
 .pfp {
     width: 50px;
     height: 50px;
@@ -156,21 +155,28 @@ footer {
 .cursor-flex {
     display: flex;
     align-items: center;
-    background: var(--cursor-bg);
+    background: var(--text-primary);
     padding: 8px;
-    color: var(--cursor-text);
+    color: var(--bg-primary);
     text-decoration: none;
     border-radius: 5px;
 }
 .cursor-flex:hover {
-    background-color: var(--nav-hover-bg);
-    color: var(--nav-hover-text);
+  background-color: var(--hover-bg-secondary-2);
 }
 .cursor-flex:hover .cursor {
-    fill: var(--nav-hover-text);
+  transform: scale(1.3);
 }
 .content-wrapper {
-    padding: 30px;
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  justify-content: space-between;
+  flex: 1;
+}
+.header-blog p {
+  font-weight: 500;
 }
 .filter-flex {
     display: flex;
