@@ -7,8 +7,6 @@ import pfp from "../../assets/randomPfp.jpg";
 
 const allPosts = await getCollection('blog');
 ---
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/odometer.js/0.4.8/themes/odometer-theme-default.min.css" integrity="sha512-jHurNV8IL4Q4DRHzlRaIboSWZqnA3KU6KTiRQrtU+jxE1MHxdiveHrztuHhyna6PWTE427SxNDDUqjaruirB2A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-<script src="https://cdnjs.cloudflare.com/ajax/libs/odometer.js/0.4.8/odometer.min.js" integrity="sha512-51WDTV7haD9BBDc8RWH2r5TnuSiRyAqEnbGyuKHYn+qpYCrCckxFeqlr1I5UoOULijyLV2vnHO9LS4MrAzHxwQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
 <PageLayout title="O mne">
 <div class="blog-header">
@@ -37,20 +35,6 @@ const allPosts = await getCollection('blog');
           Eum exercitationem iste ipsum quos quam veniam. Esse repellendus voluptatem libero eveniet perspiciatis harum atque, laboriosam asperiores aliquid sunt modi sint eum ipsum quidem deleniti aut. Fuga deleniti iure amet!
           Eos tempore quis repellendus ipsa impedit, tempora quaerat placeat voluptas perspiciatis. Fugiat tenetur quidem alias iure obcaecati explicabo odio neque tempora. Delectus eius perferendis non illo omnis labore totam reiciendis.
           Accusamus, dolorem modi ipsam odio labore iusto esse non, illum placeat delectus obcaecati unde repellat deserunt? Voluptates, ut minima esse fugit, error earum dolorem laboriosam exercitationem provident, quaerat blanditiis deleniti?</p>
-      </div>
-    </div>
-    <div class="achievments-container">
-      <div class="achievments">
-        <h2>Behy</h2>
-        <p class="odometer" id="run-count">5</p>
-      </div>
-      <div class="achievments">
-        <h2>Blog Posty</h2>
-        <p class="odometer" id="blog-count">12</p>
-      </div>
-      <div class="achievments">
-        <h2>Achievementy</h2>
-        <p class="odometer" id="achievement-count">7</p>
       </div>
     </div>
   </div>
@@ -123,87 +107,8 @@ const allPosts = await getCollection('blog');
     gap: 50px;
     margin-bottom: 100px;
   }
-  .achievments-container {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    position: relative;
-  }
-  .achievments-container::after {
-    content: "";
-    position: absolute;
-    bottom: -25px;
-    left: 0;
-    width: 100%;
-    height: 10px;
-    background: linear-gradient(to right, var(--nav-hover-text), white);
-  }
-  .achievments {
-    text-align: center;
-  }  
-  .achievments h2 {
-    font-size: 2rem;
-    margin-bottom: 10px;
-    font-weight: bold;
-    color: var(--nav-hover-text);
-  }
-  .odometer {
-    display: inline-block;
-    margin-inline: 5px;
-    background:
-      linear-gradient(66.77deg, var(--code-gradient-three) 0%, var(--code-gradient-three) 100%) padding-box,
-      linear-gradient(155deg, var(--code-gradient-one) 0%, var(--code-gradient-two) 18%, var(--code-gradient-three) 45%) border-box;
-    border-radius: 10px;
-    border: 1px solid transparent;
-    padding: 6px 8px;
-    color: var(--nav-hover-text);
-    font-size: 2rem;
-    width: 50px;
-    font-family: monospace;
-  }
 
   /* Timeline */
 
 
 </style>
-<script define:vars={{ allPosts }}>
-
-    const createOdometer = (el, value) => {
-    const odometer = new Odometer({
-      el: el,
-      value: 0,
-    });
-
-    const options = {
-      threshold: [0, 0.9],
-    };
-
-    let hasRun = false;
-
-    const callback = (entries, observer) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          if (!hasRun) {
-            odometer.update(value);
-            hasRun = true;
-          }
-        }
-      });
-    };
-
-    const observer = new IntersectionObserver(callback, options);
-    observer.observe(el);
-  };
-
-  const runCount = document.getElementById("run-count");
-  createOdometer(runCount, 5);
-
-  const blogCount = document.getElementById("blog-count");
-  createOdometer(blogCount, allPosts.length);
-
-  const achievementCount = document.getElementById("achievement-count");
-  createOdometer(achievementCount, 7);
-
-// src: https://www.youtube.com/watch?v=p2rV9tKvjFg
-
-</script>
- 

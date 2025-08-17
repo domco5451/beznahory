@@ -1,0 +1,104 @@
+---
+import { getCollection } from "astro:content";
+import { Image } from "astro:assets";
+import { Icon } from "astro-icon/components";
+
+const allPosts = await getCollection("blog");
+---
+
+<div class="container">
+  <div class="post-title-container">
+      <h2 class="posts-title">Najnovšie príspevky</h2>
+  </div>
+  <div class="post-grid">
+    {
+      allPosts.map((post: any) => (
+        <a href={`/blog/${post.slug}`} class="post-wrapper">
+          <Image
+            class="thumbnail"
+            src={post.data.thumbnail}
+            alt={post.data.thumbnailAlt}
+            loading="lazy"
+          />
+          <div class="content-wrapper">
+            <h3 class="post-title">{post.data.title}</h3>
+            {post.data.type === "tura" ? (
+              <div class="icon-info">
+                <Icon name="gps2" size={20} />
+                <p>{post.data.okres}</p>
+              </div>
+            ) : (
+              <div class="icon-info">
+                <Icon name="odoInfo" size={20} />
+                <p>{post.data.type}</p>
+              </div>
+            )}
+          </div>
+        </a>
+      ))
+    }
+  </div>
+</div>
+<style>
+  .container {
+    max-width: 1500px;
+    margin: 0 auto;
+  }
+  .post-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    gap: 20px;
+    padding: 40px;
+  }
+  .post-wrapper {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #cecece;
+    border-radius: 15px;
+    transition:
+      transform 0.3s ease,
+      box-shadow 0.3s ease;
+  }
+  .post-wrapper:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transform: translateY(-5px);
+  }
+  .content-wrapper {
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    flex: 1;
+  }
+  .thumbnail {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 13px 13px 0 0;
+  }
+  .icon-info {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-top: 10px;
+  }
+  .icon-info p {
+    font-weight: 500;
+  }
+  .post-title {
+    font-size: 1.2rem;
+    font-weight: 600;
+  }
+  .posts-title {
+    font-size: 2.3rem;
+    color: #172238;
+    padding-block-start: 40px;
+    font-weight: bolder;
+  }
+  .post-title-container {
+    min-width: 1500px;
+    display: flex;
+    align-items: start;
+    padding-inline-start: 40px;
+  }
+</style>
