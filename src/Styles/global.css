@@ -9,6 +9,13 @@
   box-sizing: border-box;
 }
 
+/* Color Scheme */
+// Background: #172238;
+// Contrast to background: #f7c948;
+// Text: #ffffff;
+// Secondary text: #bfc7d0;
+// Black: #000000;
+
 html {
   scrollbar-gutter: stable;
   background: var(--bg-primary);
