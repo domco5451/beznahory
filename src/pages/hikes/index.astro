@@ -38,13 +38,13 @@ const kraje = [
     <div class="kraje">
       {
         kraje.map((kraj: any) => (
-          <BadgeKraj href={kraj.href} kraj={kraj.kraj} />
+            <BadgeKraj href={kraj.href} kraj={kraj.kraj} />
         ))
       }
     </div>
     {
       allPosts.length === 0 && Astro.url.pathname === "/hikes" ? (
-        <p style="margin-block: 20px">Žiadne príspevky.</p>
+        <p style="margin-block: 20px">Zatial žiadne príspevky.</p>
       ) : null
     }
     {
@@ -63,8 +63,8 @@ const kraje = [
                 />
                 <div class="post-info-wrapper">
                   <h2>{post.data.title}</h2>
-                  <div style="margin-block: 5px" class="icon-info">
-                    <Icon name="gps2" size={20} />
+                  <div style="margin-block: 15px" class="icon-info">
+                    <Icon class="gps" name="gps2" size={20} />
                     <h3>{post.data.okres}</h3>
                   </div>
                   <div class="author-info">
@@ -95,12 +95,7 @@ const kraje = [
   }
   .container {
     max-width: 1300px;
-    margin: 50px auto;
-  }
-  .thumbnail {
-    width: 100%;
-    height: 300px;
-    object-fit: cover;
+    margin: 40px auto;
   }
   .kraje {
     display: flex;
@@ -129,16 +124,6 @@ const kraje = [
 
   /* Kraj Default */
 
-  code {
-    display: inline-block;
-    margin-inline: 5px;
-    background:
-      linear-gradient(66.77deg, #d6eeff 0%, #d6eeff 100%) padding-box,
-      linear-gradient(155deg, #0095ff 0%, #75c5ff 18%, #d6eeff 45%) border-box;
-    border-radius: 8px;
-    border: 1px solid transparent;
-    padding: 6px 8px;
-  }
   .kraj-selector {
     margin-block: 10px;
   }
@@ -160,16 +145,18 @@ const kraje = [
     width: 100%;
     height: 200px;
     object-fit: cover;
-    border-radius: 10px 10px 0 0;
+    border-radius: 8px 8px 0 0;
   }
   .post-info-wrapper {
     padding: 10px;
   }
   .post-info-wrapper h2 {
     font-weight: bold;
+    font-size: 1.1rem;
   }
   .post-info-wrapper h3 {
     font-weight: 300;
+    font-size: 1rem;
   }
   .author-info {
     display: flex;
@@ -180,5 +167,8 @@ const kraje = [
     display: flex;
     align-items: center;
     gap: 5px;
+  }
+  .gps {
+    color: var(--heading-text);
   }
 </style>

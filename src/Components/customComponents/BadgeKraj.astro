@@ -2,7 +2,7 @@
 import { Icon } from "astro-icon/components";
 const { kraj, size, href } = Astro.props;
 ---
-<a {href} style="display: flex; align-items: center; gap: 5px; padding: 10px; background: var(--nav-hover-bg); color: var(--nav-hover-text);width: fit-content; border-radius: 10px;">
+<a {href} style="display: flex; align-items: center; gap: 5px; padding: 10px; background: var(--heading-text); color: white;width: fit-content; border-radius: 10px;">
     <Icon name="gps2" {size} />
     <span>{kraj}</span>
 </a>
