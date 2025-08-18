@@ -1,0 +1,23 @@
+---
+const { frontmatter } = Astro.props;
+import { Icon } from "astro-icon/components";
+---
+
+<a href={frontmatter.gpx} class="gpx-link">
+    <Icon name="download" size={20} />
+    Stiahnuť trasu (.gpx)
+</a>
+<style>
+  .gpx-link {
+    color: var(--primary-text);
+    background: var(--hover-bg);
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 20px;
+    border-radius: 10px;
+  }
+  .gpx-link:hover {
+    background: #ffda6d;
+  }
+</style>

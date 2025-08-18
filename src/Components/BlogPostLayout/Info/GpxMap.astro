@@ -1,0 +1,179 @@
+---
+const { frontmatter } = Astro.props;
+---
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+
+<div id="gpx-info"></div>
+<div id="map"></div>
+
+<style>
+  #map {
+    width: 100%;
+    height: 250px;
+    margin-block-end: 10px;
+    z-index: 1;
+  }
+  #gpx-info {
+    margin-block-end: 10px;
+  }
+</style>
+<script
+  define:vars={{
+    hasGpx: !!frontmatter.gpx,
+    lat: frontmatter.latitude,
+    lng: frontmatter.longitude,
+    gpxPath: frontmatter.gpx,
+  }}
+>
+  document.addEventListener("DOMContentLoaded", () => {
+    const mapElement = document.getElementById("map");
+    if (!mapElement || !hasGpx) {
+      return; // Ukonči, ak element neexistuje
+    }
+
+    if (!window.L) {
+      console.error("Leaflet nie je načítaný!");
+      return;
+    }
+
+    const initialLat = lat || 49.1; // Default Slovensko
+    const initialLng = lng || 19.5;
+
+    let gpxLayer = null;
+    let gpxLoaded = false;
+
+    // Inicializácia malej mapy
+    const map = L.map("map").setView([initialLat, initialLng], 12);
+
+    const refreshMap = () => {
+      map.invalidateSize();
+      if (gpxLoaded && gpxLayer && typeof gpxLayer.getBounds === "function") {
+        const bounds = gpxLayer.getBounds();
+        if (bounds && bounds.isValid && bounds.isValid()) {
+          map.fitBounds(bounds);
+        }
+      }
+    };
+
+    document.addEventListener("gpx:show", refreshMap);
+
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      attribution:
+        '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+    }).addTo(map);
+
+    // GPX
+
+    if (gpxPath && window.L.GPX) {
+      try {
+        gpxLayer = new L.GPX(gpxPath, {
+          async: true,
+          polyline_options: {
+            color: "#3388ff",
+            weight: 2,
+            opacity: 0.7,
+          },
+        });
+        
+        gpxLayer
+          .on("loaded", function (e) {
+            gpxLoaded = true;
+            // Aktualizácia referencie vrstvy z eventu
+            gpxLayer = e.target;
+            const bounds = gpxLayer.getBounds();
+            if (bounds && bounds.isValid && bounds.isValid()) {
+              map.fitBounds(bounds);
+            }
+
+            // Štatistiky
+
+            const distance = (e.target.get_distance() / 1000).toFixed(2); // km
+            // Vypočítaj tempo v ms/km
+            const paceMs = e.target.get_moving_pace();
+            const totalSeconds = Math.floor(paceMs / 1000);
+            const minutes = Math.floor(totalSeconds / 60);
+            const seconds = totalSeconds % 60;
+            const paceFormatted = `${minutes}:${seconds.toString().padStart(2, "0")}/km`;
+
+            const elevationGain = Math.round(e.target.get_elevation_gain());
+            const elevationMin = Math.round(e.target.get_elevation_min());
+            const elevationMax = Math.round(e.target.get_elevation_max());
+            const time = e.target.get_total_time();
+            const duration = e.target.get_duration_string_iso(time);
+
+            // Vlož info do DOMu pod mapu
+            let infoDiv = document.getElementById("gpx-info");
+            infoDiv.innerHTML = `
+        <div style="
+          background-color: #F6F6F6;
+          padding: 10px;
+        ">
+          <div style="
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            border-radius: 15px 15px 0 0;">
+          </div>
+          <div style="
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap:5px;
+          ">
+            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 5px;">
+              <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24"><path fill="#0055ff" d="M13 22v-5l-2.1-2l-.775 3.45q-.1.4-.437.613t-.738.137L4 18.2q-.425-.075-.65-.425T3.2 17t.425-.662t.775-.138l3.8.8l1.6-8.1l-1.8.7V12q0 .425-.288.713T7 13t-.712-.288T6 12V8.95q0-.3.163-.537T6.6 8.05L9.95 6.6q.875-.375 1.288-.487T12 6q.525 0 .975.275T13.7 7l1 1.6q.525.85 1.363 1.475T18 10.9q.425.075.713.375T19 12t-.288.7t-.687.225q-1.35-.2-2.525-.838t-2-1.587l-.6 3l1.8 1.7q.15.15.225.338t.075.387V22q0 .425-.288.713T14 23t-.712-.288T13 22m.5-16.5q-.825 0-1.412-.587T11.5 3.5t.588-1.412T13.5 1.5t1.413.588T15.5 3.5t-.587 1.413T13.5 5.5"/></svg>
+              <div>
+                <p style="color: #0055ff; font-size: 0.8rem;"><strong>Tempo</strong></p>
+                <p>${paceFormatted}</p>
+              </div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 5px;">
+              <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24"><path fill="#0055ff" d="M3.25 21.775L5.8 8.9L4 9.6V12q0 .425-.287.713T3 13t-.712-.288T2 12V8.95q0-.3.163-.537T2.6 8.05l4.45-1.9q.725-.3 1.475-.062T9.7 7l1 1.6q.575.875 1.413 1.488t1.912.812q.425.075.7.375T15 12t-.288.7t-.687.225q-1.35-.2-2.525-.838t-2-1.587l-.6 3l1.8 1.7q.15.15.225.338t.075.387V22q0 .425-.288.713T10 23t-.712-.288T9 22v-5l-2.1-2l-1.625 7.2q-.075.35-.363.575T4.25 23q-.5 0-.8-.375t-.2-.85M9.5 5.5q-.825 0-1.412-.588T7.5 3.5t.588-1.412T9.5 1.5t1.413.588T11.5 3.5t-.587 1.413T9.5 5.5m9.65 15.75h-4.4q-.325 0-.537-.213T14 20.5t.213-.537t.537-.213h4.4l-.175-.175q-.225-.225-.225-.525t.225-.525t.525-.225t.525.225L21.3 19.8q.3.3.3.7t-.3.7l-1.275 1.275q-.225.225-.525.225t-.525-.225t-.225-.525t.225-.525zM16.85 17l.175.175q.225.225.225.525t-.225.525t-.525.225t-.525-.225L14.7 16.95q-.3-.3-.3-.7t.3-.7l1.275-1.275q.225-.225.525-.225t.525.225t.225.525t-.225.525l-.175.175h4.4q.325 0 .538.213t.212.537t-.213.538t-.537.212z"/></svg>
+              <div>
+                <p style="color: #0055ff; font-size: 0.8rem;"><strong>Dĺžka</strong></p>
+                <p>${distance} km</p>
+              </div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 5px;">
+              <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24"><path fill="#0055ff" d="m2.05 21l6.45-9h5.05L21 3.3V21zm1.75-5.825l-1.6-1.15L6.5 8h5.05l4.7-5.475l1.5 1.3L12.45 10H7.5zM5.95 19H19V8.7L14.45 14H9.5zM19 19"/></svg>
+              <div>
+                <p style="color: #0055ff; font-size: 0.8rem;"><strong>Prevýšenie</strong></p>
+                <p>${elevationGain} m</p>
+              </div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 5px;">
+              <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24"><path fill="#0055ff" d="M3 20q-.425 0-.712-.288T2 19t.288-.712T3 18h4.75q-.425-1.575-1.4-2.85T4 13.075q-.55-.325-.525-.712T4.15 12q3.275.05 5.562 2.375T12 20zm11 0q0-1.05-.225-2.087t-.65-1.988q1.05-1.725 2.813-2.8T19.85 12q.6-.025.625.388t-.475.687q-1.375.8-2.35 2.075T16.25 18H21q.425 0 .713.288T22 19t-.288.713T21 20zm-2-5.975q0-2.65 1.513-4.713T17.4 6.45q.575-.2.85.125t-.225.8q-.8.75-1.387 1.675t-.988 1.975q-1.1.525-2.013 1.288T12 14.025m-1.825-1.875q-.3-.225-.6-.425t-.625-.4q0-.15.025-.312T9 10.7q0-1.325-.287-2.525T7.875 5.85q-.275-.55.038-.812t.812.137q.9.725 1.588 1.65t1.112 2.025q-.45.75-.775 1.588t-.475 1.712"/></svg>
+              <div>
+                <p style="color: #0055ff; font-size: 0.8rem;"><strong>Najnižší bod</strong></p>
+                <p>${elevationMin} m</p>
+              </div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 5px;">
+              <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24"><path fill="#0055ff" d="M5 21V4h6.25q-.125.5-.2 1T11 6H7v6h7.25l.4 2H18v-1.15q.5 0 1-.075t1-.225V16h-7l-.4-2H7v7zM17.275 8.1l3.475-3.45L19.7 3.6l-2.425 2.375L16.3 5l-1.05 1.075zM18 .85q2.075 0 3.538 1.463T23 5.85t-1.463 3.538T18 10.85t-3.537-1.462T13 5.85t1.463-3.537T18 .85"/></svg>
+              <div>
+                <p style="color: #0055ff; font-size: 0.8rem;"><strong>Najvyšší bod</strong></p>
+                <p>${elevationMax} m</p>
+              </div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 5px;">
+              <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24"><path fill="#0055ff" d="M12 22q-2.075 0-3.9-.788t-3.175-2.137T2.788 15.9T2 12t.788-3.9t2.137-3.175T8.1 2.788T12 2t3.9.788t3.175 2.137T21.213 8.1T22 12t-.788 3.9t-2.137 3.175t-3.175 2.138T12 22m0-2q1.6 0 3.075-.6t2.6-1.725L12 12V4Q8.65 4 6.325 6.325T4 12t2.325 5.675T12 20"/></svg>
+              <div>
+                <p style="color: #0055ff; font-size: 0.8rem;"><strong>Trvanie</strong></p>
+                <p>${duration}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+          })
+          .addTo(map);
+      } catch (e) {
+        console.error("Chyba pri načítaní GPX", e);
+      }
+    }
+  });
+</script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" defer></script>
+<script
+  src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-gpx/2.1.2/gpx.min.js"
+  defer></script>

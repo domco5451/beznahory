@@ -1,0 +1,46 @@
+---
+const { frontmatter } = Astro.props;
+import { Icon } from "astro-icon/components";
+
+const ratings = [
+  { label: "Obtiažnosť", value: frontmatter.ratings.difficulty, icon: "lock", },
+  { label: "Výhľady", value: frontmatter.ratings.views, icon: "camera", }, 
+  { label: "Prístupnosť", value: frontmatter.ratings.accessibility, icon: "wheelchair", },
+  { label: "Terén", value: frontmatter.ratings.terrain, icon: "elevation", },
+  { label: "Dĺžka", value: frontmatter.ratings.length, icon: "length", },
+  { label: "Čas", value: frontmatter.ratings.time, icon: "clock", }
+];
+---
+
+<section class="ratings">
+    {ratings.map((rating: any) => (
+        <div class="icon-rating">
+            <Icon name={rating.icon} size={40} style="color: var(--heading-text)"/>
+            <div>
+                <p class="lable">{rating.label}: </p>
+                <p class="rating">{rating.value}</p>
+            </div>
+        </div>
+    ))}
+</section>
+<style>
+  .ratings {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5px;
+    background: #F6F6F6;
+    padding: 10px;
+    margin-block-end: 10px;
+  }
+  .icon-rating {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-bottom: 5px;
+  }
+  .lable {
+    font-size: 0.8rem;
+    font-weight: bold;
+    color: var(--heading-text);
+  }
+</style>

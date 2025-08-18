@@ -15,7 +15,7 @@ li {
 }
 
 html {
-  scrollbar-gutter: stable;
+  overflow-y: scroll;
   background: var(--bg-primary);
   color: var(--text-primary);
   font-family: "Inter", Arial, Helvetica, sans-serif;
@@ -32,6 +32,7 @@ img {
   --hover-bg-secondary: #f1f1f1;
   --hover-bg-secondary-2: #4a5c7c;
   --hover-text: #172238;
+  --heading-text: #0055ff;
   --description-text: #666;
 
 }

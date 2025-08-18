@@ -1,0 +1,89 @@
+---
+import GpxDownload from "./GpxDownload.astro";
+import MapButton from "./MapButton.astro";
+import Ratings from "./Ratings.astro";
+import GpxMap from "./GpxMap.astro";
+
+const { frontmatter } = Astro.props;
+---
+
+<div class="container">
+  <div class="tura-beh">
+    <span class="tura-button active">Túra</span>
+    <span class="beh-button">Beh</span>
+  </div>
+  <div class="beh-content">
+    <GpxMap {frontmatter} />
+    <GpxDownload {frontmatter} />
+  </div>
+  <div class="tura-content">
+    <Ratings {frontmatter} />
+    <MapButton />
+  </div>
+</div>
+<style>
+  .container {
+    height: fit-content;
+    width: 300px;
+    border-radius: 15px;
+    padding: 0px 10px 10px 10px;
+  }
+  .tura-beh {
+    display: flex;
+    justify-content: space-around;
+    align-items: center
+    color: var(--primary-text);
+    gap: 5px;
+  }
+  .tura-beh span {
+    font-size: 1.2rem;
+    cursor: pointer;
+    padding: 10px;
+    border: 1px solid rgb(233, 233, 233);
+    width: 100%;
+    text-align: center;
+    border-radius: 10px;
+    margin-block-end: 10px;
+  }
+  .tura-beh span:hover {
+    background-color: var(--hover-bg);
+  }
+  .tura-beh span.active {
+    background: var(--hover-bg)
+  }
+  .beh-content {
+    display: none;
+  }
+  .tura-content {
+    display: block;
+  }
+</style>
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const beh: any = document.querySelector(".beh-content");
+    const tura: any = document.querySelector(".tura-content");
+    const behButton: any = document.querySelector(".beh-button");
+    const turaButton: any = document.querySelector(".tura-button");
+
+    const showBeh = () => {
+      beh.style.display = "block";
+      tura.style.display = "none";
+      behButton.classList.add("active");
+      turaButton.classList.remove("active");
+      document.dispatchEvent(new CustomEvent("gpx:show"));
+    };
+
+    const showTura = () => {
+      beh.style.display = "none";
+      tura.style.display = "block";
+      behButton.classList.remove("active");
+      turaButton.classList.add("active");
+      document.dispatchEvent(new CustomEvent("gpx:show"));
+    };
+
+    behButton.addEventListener("click", showBeh);
+    turaButton.addEventListener("click", showTura);
+    
+    document.dispatchEvent(new CustomEvent('gpx:show'));
+  });
+</script>

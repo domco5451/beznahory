@@ -1,0 +1,25 @@
+---
+import { Icon } from "astro-icon/components";
+---
+
+<a
+  class="map-link"
+  href={`/map#${Astro.url.pathname.split("/").filter(Boolean).pop()}`}
+>
+  <Icon name="gps" size={20} />
+  <p>Zobraziť na mape</p>
+</a>
+<style>
+  .map-link {
+    color: var(--primary-text);
+    background: var(--hover-bg);
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 20px;
+    border-radius: 10px;
+  }
+  .map-link:hover {
+    background: #ffda6d;
+  }
+</style>

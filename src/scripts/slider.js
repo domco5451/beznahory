@@ -2,26 +2,20 @@ import Swiper from "swiper/bundle";
 import "swiper/css/bundle";
 
 document.addEventListener("DOMContentLoaded", () => {
-  const swiper = new Swiper(".swiper", {
-    direction: "horizontal",
-    grabCursor: true,
-    centeredSlides: true,
-    speed: 900,
-    loop: true,
-    slidesPerView: "3",
-    spaceBetween: 5,
-    pagination: {
-      el: ".swiper-pagination",
-      dynamicBullets: true,
-    },
+  const thumbSwiper = new Swiper(".thumbs", {
+    spaceBetween: 10,
+    slidesPerView: 4,
+    freeMode: true,
+    watchSlidesProgress: true,
+  });
+  const swiper = new Swiper(".main", {
+    spaceBetween: 10,
     navigation: {
       nextEl: ".swiper-button-next",
       prevEl: ".swiper-button-prev",
     },
-    a11y: {
-      enabled: true,
-      prevSlideMessage: "Previous slide",
-      nextSlideMessage: "Next slide",
+    thumbs: {
+      swiper: thumbSwiper,
     },
   });
 });

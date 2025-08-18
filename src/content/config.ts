@@ -20,7 +20,7 @@ const blogCollection = defineCollection({
       gpx: z.string().optional(),
       ratings: z
         .object({
-          difficulty: z.number().optional(),
+          difficulty: z.string().optional(),
           views: z.number().optional(),
           accessibility: z.number().optional(),
           length: z.string().optional(),
