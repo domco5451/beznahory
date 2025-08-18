@@ -46,13 +46,19 @@ const filteredPosts = posts.filter((post: any) =>
               class="thumbnail"
               src={post.data.thumbnail}
               alt={post.data.thumbnailAlt}
+              inferSize={true}
               layout="constrained"
               loading="eager"
             />
             <div class="post-info-wrapper">
               <h2>{post.data.title}</h2>
-              <div style="margin-block: 5px" class="icon-info">
-                <Icon name="gps2" size={20} />
+              <div class="icon-info">
+                <Icon
+                  style="margin-block: 15px"
+                  class="gps"
+                  name="gps2"
+                  size={20}
+                />
                 <h3>{post.data.okres}</h3>
               </div>
               <div class="author-info">
@@ -110,9 +116,11 @@ const filteredPosts = posts.filter((post: any) =>
   }
   .post-info-wrapper h2 {
     font-weight: bold;
+    font-size: 1.1rem;
   }
   .post-info-wrapper h3 {
     font-weight: 300;
+    font-size: 1rem;
   }
   .author-info {
     display: flex;
@@ -134,5 +142,8 @@ const filteredPosts = posts.filter((post: any) =>
     font-size: 1.2rem;
     color: var(--text-color);
     padding: 10px;
+  }
+  .gps {
+    color: var(--heading-text);
   }
 </style>
