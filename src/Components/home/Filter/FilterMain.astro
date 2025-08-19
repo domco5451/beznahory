@@ -1,0 +1,53 @@
+---
+import { getCollection } from "astro:content";
+import Badge from "./Badge.astro";
+
+
+const kraje = [
+  { href: "/hikes/bratislavsky-kraj", kraj: "Bratislavský kraj" },
+  { href: "/hikes/trnavsky-kraj", kraj: "Trnavský kraj" },
+  { href: "/hikes/trenciansky-kraj", kraj: "Trenčiansky kraj" },
+  { href: "/hikes/nitriansky-kraj", kraj: "Nitriansky kraj" },
+  { href: "/hikes/zilinsky-kraj", kraj: "Žilinský kraj" },
+  { href: "/hikes/banskobystricky-kraj", kraj: "Banskobystrický kraj" },
+  { href: "/hikes/presovsky-kraj", kraj: "Prešovský kraj" },
+  { href: "/hikes/kosicky-kraj", kraj: "Košický kraj" },
+];
+
+const allPosts = await getCollection("blog");
+const krajPosts = allPosts.filter((post: any) => post.data.kraj);
+---
+
+<div class="container">
+    <div class="container-grid">
+      {
+        kraje.map((kraj: any) => (
+          <div class="wrapper">
+            <Badge href={kraj.href} kraj={kraj.kraj} count={krajPosts.filter((post: any) => (
+                post.data.kraj === kraj.href.split("/").pop()
+            )).length}/>
+          </div>
+        ))
+      }
+    </div>
+</div>
+<style>
+  .container {
+    background: url("../../../icons/pozadieHikes.svg");
+    background-size: cover;
+  }
+  .container-grid {
+    max-width: 1500px;
+    margin: 0 auto;
+    padding: 40px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 50px;
+  }
+  .wrapper {
+    display: flex;
+    align-items: center;
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+  }
+</style>

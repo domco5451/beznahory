@@ -1,0 +1,51 @@
+---
+import { Icon } from "astro-icon/components";
+const { kraj, href, count } = Astro.props;
+---
+
+<a {href} class="badge">
+  <div class="icon-kraj">
+    <Icon class="gps" name="gps2" size={30} />
+    <p>
+      {kraj} [{count}]
+    </p>
+  </div>
+  <Icon class="cursor" name="cursor" size={30} />
+</a>
+<style>
+  .badge {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 5px;
+    padding: 10px;
+    color: varvar(--text-primary);
+    border-radius: 8px;
+    width: 100%;
+    font-weight: bold;
+  }
+  .gps {
+    transition: transform 0.5s ease-in-out;
+    color: var(--heading-text);
+  }
+  .badge:hover .gps {
+    transform: rotate(360deg);
+    color: rgb(55, 255, 55);
+  }
+  .badge:hover {
+    background: #172238;
+    color: white;
+  }
+  .cursor {
+    transition: transform 0.5s ease-in-out;
+  }
+  .badge:hover .cursor {
+    color: white;
+    transform: scale(1.2);
+  }
+  .icon-kraj {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+</style>

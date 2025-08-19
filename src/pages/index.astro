@@ -3,9 +3,33 @@ import PageLayout from "../layouts/PageLayout.astro";
 import Hero from "../components/home/Hero.astro";
 import Odometer from "../components/home/Odometer.astro";
 import Posts from "../components/home/Posts.astro";
+import FilterMain from "../components/home/Filter/FilterMain.astro";
 ---
+
 <PageLayout title="Domov">
   <Hero />
   <Odometer />
   <Posts />
+  <div class="filter-title">
+    <h2>Tipy <span>turistických oblastí</span> podľa kraja</h2>
+  </div>
+  <FilterMain />
 </PageLayout>
+<style>
+  .filter-title {
+    max-width: 1500px;
+    margin: 0 auto;
+    padding: 40px;
+  }
+  .filter-title h2 {
+    font-size: 2.3rem;
+    font-weight: 500;
+  }
+  .filter-title h2 span {
+    background: linear-gradient(90deg, #00c6ff, #0072ff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-transform: uppercase;
+    font-weight: bold;
+  }
+</style>
