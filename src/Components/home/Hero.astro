@@ -32,7 +32,7 @@ const allPosts = await getCollection("blog");
               class="hero-image"
               src={post.data.thumbnail}
               alt={post.data.thumbnailAlt}
-              loading={i > 0 ? "lazy" : "eager"}
+              loading="eager"
             />
           </div>
         ))
