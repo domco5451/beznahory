@@ -1,3 +1,73 @@
 ---
-
+import { Image } from "astro:assets";
+import { Icon } from "astro-icon/components";
+import Timeline from "./Timeline.astro";
+import Heading from "../basic/Heading.astro";
+import thumbnail from "../../assets/optimized/runhillThumbnail-lg.avif";
 ---
+
+<div class="container">
+  <div class="container-flex">
+    <div class="container-wrapper">
+      <div class="container-item">
+        <h1>Vybehnime spolu všetky kopce Slovenska!</h1>
+        <p>
+          Chceme Vám ukázať krásu slovenských kopcov cez naše vlastné skúsenosti
+          z behov a túr. Na tejto stránke nájdete detailné blogy, ktoré Vám pomôžu objaviť tie
+          najkrajšie miesta našej krajiny. Pridaj sa k nám a spoločne objavme
+          všetky kopce Slovenska - či už behom, alebo turistikou!
+        </p>
+      </div>
+      <div class="image-container">
+          <Image src={thumbnail} alt="Runhill Thumbnail" class="thumbnail" />
+      </div>
+    </div>
+  </div>
+</div>
+<style>
+  .container {
+    background-image: url("../../icons/pozadieAbout.svg");
+    background-size: cover;
+  }
+  .container-flex {
+    max-width: 1500px;
+    margin: 0 auto;
+  }
+  .container-wrapper {
+    display: flex;
+    gap: 20px;
+    padding: 40px;
+    justify-content: space-around;
+  }
+  .container-item {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    max-width: 600px;
+    flex: 1;
+  }
+  .container-item h1 {
+    font-size: 4rem;
+    font-weight: bolder;
+    text-wrap: balance;
+  }
+  .container-item p {
+    font-size: 1.1rem;
+    line-height: 2rem;
+    font-weight: 500;
+  }
+  .thumbnail {
+    width: 100%;
+    max-width: 600px;
+    height: auto;
+    object-fit: cover;
+    border-radius: 10px;
+  }
+  .image-container {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+</style>
+<Timeline />
