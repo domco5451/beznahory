@@ -33,6 +33,7 @@ const allPosts = await getCollection("blog");
               src={post.data.thumbnail}
               alt={post.data.thumbnailAlt}
               loading="eager"
+              fetchpriority="high"
             />
           </div>
         ))

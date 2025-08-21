@@ -12,7 +12,7 @@ import MdSwiper from "./MdSwiper.astro";
     alt={frontmatter.thumbnailAlt}
     inferSize={true}
     layout="constrained"
-    loading="eager"
+    fetchpriority="high"
   />
   <h1>{frontmatter.title}</h1>
   <header>
