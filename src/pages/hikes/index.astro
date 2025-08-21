@@ -1,6 +1,5 @@
 ---
 import { getCollection } from "astro:content";
-import BadgeKraj from "../../components/customComponents/BadgeKraj.astro";
 import PageLayout from "../../layouts/PageLayout.astro";
 import { Icon } from "astro-icon/components";
 import { Image } from "astro:assets";
@@ -38,7 +37,10 @@ const kraje = [
     <div class="kraje">
       {
         kraje.map((kraj: any) => (
-          <BadgeKraj href={kraj.href} kraj={kraj.kraj} />
+          <a href={kraj.href} class:list={["badge", currentPath === kraj.href && "badge-active"]}>
+            <Icon class="gpsIcon" name="gps2"/>
+            <span>{kraj.kraj}</span>
+          </a>
         ))
       }
     </div>
@@ -172,4 +174,38 @@ const kraje = [
   .gps {
     color: var(--heading-text);
   }
+  /* Badge */
+  .badge {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 10px;
+    background: var(--heading-text);
+    color: white;
+    width: fit-content;
+    border-radius: 10px;
+  }
+  .badge:hover {
+    background: rgb(45, 118, 255);
+  }
+  .badge-active {
+    background: #172238;
+  }
+  .badge-active .gpsIcon {
+    color: rgb(55, 255, 55);
+  }
+  .badge-active:hover {
+    background: #172238;
+  }
 </style>
+<script>
+  // Ked kliknem na badge ktora je aktivna, tak ma to presmeruje na /hikes
+  document.querySelectorAll(".badge").forEach((badge) => {
+    badge.addEventListener("click", (e) => {
+      if (badge.classList.contains("badge-active")) {
+        e.preventDefault();
+        window.location.href = "/hikes";
+      }
+    });
+  });
+</script>
