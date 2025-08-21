@@ -1,29 +1,29 @@
 ---
 import { Image } from "astro:assets";
-import { Icon } from "astro-icon/components";
-import Timeline from "./Timeline.astro";
-import Heading from "../basic/Heading.astro";
 import thumbnail from "../../assets/optimized/runhillThumbnail-lg.avif";
 ---
 
-<div class="container">
+<section class="container">
   <div class="container-flex">
-    <div class="container-wrapper">
-      <div class="container-item">
-        <h1>Vybehnime spolu všetky kopce Slovenska!</h1>
-        <p>
-          Chceme Vám ukázať krásu slovenských kopcov cez naše vlastné skúsenosti
-          z behov a túr. Na tejto stránke nájdete detailné blogy, ktoré Vám pomôžu objaviť tie
-          najkrajšie miesta našej krajiny. Pridaj sa k nám a spoločne objavme
-          všetky kopce Slovenska - či už behom, alebo turistikou!
-        </p>
-      </div>
-      <div class="image-container">
-          <Image src={thumbnail} alt="Runhill Thumbnail" class="thumbnail" />
-      </div>
+    <div class="container-item">
+      <h1>Vybehnime spolu všetky kopce Slovenska!</h1>
+      <p>
+        Chceme Vám ukázať krásu slovenských kopcov cez naše vlastné skúsenosti z
+        behov a túr. Na tejto stránke nájdete detailné blogy, ktoré Vám pomôžu
+        objaviť tie najkrajšie miesta našej krajiny. Pridaj sa k nám a spoločne
+        objavme všetky kopce Slovenska - či už behom, alebo turistikou!
+      </p>
+    </div>
+    <div class="image-container">
+      <Image
+        src={thumbnail}
+        alt="Runhill Thumbnail"
+        class="thumbnail"
+        loading="eager"
+      />
     </div>
   </div>
-</div>
+</section>
 <style>
   .container {
     background-image: url("../../icons/pozadieAbout.svg");
@@ -32,8 +32,6 @@ import thumbnail from "../../assets/optimized/runhillThumbnail-lg.avif";
   .container-flex {
     max-width: 1500px;
     margin: 0 auto;
-  }
-  .container-wrapper {
     display: flex;
     gap: 20px;
     padding: 40px;
@@ -70,4 +68,4 @@ import thumbnail from "../../assets/optimized/runhillThumbnail-lg.avif";
     justify-content: center;
   }
 </style>
-<Timeline />
+

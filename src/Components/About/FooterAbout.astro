@@ -1,0 +1,74 @@
+---
+import { Icon } from "astro-icon/components";
+
+const data = [
+  {
+    title: "Obsah",
+    description: `Na tejto stránke nájdete kompletné informácie o turistických trasách a bežeckých výzvach po slovenských kopcoch. Každý článok obsahuje GPX súbory na stiahnutie, fotografie, hodnotenia a praktické tipy priamo z terénu.`,
+    icon: "content",
+  },
+  {
+    title: "Cieľ",
+    description:
+      "Naším cieľom je vybehnúť a zdokumentovať každý významný kopec Slovenska. Vytvárame živý katalóg trás pre bežcov aj turistov, aby každý mohol objaviť krásu slovenských vrchov. Neváhajte a pridajte sa k nám na tejto ceste!",
+    icon: "goal",
+  },
+  {
+    title: "Rast",
+    description:
+      "S každým zdolaným vrchom rastieme - zlepšujeme kondíciu, rozširujeme vedomosti o slovenských kopcoch a zdokonaľujeme náš blog, aby sme vám priniesli tie najlepšie informácie pre vaše dobrodružstvá.",
+    icon: "plant",
+  },
+];
+---
+
+<section class="container">
+  <h2 class="main-h2">Na tejto stránke nájdete</h2>
+  <div class="wrapper">
+    {
+      data.map((item: any) => (
+        <div class="container-item">
+          <Icon style="color: #f7c948" name={item.icon} size={70} />
+          <h3>{item.title}</h3>
+          <p>{item.description}</p>
+        </div>
+      ))
+    }
+  </div>
+</section>
+
+<style>
+  .container {
+    background: #172238;
+    padding: 20px;
+    color: white;
+  }
+  .wrapper {
+    max-width: 1500px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 50px;
+    padding-block-end: 50px;
+  }
+  .container-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+  }
+  .container-item h3 {
+    font-size: 1.5rem;
+    font-weight: bold;
+  }
+  .container-item p {
+    font-size: 1rem;
+    color: #bfc7d0;
+    line-height: 2rem;
+  }
+  .main-h2 {
+    text-align: center;
+    font-size: 2rem;
+    margin-bottom: 20px;
+  }
+</style>

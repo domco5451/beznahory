@@ -1,3 +1,113 @@
 ---
+import { getCollection } from "astro:content";
+import { Image } from "astro:assets";
+import { Icon } from "astro-icon/components";
 
+const allPosts = await getCollection("blog");
 ---
+
+<section class="container">
+  <h2>Časová os príspevkov</h2>
+  <div class="wrapper">
+    {
+      allPosts.map((post: any) => (
+        <div class="item-wrapper">
+          <a href={`/blog/${post.slug}`}>
+            <div class="icon-text" >
+                <Icon class="icon" name="date" size={28}/>
+                <p>{post.data.pubDate.toLocaleDateString()}</p>
+            </div>
+            <Image
+              class="thumbnail"
+              src={post.data.thumbnail}
+              alt={post.data.thumbnailAlt}
+              loading="lazy"
+            />
+            <div class="icon-heading">
+                <Icon class="icon" name="odoInfo" size={28}/>
+                <h3>{post.data.title}</h3>
+            </div>
+          </a>
+        </div>
+      ))
+    }
+  </div>
+</section>
+<style>
+  .container {
+    color: var(--primary-text);
+    padding: 20px;
+  }
+  .wrapper {
+    max-width: 1500px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .container > h2 {
+    font-size: 2rem;
+    text-align: center;
+    margin-block-end: 20px;
+  }
+  .item-wrapper {
+    width: 700px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    padding: 0 50px 50px 0;
+  }
+  .icon-text {
+    text-align: right;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    justify-content: right;
+  }
+  .icon-heading {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .icon-text p {
+    font-size: 1.5rem;
+    font-weight: 500;
+  }
+  .item-wrapper::after {
+    content: " ";
+    position: absolute;
+    width: 1px;
+    height: 100%;
+    background: var(--border-color);
+    right: -20px;
+    top: 0;
+  }
+  .item-wrapper::before {
+    content: " ";
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: var(--border-color);
+    top: 0;
+    right: -34.5px;
+  }
+  .thumbnail {
+    width: 100%;
+    height: 100%;
+    border-radius: 10px;
+    object-fit: cover;
+    margin-block: 10px;
+  }
+  a {
+    padding: 10px;
+    border-radius: 10px;
+    transition: background 0.3s ease;
+  }
+  a:hover {
+    background: rgb(238, 238, 238);
+  }
+  .icon {
+    color: var(--heading-text)
+  }
+</style>
