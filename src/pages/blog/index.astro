@@ -29,7 +29,7 @@ const postsWithReadingTime = await Promise.all(
     </div>
   </div>
   <div class="container">
-    <section class="main-grid">
+    <div class="main-grid">
       {
         postsWithReadingTime.map((post: any, i: number) => (
           <article class="wrapper">
@@ -70,7 +70,7 @@ const postsWithReadingTime = await Promise.all(
           </article>
         ))
       }
-    </section>
+    </div>
   </div>
 </PageLayout>
 {/* <a href="https://www.svgbackgrounds.com/set/free-svg-backgrounds-and-patterns/">Free SVG Backgrounds and Patterns by SVGBackgrounds.com</a> */}
