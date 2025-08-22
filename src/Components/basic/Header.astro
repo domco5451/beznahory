@@ -5,6 +5,12 @@ const currentPath = Astro.url.pathname;
 
 const regions = [
   {
+    name: "Všetky túry",
+    color: "#000000",
+    href: "/hikes",
+    description: "Zobraziť všetky túry",
+  },
+  {
     name: "Bratislavský",
     color: "#bfa900",
     href: "/hikes/bratislavsky-kraj",
@@ -96,35 +102,29 @@ const navItems = [
 
 <header>
   <nav>
-    <div class="main-logo">
-      <Icon class="hamburger" name="hamburger" size={35} />
-      <a class="logo-container" href="/">
-        <Icon class="logo" name="logoSite" size={50} />
-        <h2>beznahory.sk</h2>
-      </a>
-    </div>
-    <div class="nav-flex">
+    <a class="logo-container" href="/">
+      <Icon class="logo" name="logoSite" size={50} />
+      <h2>beznahory.sk</h2>
+    </a>
+    <div>
       <ul class="main-ul">
         {
           navItems.map((item) => (
             <li
               class:list={[
-                "nav-item",
-                (currentPath === item.href ||
-                  currentPath.startsWith(item.href + "/")) &&
-                  "nav-item-active",
+                "nav-item"
               ]}
             >
               {item.hasDropdown ? (
                 <>
-                  <a href={item.href} class="nav-item-dropdown main-link">
+                  <a class="nav-item-dropdown main-link">
                     <span class="dropdown-link">{item.name}</span>
                     <Icon class="arrow-dropdown" name="arrow-down" size={20} />
                   </a>
                   <div class="nav-dropdown">
                     <ul class="nav-dropdown-content">
                       {item.dropdownItems?.map((region) => (
-                        <li>
+                        <li class="dropdown-item-container">
                           <a
                             href={region.href}
                             class="dropdown-item-link"
@@ -161,6 +161,7 @@ const navItems = [
         }
       </ul>
     </div>
+    <Icon class="hamburger" name="hamburger" size={30} />
   </nav>
 </header>
 <style>
@@ -172,19 +173,17 @@ const navItems = [
     position: sticky;
     top: 0;
     z-index: 1000;
+    background: var(--bg-primary);
   }
   nav {
+    max-width: 1500px;
+    margin: 0 auto;
     display: flex;
-    justify-content: space-around;
+    justify-content: space-between;
     align-items: center;
-    padding-inline: 100px;
     padding-block: 8px;
-    background: var(--bg-primary);
     color: var(--text-primary);
     border-block-end: 1px solid var(--border-color);
-  }
-  .main-logo {
-    display: flex;
   }
   .logo {
     fill: var(--text-primary);
@@ -200,16 +199,11 @@ const navItems = [
   h2 {
     font-size: 1.5rem;
   }
-  .nav-flex {
-    display: flex;
-    gap: 20px;
-  }
   .main-ul {
     display: flex;
     list-style: none;
     gap: 15px;
     font-size: 1.1rem;
-    align-items: center;
   }
   .region-bar {
     width: 4px;
@@ -236,10 +230,10 @@ const navItems = [
   nav .nav-item-dropdown:hover .dropdown-link {
     color: var(--hover-text);
   }
-  .nav-dropdown-content li:hover {
+  .dropdown-item-container:hover {
     background: var(--hover-bg-secondary);
   }
-  .nav-dropdown-content li {
+  .dropdown-item-container {
     margin: 7px;
     border-radius: 5px;
   }
@@ -267,7 +261,6 @@ const navItems = [
   }
   .nav-dropdown-content {
     display: none;
-    transition: opacity 0.3s ease;
     list-style: none;
     position: absolute;
     background-color: var(--bg-primary);
@@ -277,9 +270,6 @@ const navItems = [
     top: 3px;
     border-radius: 10px;
     border: 1px solid var(--border-color);
-  }
-  .nav-item:hover .nav-dropdown-content {
-    display: block;
   }
   .nav-dropdown::after {
     content: "";
@@ -296,29 +286,12 @@ const navItems = [
     fill: var(--text-primary);
   }
   .nav-item:hover .arrow-dropdown {
-    transform: rotate(180deg);
     fill: var(--hover-text);
   }
   .main-ul a {
     color: var(--text-primary);
     text-decoration: none;
   }
-  .main-link::after {
-    content: "";
-    position: absolute;
-    left: 0;
-    bottom: 0px;
-    width: 100%;
-    height: 2px;
-    background-color: transparent;
-  }
-  .nav-item-active .main-link::after {
-    background-color: var(--border-color);
-  }
-  .nav-item-active .dropdown-link {
-    color: var(--hover-text);
-  }
-
   .dropdown-item-link {
     display: flex;
     align-items: center;
@@ -329,7 +302,19 @@ const navItems = [
     border-radius: 8px;
     margin: 2px;
   }
-  @media (max-width: 768px) {
+  .nav-item {
+    border-radius: 5px;
+  }
+  .nav-item-active {
+    background: var(--hover-bg);
+  }
+  .dropdown-active .arrow-dropdown {
+    transform: rotate(180deg);
+  }
+  @media (max-width: 900px) {
+    nav {
+      padding-inline: 20px;
+    }
     .hamburger {
       display: block;
       cursor: pointer;
@@ -338,16 +323,35 @@ const navItems = [
     .main-ul {
       position: fixed;
       left: -100%;
-      top: 80px;
+      top: 67px;
       flex-direction: column;
+      align-items: start;
       gap: 0;
-      background: var(--nav-bg);
+      background: white;
       width: 100%;
+      height: 100%;
       transition: left 0.3s;
       text-align: center;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
     }
     .nav-item {
-      margin: 20px 0;
+      padding: 20px 0;
+      width: 100%;
+      border-block-end: 1px solid var(--border-color);
+      border-radius: 0;
+      position: relative;
+    }
+    .main-link {
+      display: flex;
+      justify-content: space-between;
+      padding-inline-start: 20px;
+    }
+    .main-link::after {
+      display: none;
+    }
+    nav .main-link:hover {
+      background: transparent;
     }
     .main-ul.active {
       left: 0;
@@ -355,14 +359,129 @@ const navItems = [
     .hamburger.active {
       transform: rotate(90deg);
     }
+    .nav-item:hover {
+      background: var(--hover-bg);
+    }
+    .nav-dropdown-content {
+      position: absolute;
+      top: 20px;
+      left: 0;
+      width: 100%;
+      border-radius: 0px;
+    }
+    .region-bar {
+      display: none;
+    }
+    .region-description {
+      display: none;
+    }
+    .dropdown-item-container {
+      border-block-end: 1px solid var(--border-color);
+      padding-block: 11px;
+      border-radius: 0;
+      margin: 0;
+      background: #fff7e0;
+    }
   }
 </style>
 <script>
-  const hamburger = document.querySelector(".hamburger");
-  const navMenu = document.querySelector(".main-ul");
+// Select all nav items
+const navItems = document.querySelectorAll(".nav-item");
+const hamburger = document.querySelector(".hamburger");
+const navMenu = document.querySelector(".main-ul");
 
-  hamburger?.addEventListener("click", () => {
-    hamburger.classList.toggle("active");
-    navMenu?.classList.toggle("active");
+// Hamburger mobile menu
+hamburger?.addEventListener("click", () => {
+  hamburger.classList.toggle("active");
+  navMenu?.classList.toggle("active");
+});
+
+// Funkcia na zatvorenie všetkých dropdownov
+const closeAllDropdowns = () => {
+  document.querySelectorAll(".nav-dropdown-content").forEach((dropdown) => {
+    dropdown.style.display = ""; // Reset na CSS default (none)
+    
+    // Nájdi rodiča (nav-item) a odstráň mu active triedu, ale iba ak nie je aktívny kvôli URL
+    const parentNavItem = dropdown.closest(".nav-item");
+    if (parentNavItem) {
+      // Vždy odstráň dropdown-active (šípka ide dole)
+      parentNavItem.classList.remove("dropdown-active");
+      
+      // Odstráň nav-item-active, ale iba ak nie je aktívny kvôli URL
+      if (!parentNavItem.hasAttribute("data-url-active")) {
+        parentNavItem.classList.remove("nav-item-active");
+      }
+    }
   });
+};
+
+// Najprv označíme, ktoré položky sú aktívne kvôli URL
+document.querySelectorAll(".nav-item.nav-item-active").forEach(item => {
+  item.setAttribute("data-url-active", "true");
+});
+
+// Pridaj click event len na nav items s dropdownom
+navItems.forEach((item) => {
+  // Skontroluj, či item má dropdown trigger
+  const dropdownTrigger = item.querySelector(".nav-item-dropdown");
+  if (!dropdownTrigger) return; // Preskoč items bez dropdownu
+
+  // Pridaj click listener na dropdown trigger
+  dropdownTrigger.addEventListener("click", (event) => {
+    event.preventDefault(); // Zabráň navigácii
+
+    // Nájdi dropdown content
+    const dropdown = item.querySelector(".nav-dropdown-content");
+    if (!dropdown) return;
+
+    // Toggle dropdown a nav-item-active triedu
+    if (dropdown.style.display === "block") {
+      dropdown.style.display = ""; // Zatvor dropdown
+      
+      // Odstráň dropdown-active triedu (šípka ide dole)
+      item.classList.remove("dropdown-active");
+      
+      // Odstráň active triedu, ale iba ak nie je aktívny kvôli URL
+      if (!item.hasAttribute("data-url-active")) {
+        item.classList.remove("nav-item-active");
+      }
+    } else {
+      // Zatvor všetky ostatné dropdowny
+      closeAllDropdowns();
+      
+      // Otvor tento dropdown
+      dropdown.style.display = "block";
+      
+      // Pridaj dropdown-active triedu (šípka ide hore)
+      item.classList.add("dropdown-active");
+      
+      // Pridaj active triedu
+      item.classList.add("nav-item-active");
+    }
+
+    // Zabráň event bubblingu, aby sa event nedostal na document
+    event.stopPropagation();
+  });
+
+  // Zabráň klikom vnútri dropdownu, aby ho zatvorili
+  const dropdownContent = item.querySelector(".nav-dropdown-content");
+  if (dropdownContent) {
+    dropdownContent.addEventListener("click", (event) => {
+      // Zastav event propagation, ale nechaj defaultnú akciu (klik na link)
+      event.stopPropagation();
+    });
+  }
+});
+
+// Zatvor dropdown pri kliknutí kamkoľvek inde na stránke
+document.addEventListener("click", () => {
+  closeAllDropdowns();
+});
+
+// Zatvor dropdown pri stlačení klávesy ESC
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Escape") {
+    closeAllDropdowns();
+  }
+});
 </script>
