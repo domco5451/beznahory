@@ -58,7 +58,7 @@ const postsWithReadingTime = await Promise.all(
                     />
                     <div>
                       <p><strong>{post.data.author}</strong></p>
-                      <p>{post.data.pubDate.toLocaleDateString()}</p>
+                      <p>{new Date(post.data.pubDate).toLocaleDateString("sk-SK", { year: 'numeric', month: 'long', day: 'numeric' })}</p>
                     </div>
                   </div>
                   <a class="cursor-flex" href={`/blog/${post.slug}`}>

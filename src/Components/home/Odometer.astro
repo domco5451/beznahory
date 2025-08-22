@@ -1,8 +1,8 @@
 ---
-import { getCollection } from 'astro:content';
+import { getCollection } from "astro:content";
 import { Icon } from "astro-icon/components";
 
-const allPosts = await getCollection('blog');
+const allPosts = await getCollection("blog");
 
 const hikes = await getCollection("blog", ({ data }) => {
   return data.type === "tura";
@@ -13,109 +13,129 @@ const akcie = await getCollection("blog", ({ data }) => {
 const tips = await getCollection("blog", ({ data }) => {
   return data.type === "tip";
 });
+
+const data = [
+  { name: "AKCIÍ", id: "akcie-count", icon: "odoAkcia", size: "50" },
+  { name: "TÚR PO SLOVENSKU", id: "tury-count", icon: "odoKompas", size: "50" },
+  { name: "TIPY A TRIKY", id: "tip-count", icon: "odoInfo", size: "58" },
+  {
+    name: "VŠETKÝCH PRÍSPEVKOV",
+    id: "allPosts-count",
+    icon: "odoGlobal",
+    size: "50",
+  },
+];
 ---
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/odometer.js/0.4.8/themes/odometer-theme-default.min.css" integrity="sha512-jHurNV8IL4Q4DRHzlRaIboSWZqnA3KU6KTiRQrtU+jxE1MHxdiveHrztuHhyna6PWTE427SxNDDUqjaruirB2A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-<script src="https://cdnjs.cloudflare.com/ajax/libs/odometer.js/0.4.8/odometer.min.js" integrity="sha512-51WDTV7haD9BBDc8RWH2r5TnuSiRyAqEnbGyuKHYn+qpYCrCckxFeqlr1I5UoOULijyLV2vnHO9LS4MrAzHxwQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
+<link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/odometer.js/0.4.8/themes/odometer-theme-default.min.css"
+  integrity="sha512-jHurNV8IL4Q4DRHzlRaIboSWZqnA3KU6KTiRQrtU+jxE1MHxdiveHrztuHhyna6PWTE427SxNDDUqjaruirB2A=="
+  crossorigin="anonymous"
+  referrerpolicy="no-referrer"
+/>
+<script
+  src="https://cdnjs.cloudflare.com/ajax/libs/odometer.js/0.4.8/odometer.min.js"
+  integrity="sha512-51WDTV7haD9BBDc8RWH2r5TnuSiRyAqEnbGyuKHYn+qpYCrCckxFeqlr1I5UoOULijyLV2vnHO9LS4MrAzHxwQ=="
+  crossorigin="anonymous"
+  referrerpolicy="no-referrer"></script>
 
-<div class="achievements-container">
-  <div class="achievements">
-    <Icon name="odoAkcia" size={50} class="odoIcon"/>
-    <p class="odometer" id="akcie-count"></p>
-    <h2>AKCIÍ</h2>
-  </div>
-  <div class="achievements">
-    <Icon name="odoKompas" size={50} class="odoIcon"/>
-    <p class="odometer" id="tury-count"></p>
-    <h2>TÚR PO SLOVENSKU</h2>
-  </div>
-  <div class="achievements">
-    <Icon name="odoInfo" size={58} class="odoIcon"/>
-    <p class="odometer" id="tip-count"></p>
-    <h2>TIPY A TRIKY</h2>
-  </div>
-  <div class="achievements">
-    <Icon name="odoGlobal" size={50} class="odoIcon"/>
-    <p class="odometer" id="allPosts-count"></p>
-    <h2>VŠETKÝCH PRÍSPEVKOV</h2>
-  </div>
-</div>
-<style>
-  .achievements-container {
-    display: flex;
-    justify-content: center;
-    gap: 7%;
-    background: #172238;
-    mask-image: linear-gradient(to bottom, #bae1ff, #eabdba);
-  }
-  .achievements {
-    width: 300px;
-    height: auto;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    padding: 30px;
-  }
-  .achievements h2 {
-    font-size: 1rem;
-    margin-bottom: 10px;
-    font-weight: 300;
-    color: #bfc7d0;
-  }
-  .odometer {
-    font-size: 2.5rem;
-    font-weight: bold;
-    margin-block: 5px;
-    font-family: monospace;
-    color: #ffffff;
-  }
-    .odoIcon {
-        color: #f7c948;
+<section class="container">
+  <div class="achievements-container">
+    {
+      data.map((item: any) => (
+        <div class="achievements">
+          <Icon name={item.icon} size={item.size} class="odoIcon" />
+          <p class="odometer" id={item.id} />
+          <h2>{item.name}</h2>
+        </div>
+      ))
     }
-</style>
-<script define:vars={{ allPosts, hikes, akcie, tips }}>
-
+  </div>
+  <style>
+    .container {
+      background: var(--text-primary);
+    }
+    .achievements-container {
+      max-width: 1500px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr 1fr;
+      gap: 20px;
+      justify-items: center;
+      align-items: center;
+      padding: 50px;
+    }
+    .achievements {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      gap: 10px;
+    }
+    .achievements h2 {
+      font-size: 1rem;
+      margin-bottom: 10px;
+      font-weight: 300;
+      color: #bfc7d0;
+    }
+    .odometer {
+      font-size: 2.5rem;
+      font-weight: bold;
+      margin-block: 5px;
+      font-family: monospace;
+      color: #ffffff;
+    }
+    .odoIcon {
+      color: #f7c948;
+    }
+    @media (max-width: 900px) {
+      .container {
+        display: none;
+      }
+    }
+  </style>
+  <script define:vars={{ allPosts, hikes, akcie, tips }}>
     const createOdometer = (el, value) => {
-    const odometer = new Odometer({
-      el: el,
-      value: 0,
-    });
-
-    const options = {
-      threshold: [0, 0.9],
-    };
-
-    let hasRun = false;
-
-    const callback = (entries, observer) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          if (!hasRun) {
-            odometer.update(value);
-            hasRun = true;
-          }
-        }
+      const odometer = new Odometer({
+        el: el,
+        value: 0,
       });
+
+      const options = {
+        threshold: [0, 0.9],
+      };
+
+      let hasRun = false;
+
+      const callback = (entries, observer) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            if (!hasRun) {
+              odometer.update(value);
+              hasRun = true;
+            }
+          }
+        });
+      };
+
+      const observer = new IntersectionObserver(callback, options);
+      observer.observe(el);
     };
 
-    const observer = new IntersectionObserver(callback, options);
-    observer.observe(el);
-  };
+    const akcieCount = document.getElementById("akcie-count");
+    createOdometer(akcieCount, akcie.length);
 
-  const akcieCount = document.getElementById("akcie-count");
-  createOdometer(akcieCount, akcie.length);
+    const turyCount = document.getElementById("tury-count");
+    createOdometer(turyCount, hikes.length);
 
-  const turyCount = document.getElementById("tury-count");
-  createOdometer(turyCount, hikes.length);
+    const tipCount = document.getElementById("tip-count");
+    createOdometer(tipCount, tips.length);
 
-  const tipCount = document.getElementById("tip-count");
-  createOdometer(tipCount, tips.length);
+    const allPostsCount = document.getElementById("allPosts-count");
+    createOdometer(allPostsCount, allPosts.length);
 
-  const allPostsCount = document.getElementById("allPosts-count");
-  createOdometer(allPostsCount, allPosts.length);
-
-// src: https://www.youtube.com/watch?v=p2rV9tKvjFg
-
-</script>
+    // src: https://www.youtube.com/watch?v=p2rV9tKvjFg
+  </script>
+</section>

@@ -64,7 +64,7 @@ const filteredPosts = posts.filter((post: any) =>
                 </div>
                 <div class="icon-info">
                   <Icon name="date" size={20} />
-                  <p>{post.data.pubDate.toLocaleDateString()}</p>
+                  <p>{new Date(post.data.pubDate).toLocaleDateString("sk-SK", { year: 'numeric', month: 'long', day: 'numeric' })}</p>
                 </div>
               </div>
             </div>

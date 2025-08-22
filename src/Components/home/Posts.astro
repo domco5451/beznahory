@@ -8,7 +8,7 @@ const allPosts = await getCollection("blog");
 
 <div class="container">
   <div class="post-title-container">
-      <h2 class="posts-title">Najnovšie príspevky</h2>
+    <h2 class="posts-title">Najnovšie príspevky</h2>
   </div>
   <div class="post-grid">
     {
@@ -41,18 +41,18 @@ const allPosts = await getCollection("blog");
 </div>
 <style>
   .container {
-    max-width: 1500px;
-    margin: 0 auto;
     color: var(--text-primary);
   }
   .post-grid {
+    max-width: 1500px;
+    margin: 0 auto;
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr;
     gap: 20px;
     padding: 40px;
   }
   .post-wrapper {
-    height: 250px;
+    height: auto;
     display: flex;
     flex-direction: column;
     border: 1px solid #cecece;
@@ -97,12 +97,28 @@ const allPosts = await getCollection("blog");
     font-weight: bolder;
   }
   .post-title-container {
-    min-width: 1500px;
-    display: flex;
-    align-items: start;
-    padding-inline-start: 40px;
+    max-width: 1500px;
+    margin: 0 auto;
+    text-align: center;
   }
   .icon {
     color: var(--heading-text);
+  }
+  @media (max-width: 1200px) {
+    .post-grid {
+      grid-template-columns: 1fr 1fr 1fr;
+    }
+  }
+  @media (max-width: 900px) {
+    .post-grid {
+      grid-template-columns: 1fr 1fr;
+      padding: 20px;
+    }
+  }
+  @media (max-width: 560px) {
+    .post-grid {
+      grid-template-columns: 1fr;
+      padding: 20px;
+    }
   }
 </style>

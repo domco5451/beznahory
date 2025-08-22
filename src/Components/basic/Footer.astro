@@ -1,7 +1,73 @@
 ---
 import { Icon } from "astro-icon/components";
 
-const footerLinks = [
+// Definujeme rozhrania pre naše dátové typy
+interface FooterLink {
+  section: string;
+  url: string;
+}
+
+interface SocialLink {
+  name: string;
+  url: string;
+  size: number;
+}
+
+interface ContactItem {
+  type: string;
+  icon: string;
+  text: string;
+  size: number;
+}
+
+interface LogoContent {
+  logoIcon: string;
+  logoSize: number;
+  textIcon: string;
+  textWidth: number;
+  textHeight: number;
+  sloganIcon: string;
+  sloganWidth: number;
+  sloganHeight: number;
+  description: string;
+}
+
+interface SocialContent {
+  description: string;
+  links: SocialLink[];
+}
+
+interface FooterLogoSection {
+  type: "logo";
+  content: LogoContent;
+}
+
+interface FooterLinksSection {
+  type: "links";
+  title: string;
+  content: FooterLink[];
+}
+
+interface FooterSocialSection {
+  type: "social";
+  title: string;
+  content: SocialContent;
+}
+
+interface FooterContactSection {
+  type: "contact";
+  title: string;
+  content: ContactItem[];
+}
+
+type FooterSection = 
+  | FooterLogoSection 
+  | FooterLinksSection 
+  | FooterSocialSection 
+  | FooterContactSection;
+
+// Navigačné odkazy
+const footerLinks: FooterLink[] = [
   { section: "Domov", url: "/" },
   { section: "Blog", url: "/blog" },
   { section: "Túry", url: "/hikes" },
@@ -10,83 +76,150 @@ const footerLinks = [
   { section: "Tipy a triky", url: "/tipy-a-triky" },
   { section: "O nás", url: "/about" },
 ];
+
+// Sociálne siete
+const socialLinks: SocialLink[] = [
+  { name: "instagram", url: "https://instagram.com/beznahory", size: 30 },
+  // Môžeš pridať ďalšie sociálne siete
+  // { name: "facebook", url: "https://facebook.com/beznahory", size: 30 },
+  // { name: "twitter", url: "https://twitter.com/beznahory", size: 30 },
+];
+
+// Kontaktné údaje
+const contactInfo: ContactItem[] = [
+  { type: "mail", icon: "mail", text: "beznahory@gmail.com", size: 20 },
+  // Môžeš pridať ďalšie kontaktné údaje
+  // { type: "phone", icon: "phone", text: "+421 123 456 789", size: 20 },
+];
+
+// Sekcie vo footeri
+const footerSections: FooterSection[] = [
+  {
+    type: "logo",
+    content: {
+      logoIcon: "logoSite",
+      logoSize: 80,
+      textIcon: "logo-text",
+      textWidth: 200,
+      textHeight: 30,
+      sloganIcon: "slogan",
+      sloganWidth: 100,
+      sloganHeight: 20,
+      description: "Blog venovaný horskému behu – hill run. Nájdeš tu tipy na tréning do kopcov, recenzie trás, vybavenie, zážitky z behov a inšpirácie pre každého, kto miluje beh v prírode a výzvy strmých stúpaní."
+    }
+  },
+  {
+    type: "links",
+    title: "Sekcie",
+    content: footerLinks
+  },
+  {
+    type: "social",
+    title: "Sledujte nás",
+    content: {
+      description: "Sledujte nás na sociálnych sieťach, kde zdieľame tipy, trasy a inšpirácie pre horský beh.",
+      links: socialLinks
+    }
+  },
+  {
+    type: "contact",
+    title: "Kontakt",
+    content: contactInfo
+  }
+];
 ---
 
-<footer>
+<footer class="container">
   <div class="p-footer">
-    <div class="footer-logo">
-      <div class="logo-text">
-        <Icon name="logoSite" size={80} />
-        <div>
-          <Icon name="logo-text" width="200" height="30" />
-          <Icon name="slogan" width="100" height="20" />
-        </div>
-      </div>
-      <p>
-        Blog venovaný horskému behu – hill run. Nájdeš tu tipy na tréning do
-        kopcov, recenzie trás, vybavenie, zážitky z behov a inšpirácie pre
-        každého, kto miluje beh v prírode a výzvy strmých stúpaní.
-      </p>
-    </div>
-    <div class="footer-links">
-      <h2>Sekcie</h2>
-      <ul>
-        {
-          footerLinks.map((link: any) => (
-            <li>
-              <div class="icon-link">
-                <Icon name="roundet-arrow-left" size={20} />
-                <h3><a href={link.url}>{link.section}</a></h3>
+    {
+      footerSections.map((section) => {
+        if (section.type === "logo") {
+          return (
+            <div class="footer-logo">
+              <div class="logo-text">
+                <Icon name={section.content.logoIcon} size={section.content.logoSize} />
+                <div>
+                  <Icon name={section.content.textIcon} width={section.content.textWidth} height={section.content.textHeight} />
+                  <Icon name={section.content.sloganIcon} width={section.content.sloganWidth} height={section.content.sloganHeight} />
+                </div>
               </div>
-            </li>
-          ))
+              <p>{section.content.description}</p>
+            </div>
+          );
+        } else if (section.type === "links") {
+          return (
+            <div class="footer-links">
+              <h2>{section.title}</h2>
+              <ul>
+                {section.content.map((link: FooterLink) => (
+                  <li>
+                    <div class="icon-link">
+                      <Icon name="roundet-arrow-left" size={20} />
+                      <h3>
+                        <a href={link.url}>{link.section}</a>
+                      </h3>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          );
+        } else if (section.type === "social") {
+          return (
+            <div class="footer-links">
+              <h2>{section.title}</h2>
+              <div class="social-container">
+                <p>{section.content.description}</p>
+                <div class="social-icons">
+                  {section.content.links.map((social: SocialLink) => (
+                    <a href={social.url} aria-label={social.name}>
+                      <Icon name={social.name} size={social.size} />
+                    </a>
+                  ))}
+                </div>
+              </div>
+            </div>
+          );
+        } else if (section.type === "contact") {
+          return (
+            <div class="footer-links">
+              <h2>{section.title}</h2>
+              {section.content.map((item: ContactItem) => (
+                <div class={`icon-${item.type}`}>
+                  <Icon name={item.icon} size={item.size} />
+                  <p>{item.text}</p>
+                </div>
+              ))}
+            </div>
+          );
         }
-      </ul>
-    </div>
-    <div class="footer-links">
-      <h2>Sledujte nás</h2>
-      <div style="display: flex; flex-direction: column; gap: 20px;">
-        <p>
-          Sledujte nás na sociálnych sieťach, kde zdieľame tipy, trasy a
-          inšpirácie pre horský beh.
-        </p>
-        <div style="display: flex; gap: 10px; color: var(--nav-hover-text);">
-          <Icon name="instagram" size={30} />
-        </div>
-      </div>
-    </div>
-    <div class="footer-links">
-      <h2>Kontakt</h2>
-      <div class="icon-mail">
-        <Icon name="mail" size={20} />
-        <p>beznahory@gmail.com</p>
-      </div>
-    </div>
+        return null;
+      })
+    }
   </div>
   <div class="footer-bottom">
     <hr />
-    <div
-      style="display: flex; justify-content: space-between; align-items: center;"
-    >
-      <p>&copy Copyright - beznahory.sk 2025</p>
-      <a href="/">Privacy Policy</a>
+    <div class="copyright-container">
+      <p>&copy; Copyright - beznahory.sk 2025</p>
+      <a href="/privacy-policy">Privacy Policy</a>
     </div>
   </div>
 </footer>
+
 <style>
-  footer {
+  .container {
     border-block-start: 1px solid var(--border-color);
   }
   .p-footer {
-    max-width: 1300px;
-    margin: auto;
+    max-width: 1500px;
+    margin: 0 auto;
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr;
     padding: 20px;
     gap: 100px;
   }
   .footer-bottom {
-    max-width: 1300px;
+    max-width: 1500px;
     margin: auto;
     padding-inline: 20px;
   }
@@ -142,5 +275,30 @@ const footerLinks = [
   }
   a:hover {
     text-decoration: underline;
+  }
+  
+  /* Nové štýly */
+  .social-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  .social-icons {
+    display: flex;
+    gap: 10px;
+    color: var(--nav-hover-text);
+  }
+  .copyright-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  @media (max-width: 900px) {
+    .p-footer {
+      grid-template-columns: 1fr;
+      gap: 40px;
+      padding-inline: 20px;
+    }
   }
 </style>

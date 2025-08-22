@@ -29,7 +29,7 @@ import MdSwiper from "./MdSwiper.astro";
     </div>
     <div class="flex-container">
       <Icon name="date" size={20} />
-      <p>{frontmatter.pubDate.toLocaleDateString()}</p>
+      <p>{new Date(frontmatter.pubDate).toLocaleDateString("sk-SK", { year: 'numeric', month: 'long', day: 'numeric' })}</p>
     </div>
     <div class="flex-container">
       <Icon name="read" size={20} />

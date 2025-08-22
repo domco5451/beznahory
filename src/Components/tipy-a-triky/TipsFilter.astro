@@ -35,7 +35,7 @@ const allPosts = await getCollection("blog", ({ data }) => {
                 </div>
                 <div class="icon-date">
                     <Icon name="date" size={30} />
-                    <p>{post.data.pubDate.toLocaleDateString()}</p>
+                    <p>{new Date(post.data.pubDate).toLocaleDateString("sk-SK", { year: 'numeric', month: 'long', day: 'numeric' })}</p>
                 </div>
             </div>
         </div>

@@ -2,7 +2,6 @@
 import { getCollection } from "astro:content";
 import Badge from "./Badge.astro";
 
-
 const kraje = [
   { href: "/hikes/bratislavsky-kraj", kraj: "Bratislavský kraj" },
   { href: "/hikes/trnavsky-kraj", kraj: "Trnavský kraj" },
@@ -19,17 +18,21 @@ const krajPosts = allPosts.filter((post: any) => post.data.kraj);
 ---
 
 <div class="container">
-    <div class="container-grid">
-      {
-        kraje.map((kraj: any) => (
-          <div class="wrapper">
-            <Badge href={kraj.href} kraj={kraj.kraj} count={krajPosts.filter((post: any) => (
-                post.data.kraj === kraj.href.split("/").pop()
-            )).length}/>
-          </div>
-        ))
-      }
-    </div>
+  <div class="container-grid">
+    {
+      kraje.map((kraj: any) => (
+        <Badge
+          href={kraj.href}
+          kraj={kraj.kraj}
+          count={
+            krajPosts.filter(
+              (post: any) => post.data.kraj === kraj.href.split("/").pop()
+            ).length
+          }
+        />
+      ))
+    }
+  </div>
 </div>
 <style>
   .container {
@@ -44,10 +47,12 @@ const krajPosts = allPosts.filter((post: any) => post.data.kraj);
     grid-template-columns: 1fr 1fr;
     gap: 50px;
   }
-  .wrapper {
-    display: flex;
-    align-items: center;
-    border: 1px solid var(--border-color);
-    border-radius: 10px;
+  @media (max-width: 900px) {
+    .container-grid {
+      grid-template-columns: 1fr;
+      justify-items: center;
+      align-items: center;
+      text-align: center;
+    }
   }
 </style>

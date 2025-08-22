@@ -1,8 +1,6 @@
 ---
 import { Icon } from "astro-icon/components";
 
-const currentPath = Astro.url.pathname;
-
 const regions = [
   {
     name: "Všetky túry",
@@ -110,46 +108,35 @@ const navItems = [
       <ul class="main-ul">
         {
           navItems.map((item) => (
-            <li
-              class:list={[
-                "nav-item"
-              ]}
-            >
+            <li class="nav-item">
               {item.hasDropdown ? (
                 <>
-                  <a class="nav-item-dropdown main-link">
+                  <button
+                    class="dropdown-button main-link"
+                    aria-expanded="false"
+                  >
                     <span class="dropdown-link">{item.name}</span>
                     <Icon class="arrow-dropdown" name="arrow-down" size={20} />
-                  </a>
-                  <div class="nav-dropdown">
-                    <ul class="nav-dropdown-content">
-                      {item.dropdownItems?.map((region) => (
-                        <li class="dropdown-item-container">
-                          <a
-                            href={region.href}
-                            class="dropdown-item-link"
-                            style="margin: 8px;"
-                          >
-                            <div
-                              style={{ backgroundColor: region.color }}
-                              class="region-bar"
-                            />
-                            <div>
-                              <span
-                                style="margin-block: 3px;"
-                                class="region-name"
-                              >
-                                {region.name}
-                              </span>
-                              <span class="region-description">
-                                {region.description}
-                              </span>
-                            </div>
-                          </a>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
+                  </button>
+
+                  <ul class="nav-dropdown-content">
+                    {item.dropdownItems?.map((region) => (
+                      <li class="dropdown-item-container">
+                        <a href={region.href} class="dropdown-item-link">
+                          <div
+                            style={{ backgroundColor: region.color }}
+                            class="region-bar"
+                          />
+                          <div>
+                            <span class="region-name">{region.name}</span>
+                            <span class="region-description">
+                              {region.description}
+                            </span>
+                          </div>
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
                 </>
               ) : (
                 <a class="main-link" href={item.href}>
@@ -174,6 +161,7 @@ const navItems = [
     top: 0;
     z-index: 1000;
     background: var(--bg-primary);
+    border-block-end: 1px solid var(--border-color);
   }
   nav {
     max-width: 1500px;
@@ -183,7 +171,6 @@ const navItems = [
     align-items: center;
     padding-block: 8px;
     color: var(--text-primary);
-    border-block-end: 1px solid var(--border-color);
   }
   .logo {
     fill: var(--text-primary);
@@ -209,10 +196,15 @@ const navItems = [
     width: 4px;
     height: 35px;
   }
-  .nav-item-dropdown {
-    display: flex;
-    align-items: center;
+  .dropdown-button {
+    background: none;
+    border: none;
+    font-size: inherit;
+    font-family: inherit;
+    color: inherit;
     cursor: pointer;
+    width: 100%;
+    text-align: left;
   }
   .main-link {
     padding-inline: 8px;
@@ -225,9 +217,6 @@ const navItems = [
   }
   nav .main-link:hover {
     background: var(--hover-bg);
-    color: var(--hover-text);
-  }
-  nav .nav-item-dropdown:hover .dropdown-link {
     color: var(--hover-text);
   }
   .dropdown-item-container:hover {
@@ -246,18 +235,8 @@ const navItems = [
     color: var(--description-text);
     display: block;
   }
-  .nav-item-dropdown {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    cursor: pointer;
-    text-decoration: none;
-  }
   .dropdown-link {
     color: inherit;
-  }
-  .nav-dropdown {
-    position: relative;
   }
   .nav-dropdown-content {
     display: none;
@@ -267,19 +246,10 @@ const navItems = [
     min-width: 250px;
     box-shadow: 0px 0px 10px rgba(177, 177, 177, 0.2);
     z-index: 1;
-    top: 3px;
+    top: 100%;
+    left: 8px; /* Zarovnanie s vnútorným obsahom tlačidla (zodpovedá padding-inline tlačidla) */
     border-radius: 10px;
     border: 1px solid var(--border-color);
-  }
-  .nav-dropdown::after {
-    content: "";
-    display: block;
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: 100%;
-    height: 5px; /* výška medzery medzi textom a menu */
-    z-index: 9999;
   }
   .arrow-dropdown {
     transition: transform 0.3s ease;
@@ -304,6 +274,7 @@ const navItems = [
   }
   .nav-item {
     border-radius: 5px;
+    position: relative;
   }
   .nav-item-active {
     background: var(--hover-bg);
@@ -336,7 +307,6 @@ const navItems = [
       -webkit-overflow-scrolling: touch;
     }
     .nav-item {
-      padding: 20px 0;
       width: 100%;
       border-block-end: 1px solid var(--border-color);
       border-radius: 0;
@@ -345,7 +315,7 @@ const navItems = [
     .main-link {
       display: flex;
       justify-content: space-between;
-      padding-inline-start: 20px;
+      padding: 30px;
     }
     .main-link::after {
       display: none;
@@ -363,11 +333,12 @@ const navItems = [
       background: var(--hover-bg);
     }
     .nav-dropdown-content {
-      position: absolute;
-      top: 20px;
-      left: 0;
+      position: static;
       width: 100%;
-      border-radius: 0px;
+      border-radius: 0;
+      box-shadow: none;
+      border: none;
+      margin-top: 5px;
     }
     .region-bar {
       display: none;
@@ -377,111 +348,125 @@ const navItems = [
     }
     .dropdown-item-container {
       border-block-end: 1px solid var(--border-color);
-      padding-block: 11px;
       border-radius: 0;
       margin: 0;
       background: #fff7e0;
+      padding-block: 17.5px;
     }
   }
 </style>
 <script>
-// Select all nav items
-const navItems = document.querySelectorAll(".nav-item");
-const hamburger = document.querySelector(".hamburger");
-const navMenu = document.querySelector(".main-ul");
+  // Select all nav items
+  const navItems = document.querySelectorAll(".nav-item");
+  const hamburger = document.querySelector(".hamburger");
+  const navMenu = document.querySelector(".main-ul");
 
-// Hamburger mobile menu
-hamburger?.addEventListener("click", () => {
-  hamburger.classList.toggle("active");
-  navMenu?.classList.toggle("active");
-});
-
-// Funkcia na zatvorenie všetkých dropdownov
-const closeAllDropdowns = () => {
-  document.querySelectorAll(".nav-dropdown-content").forEach((dropdown) => {
-    dropdown.style.display = ""; // Reset na CSS default (none)
-    
-    // Nájdi rodiča (nav-item) a odstráň mu active triedu, ale iba ak nie je aktívny kvôli URL
-    const parentNavItem = dropdown.closest(".nav-item");
-    if (parentNavItem) {
-      // Vždy odstráň dropdown-active (šípka ide dole)
-      parentNavItem.classList.remove("dropdown-active");
-      
-      // Odstráň nav-item-active, ale iba ak nie je aktívny kvôli URL
-      if (!parentNavItem.hasAttribute("data-url-active")) {
-        parentNavItem.classList.remove("nav-item-active");
-      }
-    }
-  });
-};
-
-// Najprv označíme, ktoré položky sú aktívne kvôli URL
-document.querySelectorAll(".nav-item.nav-item-active").forEach(item => {
-  item.setAttribute("data-url-active", "true");
-});
-
-// Pridaj click event len na nav items s dropdownom
-navItems.forEach((item) => {
-  // Skontroluj, či item má dropdown trigger
-  const dropdownTrigger = item.querySelector(".nav-item-dropdown");
-  if (!dropdownTrigger) return; // Preskoč items bez dropdownu
-
-  // Pridaj click listener na dropdown trigger
-  dropdownTrigger.addEventListener("click", (event) => {
-    event.preventDefault(); // Zabráň navigácii
-
-    // Nájdi dropdown content
-    const dropdown = item.querySelector(".nav-dropdown-content");
-    if (!dropdown) return;
-
-    // Toggle dropdown a nav-item-active triedu
-    if (dropdown.style.display === "block") {
-      dropdown.style.display = ""; // Zatvor dropdown
-      
-      // Odstráň dropdown-active triedu (šípka ide dole)
-      item.classList.remove("dropdown-active");
-      
-      // Odstráň active triedu, ale iba ak nie je aktívny kvôli URL
-      if (!item.hasAttribute("data-url-active")) {
-        item.classList.remove("nav-item-active");
-      }
-    } else {
-      // Zatvor všetky ostatné dropdowny
-      closeAllDropdowns();
-      
-      // Otvor tento dropdown
-      dropdown.style.display = "block";
-      
-      // Pridaj dropdown-active triedu (šípka ide hore)
-      item.classList.add("dropdown-active");
-      
-      // Pridaj active triedu
-      item.classList.add("nav-item-active");
-    }
-
-    // Zabráň event bubblingu, aby sa event nedostal na document
-    event.stopPropagation();
+  // Hamburger mobile menu
+  hamburger?.addEventListener("click", () => {
+    hamburger.classList.toggle("active");
+    navMenu?.classList.toggle("active");
   });
 
-  // Zabráň klikom vnútri dropdownu, aby ho zatvorili
-  const dropdownContent = item.querySelector(".nav-dropdown-content");
-  if (dropdownContent) {
-    dropdownContent.addEventListener("click", (event) => {
-      // Zastav event propagation, ale nechaj defaultnú akciu (klik na link)
+  // Funkcia na zatvorenie všetkých dropdownov
+  const closeAllDropdowns = () => {
+    document.querySelectorAll(".nav-dropdown-content").forEach((dropdown) => {
+      if (dropdown instanceof HTMLElement) {
+        dropdown.style.display = ""; // Reset na CSS default (none)
+      }
+
+      // Nájdi rodiča (nav-item) a odstráň mu active triedu, ale iba ak nie je aktívny kvôli URL
+      const parentNavItem = dropdown.closest(".nav-item");
+      if (parentNavItem) {
+        // Vždy odstráň dropdown-active (šípka ide dole)
+        parentNavItem.classList.remove("dropdown-active");
+        
+        // Nastav aria-expanded na false
+        const button = parentNavItem.querySelector(".dropdown-button");
+        if (button) {
+          button.setAttribute("aria-expanded", "false");
+        }
+
+        // Odstráň nav-item-active, ale iba ak nie je aktívny kvôli URL
+        if (!parentNavItem.hasAttribute("data-url-active")) {
+          parentNavItem.classList.remove("nav-item-active");
+        }
+      }
+    });
+  };
+
+  // Najprv označíme, ktoré položky sú aktívne kvôli URL
+  document.querySelectorAll(".nav-item.nav-item-active").forEach((item) => {
+    item.setAttribute("data-url-active", "true");
+  });
+
+  // Pridaj click event len na nav items s dropdownom
+  navItems.forEach((item) => {
+    // Skontroluj, či item má dropdown trigger
+    const dropdownTrigger = item.querySelector(".dropdown-button");
+    if (!dropdownTrigger) return; // Preskoč items bez dropdownu
+
+    // Pridaj click listener na dropdown trigger
+    dropdownTrigger.addEventListener("click", (event) => {
+      event.preventDefault(); // Zabráň navigácii
+
+      // Nájdi dropdown content
+      const dropdown = item.querySelector(".nav-dropdown-content");
+      if (!dropdown || !(dropdown instanceof HTMLElement)) return;
+
+      // Toggle dropdown a nav-item-active triedu
+      if (dropdown.style.display === "block") {
+        dropdown.style.display = ""; // Zatvor dropdown
+        
+        // Nastav aria-expanded
+        dropdownTrigger.setAttribute("aria-expanded", "false");
+
+        // Odstráň dropdown-active triedu (šípka ide dole)
+        item.classList.remove("dropdown-active");
+
+        // Odstráň active triedu, ale iba ak nie je aktívny kvôli URL
+        if (!item.hasAttribute("data-url-active")) {
+          item.classList.remove("nav-item-active");
+        }
+      } else {
+        // Zatvor všetky ostatné dropdowny
+        closeAllDropdowns();
+
+        // Otvor tento dropdown
+        dropdown.style.display = "block";
+        
+        // Nastav aria-expanded
+        dropdownTrigger.setAttribute("aria-expanded", "true");
+
+        // Pridaj dropdown-active triedu (šípka ide hore)
+        item.classList.add("dropdown-active");
+
+        // Pridaj active triedu
+        item.classList.add("nav-item-active");
+      }
+
+      // Zabráň event bubblingu, aby sa event nedostal na document
       event.stopPropagation();
     });
-  }
-});
 
-// Zatvor dropdown pri kliknutí kamkoľvek inde na stránke
-document.addEventListener("click", () => {
-  closeAllDropdowns();
-});
+    // Zabráň klikom vnútri dropdownu, aby ho zatvorili
+    const dropdownContent = item.querySelector(".nav-dropdown-content");
+    if (dropdownContent) {
+      dropdownContent.addEventListener("click", (event) => {
+        // Zastav event propagation, ale nechaj defaultnú akciu (klik na link)
+        event.stopPropagation();
+      });
+    }
+  });
 
-// Zatvor dropdown pri stlačení klávesy ESC
-document.addEventListener("keydown", (event) => {
-  if (event.key === "Escape") {
+  // Zatvor dropdown pri kliknutí kamkoľvek inde na stránke
+  document.addEventListener("click", () => {
     closeAllDropdowns();
-  }
-});
+  });
+
+  // Zatvor dropdown pri stlačení klávesy ESC
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") {
+      closeAllDropdowns();
+    }
+  });
 </script>
