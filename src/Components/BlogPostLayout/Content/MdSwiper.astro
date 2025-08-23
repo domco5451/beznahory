@@ -84,6 +84,11 @@ const { images } = Astro.props;
   .swiper-button-next {
     color: white;
   }
+  @media (max-width: 570px) {
+    .swiper-container {
+      height: 400px;
+    }
+  }
 </style>
 <script src="../../../scripts/slider.js"></script>
 <script

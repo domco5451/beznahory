@@ -2,7 +2,6 @@
 import PageLayout from "./PageLayout.astro";
 import Toc from "../components/BlogPostLayout/Toc.astro";
 import MdContent from "../components/BlogPostLayout/Content/MdContentMain.astro";
-import SideInfo from "../components/BlogPostLayout/Info/SideInfoMain.astro";
 
 const { frontmatter, headings, remarkPluginFrontmatter } = Astro.props;
 
@@ -12,15 +11,14 @@ const images = frontmatter.gallery || [];
 <PageLayout title={frontmatter.title}>
   <div class="container">
     <div class="wrapper">
-      {frontmatter.ratings && 
-        <SideInfo {frontmatter} />
-      }
-      <div>
+      <div class="content">
         <MdContent {frontmatter} {remarkPluginFrontmatter} {images}>
           <slot />
         </MdContent>
       </div>
-      <Toc {headings} />
+      <div class="toc-container">
+        <Toc {headings} />
+      </div>
     </div>
   </div>
 </PageLayout>
@@ -30,12 +28,46 @@ const images = frontmatter.gallery || [];
     scroll-behavior: smooth;
   }
   .container {
-    max-width: 100%;
-    margin: 50px auto;
+    padding-block: 50px;
   }
   .wrapper {
+    max-width: 1500px;
+    margin: auto;
     display: flex;
-    justify-content: center;
     gap: 50px;
+    justify-content: center;
+    align-items: flex-start;
+    padding-inline: 20px;
+  }
+  .content {
+    width: 100%;
+    max-width: 800px;
+    flex-grow: 1;
+    flex-shrink: 1;
+    flex-basis: 0;
+    min-width: 0; 
+  }
+  .toc-container {
+    width: 250px;
+    flex-shrink: 0;
+    position: sticky;
+    top: 100px; 
+  }
+  @media (max-width: 1200px) {
+    .wrapper {
+      gap: 30px;
+    }
+    .toc-container {
+      width: 220px;
+    }
+  }
+
+  @media (max-width: 900px) {
+    .wrapper {
+      gap: 20px;
+    }
+    .toc-container {
+      display: none;
+    }
   }
 </style>

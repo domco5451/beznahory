@@ -18,7 +18,7 @@ const ratings = [
             <Icon name={rating.icon} size={40} style="color: var(--heading-text)"/>
             <div>
                 <p class="lable">{rating.label}: </p>
-                <p class="rating">{rating.value}</p>
+                <p class="rating">{rating.value} {typeof rating.value === "number" && " / 5"}</p>
             </div>
         </div>
     ))}

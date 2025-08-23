@@ -3,43 +3,53 @@ import { Image } from "astro:assets";
 import { Icon } from "astro-icon/components";
 const { frontmatter, remarkPluginFrontmatter, images } = Astro.props;
 import MdSwiper from "./MdSwiper.astro";
+import SideInfoMain from "../Info/SideInfoMain.astro";
 ---
 
-<article class="markdown-post-article">
-  <Image
-    class="thumbnail"
-    src={frontmatter.thumbnail}
-    alt={frontmatter.thumbnailAlt}
-    inferSize={true}
-    layout="constrained"
-    fetchpriority="high"
-  />
-  <h1>{frontmatter.title}</h1>
-  <header>
-    <div class="author-info">
-      <Image
-        class="pfp"
-        src={frontmatter.pfp}
-        alt={frontmatter.pfpAlt}
-        inferSize={true}
-        layout="constrained"
-        loading="eager"
-      />
-      <p><strong>{frontmatter.author}</strong></p>
-    </div>
-    <div class="flex-container">
-      <Icon name="date" size={20} />
-      <p>{new Date(frontmatter.pubDate).toLocaleDateString("sk-SK", { year: 'numeric', month: 'long', day: 'numeric' })}</p>
-    </div>
-    <div class="flex-container">
-      <Icon name="read" size={20} />
-      <p>{remarkPluginFrontmatter.minutesRead}</p>
-    </div>
-  </header>
-  <section class="markdown-content">
-    <slot />
-  </section>
-  {frontmatter.gallery && <MdSwiper images={images} />}
+<article class="container">
+  <div class="wrapper">
+    <Image
+      class="thumbnail"
+      src={frontmatter.thumbnail}
+      alt={frontmatter.thumbnailAlt}
+      layout="constrained"
+      fetchpriority="high"
+    />
+    <h1>{frontmatter.title}</h1>
+    <header>
+      <div class="author-info">
+        <Image
+          class="pfp"
+          src={frontmatter.pfp}
+          alt={frontmatter.pfpAlt}
+          layout="constrained"
+          loading="eager"
+        />
+        <p><strong>{frontmatter.author}</strong></p>
+      </div>
+      <div class="flex-container">
+        <Icon class="icon" name="date" size={20} />
+        <p>
+          {
+            new Date(frontmatter.pubDate).toLocaleDateString("sk-SK", {
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+            })
+          }
+        </p>
+      </div>
+      <div class="flex-container icon-read">
+        <Icon class="icon" name="read" size={20} />
+        <p>{remarkPluginFrontmatter.minutesRead}</p>
+      </div>
+    </header>
+    {frontmatter.ratings && <SideInfoMain {frontmatter} />}
+    <section class="markdown-content">
+      <slot />
+    </section>
+    {frontmatter.gallery && <MdSwiper images={images} />}
+  </div>
 </article>
 <style>
   h1 {
@@ -53,9 +63,15 @@ import MdSwiper from "./MdSwiper.astro";
     align-items: center;
     gap: 40px;
     margin-bottom: 20px;
+    flex-wrap: wrap;
   }
-  .markdown-post-article {
-    max-width: 800px;
+  .container {
+  }
+  .wrapper {
+    max-width: 100%;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
   }
   .pfp {
     width: 60px;
@@ -94,5 +110,35 @@ import MdSwiper from "./MdSwiper.astro";
     max-width: 100%;
     height: auto;
     border-radius: 10px;
+  }
+  @media (max-width: 650px) {
+    header {
+      gap: 10px;
+    }
+  }
+  @media (max-width: 590px) {
+    .pfp {
+      width: 50px;
+      height: 50px;
+    }
+    .author-info {
+      gap: 10px;
+      font-size: 0.9rem;
+    }
+    .thumbnail {
+      height: 250px;
+    }
+    .icon {
+      width: 15px;
+      height: 15px;
+    }
+    .flex-container p {
+      font-size: 0.9rem;
+    }
+  }
+  @media (max-width: 520px) {
+    header {
+      gap: 20px;
+    }
   }
 </style>
