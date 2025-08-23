@@ -11,6 +11,8 @@ const blogCollection = defineCollection({
       hero: image(),
       thumbnail: image(),
       thumbnailAlt: z.string(),
+      thumbnailSmall: image(),
+      thumbnailSmallAlt: z.string(),
       kraj: z.string().optional(),
       okres: z.string().optional(),
       pfp: image().optional(),

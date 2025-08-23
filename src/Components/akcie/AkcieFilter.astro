@@ -16,8 +16,8 @@ const allPosts = await getCollection("blog", ({ data }) => {
           <div class="post-container">
             <Image
               class="thumbnail"
-              src={post.data.thumbnail}
-              alt={post.data.thumbnailAlt}
+              src={post.data.thumbnailSmall}
+              alt={post.data.thumbnailSmallAlt}
               loading="eager"
             />
             <div class="content-wrapper">

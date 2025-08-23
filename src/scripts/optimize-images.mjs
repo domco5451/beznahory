@@ -5,10 +5,9 @@ import sharp from 'sharp';
 const INPUT = 'src/assets/raw';
 const OUTPUT = 'src/assets/optimized';
 const TARGETS = [
-  { label: 'hero', width:1600 },
-  { label: 'lg', width:1200 },
-  { label: 'md', width:800 },
-  { label: 'sm', width:400 }
+  { label: 'hero', width:2000 },
+  { label: 'lg', width:800 },
+  { label: 'sm', width:350 },
 ];
 
 await mkdir(OUTPUT, { recursive: true });

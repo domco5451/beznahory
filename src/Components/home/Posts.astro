@@ -16,8 +16,8 @@ const allPosts = await getCollection("blog");
         <a href={`/blog/${post.slug}`} class="post-wrapper">
           <Image
             class="thumbnail"
-            src={post.data.thumbnail}
-            alt={post.data.thumbnailAlt}
+            src={post.data.thumbnailSmall}
+            alt={post.data.thumbnailSmallAlt}
             loading="lazy"
           />
           <div class="content-wrapper">
