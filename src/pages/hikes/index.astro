@@ -3,6 +3,7 @@ import { getCollection } from "astro:content";
 import PageLayout from "../../layouts/PageLayout.astro";
 import { Icon } from "astro-icon/components";
 import { Image } from "astro:assets";
+import Heading from "../../components/basic/Heading.astro";
 
 const currentPath = Astro.url.pathname;
 
@@ -24,15 +25,7 @@ const kraje = [
 ---
 
 <PageLayout title="Túry">
-  <div class="blog-header">
-    <div class="blog-wrapper">
-      <div>
-        <h1>Turistika</h1>
-        <h2>Filtrujte blog príspevky podľa kraja</h2>
-      </div>
-      <Icon name="mountain" size={200} />
-    </div>
-  </div>
+    <Heading blogTitle="Túry" blogDescription="Vyberte si turistiku podľa vášho kraju" iconName="blog" />
   <div class="container">
     <div class="kraje">
       {
@@ -96,8 +89,9 @@ const kraje = [
     color: var(--text-color);
   }
   .container {
-    max-width: 1300px;
+    max-width: 1500px;
     margin: 40px auto;
+    padding: 0 20px 20px 20px;
   }
   .kraje {
     display: flex;
@@ -196,6 +190,21 @@ const kraje = [
   }
   .badge-active:hover {
     background: #172238;
+  }
+  @media (max-width: 1300px) {
+    .grid-container-hikes {
+      grid-template-columns: 1fr 1fr 1fr;
+    }
+  }
+  @media (max-width: 1000px) {
+    .grid-container-hikes {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  @media (max-width: 675px) {
+    .grid-container-hikes {
+      grid-template-columns: 1fr;
+    }
   }
 </style>
 <script>

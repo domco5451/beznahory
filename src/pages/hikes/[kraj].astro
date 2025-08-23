@@ -144,4 +144,19 @@ const filteredPosts = posts.filter((post: any) =>
   .gps {
     color: var(--heading-text);
   }
+  @media (max-width: 1300px) {
+    .grid-container {
+      grid-template-columns: 1fr 1fr 1fr;
+    }
+  }
+  @media (max-width: 1000px) {
+    .grid-container {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  @media (max-width: 675px) {
+    .grid-container {
+      grid-template-columns: 1fr;
+    }
+  }
 </style>
