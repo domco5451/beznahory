@@ -2,6 +2,7 @@
 import { getCollection } from "astro:content";
 import { Image } from "astro:assets";
 import { Icon } from "astro-icon/components";
+import Heading from "../../components/basic/Heading.astro";
 import PageLayout from "../../layouts/PageLayout.astro";
 
 const allPosts = await getCollection("blog");
@@ -18,16 +19,8 @@ const postsWithReadingTime = await Promise.all(
 ---
 
 {/* Dorobiť Image nech nie je nad header */}
-<PageLayout title="Blog">
-  <div class="blog-header">
-    <div class="blog-wrapper">
-      <div>
-        <h1>Blog</h1>
-        <h2>Moje príbehy z behu na horách</h2>
-      </div>
-      <Icon name="blog" size={200} />
-    </div>
-  </div>
+<PageLayout title="Blog | beznahory.sk">
+  <Heading blogTitle="Blog" blogDescription="Naše najnovšie túry, tipy a akcie" iconName="blog" />
   <div class="container">
     <div class="main-grid">
       {
@@ -88,8 +81,9 @@ const postsWithReadingTime = await Promise.all(
 }
 <style>
   .container {
-    max-width: 1400px;
+    max-width: 1500px;
     margin: 50px auto;
+    padding: 0 20px;
   }
   .blog-header h1 {
     font-size: 4rem;
@@ -151,7 +145,7 @@ const postsWithReadingTime = await Promise.all(
   .author-flex {
     display: flex;
     align-items: center;
-    gap: 15px;
+    gap: 15px;;
     flex: 1;
   }
   .wrapper-flex {
@@ -203,20 +197,37 @@ const postsWithReadingTime = await Promise.all(
   .margin-nadpis h3 {
     font-weight: 300;
   }
+  @media (max-width: 900px) {
+    .description {
+      overflow: hidden;
+      display: -webkit-box;
+      -webkit-line-clamp: 4; /* number of lines to show */
+      line-clamp: 4;
+      -webkit-box-orient: vertical;
+    }
+  }
   @media (max-width: 815px) {
     .main-grid {
       grid-template-columns: 1fr;
-      padding: 15px;
+    }
+  }
+  @media (max-width: 500px) {
+    .description {
+      overflow: hidden;
+      display: -webkit-box;
+      -webkit-line-clamp: 4; /* number of lines to show */
+      line-clamp: 4;
+      -webkit-box-orient: vertical;
     }
   }
   @media (max-width: 450px) {
-    .description {
-   overflow: hidden;
-   display: -webkit-box;
-   -webkit-line-clamp: 4; /* number of lines to show */
-           line-clamp: 4; 
-   -webkit-box-orient: vertical;
+    .wrapper-flex {
+      flex-direction: column;
+      justify-content: center;
+      gap: 20px;
+    }
+    .cursor-flex {
+      padding: 10px 50px;
     }
   }
-
 </style>

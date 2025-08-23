@@ -1,34 +1,59 @@
 ---
 import { Icon } from "astro-icon/components";
-const { blogTitle, blogDescription, iconName, size = 200 } = Astro.props;
+const { blogTitle, blogDescription, iconName } = Astro.props;
 ---
-<div class="blog-header">
-  <div class="blog-wrapper">
-    <div>
-      <h1>{blogTitle}</h1>
-      <h2>{blogDescription}</h2>
+
+<div class="container">
+  <div class="wrapper">
+    <Icon class="icon" name={iconName} />
+    <div class="text-wrapper">
+      <h1 class="title">{blogTitle}</h1>
+      <h2 class="description">{blogDescription}</h2>
     </div>
-    <Icon name={iconName} {size} />
   </div>
 </div>
 <style>
-  .blog-header h1 {
-    font-size: 4rem;
+  .title {
+    font-size: 3.5rem;
     font-weight: bolder;
   }
-  .blog-header h2 {
+  .description {
     font-size: 1.5rem;
+    font-weight: 400;
   }
-  .blog-header {
+  .text-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  .container {
     background-image: url("../../icons/pozadieAbout.svg");
     background-size: cover;
-    padding-inline: 20%;
     padding-block: 35px;
   }
-  .blog-wrapper {
-    max-width: 1200px;
+  .wrapper {
+    max-width: 1500px;
+    margin: 0 auto;
     display: flex;
+    flex-direction: row-reverse;
     justify-content: space-between;
     align-items: center;
+    padding-inline: 20px;
+  }
+  .icon {
+    width: 200px;
+    height: 200px;
+  }
+  @media (max-width: 600px) {
+    .wrapper {
+      flex-direction: column;
+    }
+    .icon {
+      width: 300px;
+      height: 300px;
+    }
+    .title {
+      text-align: center;
+    }
   }
 </style>
