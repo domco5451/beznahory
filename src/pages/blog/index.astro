@@ -31,7 +31,7 @@ const postsWithReadingTime = await Promise.all(
                 class="thumbnail"
                 src={post.data.thumbnail}
                 alt={post.data.thumbnailAlt}
-                loading={i < 4 ? "eager" : "lazy"}
+                loading={i > 1 ? "lazy" : "eager"}
               />
             </a>
             <div class="content-wrapper">
@@ -49,7 +49,7 @@ const postsWithReadingTime = await Promise.all(
                     width={50}
                     src={post.data.pfp}
                     alt={post.data.pfpAlt}
-                    loading={i < 2 ? "eager" : "lazy"}
+                    loading="lazy"
                   />
                   <div>
                     <p>
