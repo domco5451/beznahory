@@ -4,13 +4,13 @@ import { Icon } from "astro-icon/components";
 const data = [
   {
     title: "Obsah",
-    description: `Na tejto stránke nájdete kompletné informácie o turistických trasách a bežeckých výzvach po slovenských kopcoch. Každý článok obsahuje GPX súbory na stiahnutie, fotografie, hodnotenia a praktické tipy priamo z terénu.`,
+    description: `Kompletné informácie o turistických trasách a bežeckých výzvach po slovenských kopcoch. Každý článok obsahuje GPX súbory na stiahnutie, fotografie, hodnotenia a praktické tipy priamo z terénu.`,
     icon: "content",
   },
   {
     title: "Cieľ",
     description:
-      "Naším cieľom je vybehnúť a zdokumentovať každý významný kopec Slovenska. Vytvárame živý katalóg trás pre bežcov aj turistov, aby každý mohol objaviť krásu slovenských vrchov. Neváhajte a pridajte sa k nám na tejto ceste!",
+      "Vybehnúť a zdokumentovať každý významný kopec Slovenska. Vytvárame živý katalóg trás pre bežcov aj turistov, aby každý mohol objaviť krásu slovenských vrchov. Neváhajte a pridajte sa k nám na tejto ceste!",
     icon: "goal",
   },
   {
@@ -70,5 +70,11 @@ const data = [
     text-align: center;
     font-size: 2rem;
     margin-bottom: 20px;
+  }
+  @media (max-width: 900px) {
+    .wrapper {
+      grid-template-columns: 1fr;
+      gap: 30px;
+    }
   }
 </style>

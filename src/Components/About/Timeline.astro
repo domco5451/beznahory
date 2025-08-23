@@ -110,4 +110,13 @@ const allPosts = await getCollection("blog");
   .icon {
     color: var(--heading-text)
   }
+  @media (max-width: 900px) {
+    .item-wrapper::before, .item-wrapper::after {
+      display: none;
+    }
+    .item-wrapper {
+      width: 100%;
+      padding: 0;
+    }
+  }
 </style>
