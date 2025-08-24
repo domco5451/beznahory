@@ -219,7 +219,7 @@ to-do.md
 *.test.md
 *.test.mdx
 *.notes.md
-/src/content/blog/tury/test/test.*
-/src/content/blog/akcie/test/test.*
-/src/content/blog/tipy/test/test.*
+/src/content/blog/tipy/test
+/src/content/blog/tury/test
+/src/content/blog/akcie/test
 /test/
