@@ -4,7 +4,7 @@
   "version": "0.0.1",
   "scripts": {
     "dev": "astro dev",
-    "build": "ls -la src || true && ls -la src/layouts || true && astro build",
+    "build": "astro build",
     "preview": "astro preview",
     "astro": "astro"
   },
