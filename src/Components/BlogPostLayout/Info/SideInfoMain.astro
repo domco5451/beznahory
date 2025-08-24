@@ -10,12 +10,14 @@ const { frontmatter } = Astro.props;
 <div class="container">
   <div class="tura-beh">
     <span class="tura-button active">Túra</span>
-    <span class="beh-button">Beh</span>
+    { frontmatter.gpx && <span class="beh-button">Beh</span>}
   </div>
+  { frontmatter.gpx && 
   <div class="beh-content">
     <GpxMap {frontmatter} />
     <GpxDownload {frontmatter} />
   </div>
+  }
   <div class="tura-content">
     <Ratings {frontmatter} />
     <MapButton />

@@ -20,60 +20,73 @@ const postsWithReadingTime = await Promise.all(
 
 {/* Dorobiť Image nech nie je nad header */}
 <PageLayout title="Blog | beznahory.sk">
-  <Heading blogTitle="Blog" blogDescription="Naše najnovšie túry, tipy a akcie" iconName="computer" />
+  <Heading
+    blogTitle="Blog"
+    blogDescription="Naše najnovšie túry, tipy a akcie"
+    iconName="computer"
+  />
   <div class="container">
     <div class="main-grid">
       {
-        postsWithReadingTime.map((post: any, i: number) => (
-          <article class="wrapper">
-            <a href={`/blog/${post.slug}`}>
-              <Image
-                class="thumbnail"
-                src={post.data.thumbnail}
-                alt={post.data.thumbnailAlt}
-                loading={i > 1 ? "lazy" : "eager"}
-              />
-            </a>
-            <div class="content-wrapper">
-              <header class="header-blog">
-                <h2>
-                  <a href={`/blog/${post.slug}`}>{post.data.title}</a>
-                </h2>
-                <p class="read">{post.minutesRead}</p>
-                <p class="description">{post.data.description}</p>
-              </header>
-              <footer class="wrapper-flex">
-                <div class="author-flex">
-                  <Image
-                    class="pfp"
-                    width={50}
-                    src={post.data.pfp}
-                    alt={post.data.pfpAlt}
-                    loading="lazy"
-                  />
-                  <div>
-                    <p>
-                      <strong>{post.data.author}</strong>
-                    </p>
-                    <p>
-                      {new Date(post.data.pubDate).toLocaleDateString("sk-SK", {
-                        year: "numeric",
-                        month: "long",
-                        day: "numeric",
-                      })}
-                    </p>
+        postsWithReadingTime.length > 0 &&
+          postsWithReadingTime.map((post: any, i: number) => (
+            <article class="wrapper">
+              <a href={`/blog/${post.slug}`}>
+                <Image
+                  class="thumbnail"
+                  src={post.data.thumbnail}
+                  alt={post.data.thumbnailAlt}
+                  loading={i > 1 ? "lazy" : "eager"}
+                />
+              </a>
+              <div class="content-wrapper">
+                <header class="header-blog">
+                  <h2>
+                    <a href={`/blog/${post.slug}`}>{post.data.title}</a>
+                  </h2>
+                  <p class="read">{post.minutesRead}</p>
+                  <p class="description">{post.data.description}</p>
+                </header>
+                <footer class="wrapper-flex">
+                  <div class="author-flex">
+                    <Image
+                      class="pfp"
+                      width={50}
+                      src={post.data.pfp}
+                      alt={post.data.pfpAlt}
+                      loading="lazy"
+                    />
+                    <div>
+                      <p>
+                        <strong>{post.data.author}</strong>
+                      </p>
+                      <p>
+                        {new Date(post.data.pubDate).toLocaleDateString(
+                          "sk-SK",
+                          {
+                            year: "numeric",
+                            month: "long",
+                            day: "numeric",
+                          }
+                        )}
+                      </p>
+                    </div>
                   </div>
-                </div>
-                <a class="cursor-flex" href={`/blog/${post.slug}`}>
-                  <span>Čítať ďalej</span>
-                  <Icon class="cursor" name="cursor" size={15} />
-                </a>
-              </footer>
-            </div>
-          </article>
-        ))
+                  <a class="cursor-flex" href={`/blog/${post.slug}`}>
+                    <span>Čítať ďalej</span>
+                    <Icon class="cursor" name="cursor" size={15} />
+                  </a>
+                </footer>
+              </div>
+            </article>
+          ))
       }
     </div>
+    {
+      postsWithReadingTime.length === 0 && (
+        <p class="empty">Žiadne články na zobrazenie</p>
+      )
+    }
   </div>
 </PageLayout>
 {
@@ -97,6 +110,12 @@ const postsWithReadingTime = await Promise.all(
     background-size: cover;
     padding-inline: 20%;
     padding-block: 35px;
+  }
+  .empty {
+    text-align: center;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--text-secondary);
   }
   .blog-wrapper {
     max-width: 1200px;
@@ -145,7 +164,7 @@ const postsWithReadingTime = await Promise.all(
   .author-flex {
     display: flex;
     align-items: center;
-    gap: 15px;;
+    gap: 15px;
     flex: 1;
   }
   .wrapper-flex {

@@ -9,7 +9,7 @@ const allPosts = await getCollection("blog");
 <section class="container">
   <h2>Časová os príspevkov</h2>
   <div class="wrapper">
-    {
+    { allPosts.length > 0 &&
       allPosts.map((post: any) => (
         <div class="item-wrapper">
           <a href={`/blog/${post.slug}`}>
@@ -31,6 +31,9 @@ const allPosts = await getCollection("blog");
         </div>
       ))
     }
+    {allPosts.length === 0 && (
+      <p>Žiadne príspevky na zobrazenie.</p>
+    )}
   </div>
 </section>
 <style>

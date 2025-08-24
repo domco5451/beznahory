@@ -104,7 +104,14 @@ const postsData = allPosts
       zoom = 10;
     }
 
-    const map = L.map("map").setView([centerLat, centerLng], zoom);
+    const map = L.map("map", {
+      minZoom: 6,  // Zabráni prílišnému odzoomovaniu
+      maxBounds: [
+        [44.0, 14.0],  // Juhozápadný bod - dostatočne ďaleko aby sa nezobrazovali prázdne miesta
+        [52.0, 25.0]   // Severovýchodný bod
+      ],
+      maxBoundsViscosity: 1.0  // Sila "pružiny" pri dosiahnutí hraníc (1.0 = úplne pevné)
+    }).setView([centerLat, centerLng], zoom);
 
     // Pridaj dlaždice OpenStreetMap
     L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {

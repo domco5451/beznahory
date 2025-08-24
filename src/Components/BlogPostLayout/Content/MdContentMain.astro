@@ -14,6 +14,7 @@ import SideInfoMain from "../Info/SideInfoMain.astro";
       alt={frontmatter.thumbnailAlt}
       layout="constrained"
       fetchpriority="high"
+      loading="eager"
     />
     <h1>{frontmatter.title}</h1>
     <header>
@@ -48,7 +49,7 @@ import SideInfoMain from "../Info/SideInfoMain.astro";
     <section class="markdown-content">
       <slot />
     </section>
-    {frontmatter.gallery && <MdSwiper images={images} />}
+    {frontmatter.gallery && <MdSwiper {images} />}
   </div>
 </article>
 <style>
