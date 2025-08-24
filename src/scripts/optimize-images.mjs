@@ -5,7 +5,6 @@ import sharp from 'sharp';
 const INPUT = 'src/assets/raw';
 const OUTPUT = 'src/assets/optimized';
 const TARGETS = [
-  { label: 'hero', width:2000 },
   { label: 'lg', width:800 },
   { label: 'sm', width:350 },
 ];

@@ -23,7 +23,7 @@ console.log(latestPost);
           <div class="swiper-slide">
             <Image
               class="hero"
-              src={post.data.hero}
+              src={post.data.thumbnail}
               alt={post.data.thumbnailAlt}
               loading="eager"
             />
@@ -47,12 +47,12 @@ console.log(latestPost);
       latestPost && (
         <Image
           class="hero"
-          src={latestPost.data.hero}
+          src={latestPost.data.thumbnail}
           alt={latestPost.data.thumbnailAlt}
           loading="eager"
         />
         <div class="hero-content-mobile">
-          <h2 class="hero-title">{latestPost.data.title}.</h2>
+          <h2 class="hero-title">{latestPost.data.title}</h2>
           <a class="hero-cta" href={`/blog/${latestPost.slug}`}>
           <Icon class="read-icon" name="read" size={30} />
           Čítať Blog
@@ -72,11 +72,13 @@ console.log(latestPost);
   .swiper {
     width: 100%;
     height: 500px;
+    background: black;
   }
   .hero {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    opacity: 0.6;
   }
   .hero-title {
     font-size: 3.5rem;
@@ -103,7 +105,8 @@ console.log(latestPost);
     -webkit-line-clamp: 2; /* number of lines to show */
     line-clamp: 2;
     -webkit-box-orient: vertical;
-    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
+    filter: drop-shadow(2px 2px 5px rgba(0, 0, 0, 0.7));
+
   }
   .hero-cta {
     padding: 10px 80px;
@@ -137,6 +140,7 @@ console.log(latestPost);
       display: block;
       width: 100vw;
       position: relative;
+      background: black;
     }
     .hero-content-mobile {
       position: absolute;

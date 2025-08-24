@@ -215,4 +215,11 @@ to-do.md
 # Personal / WIP files
 *.wip.*
 *.draft.md
+*.draft.mdx
+*.test.md
+*.test.mdx
 *.notes.md
+/src/content/blog/tury/test.*
+/src/content/blog/akcie/test.*
+/src/content/blog/tipy/test.*
+/test/
