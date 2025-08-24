@@ -9,6 +9,8 @@ import { remarkReadingTime } from "./plugins/remark-reading-time.mjs";
 
 import compress from "astro-compress";
 
+import { fileURLToPath } from 'url';
+
 // https://astro.build/config
 export default defineConfig({
   site: "https://beznahory.sk",
@@ -32,5 +34,12 @@ export default defineConfig({
 
   markdown: {
     remarkPlugins: [remarkReadingTime],
+  },
+  vite: {
+    resolve: {
+      alias: {
+        '@': fileURLToPath(new URL('./src', import.meta.url))
+      }
+    }
   },
 });
