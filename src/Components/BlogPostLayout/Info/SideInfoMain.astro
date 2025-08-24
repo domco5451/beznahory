@@ -61,12 +61,16 @@ const { frontmatter } = Astro.props;
 </style>
 <script>
   document.addEventListener("DOMContentLoaded", () => {
-    const beh: any = document.querySelector(".beh-content");
-    const tura: any = document.querySelector(".tura-content");
-    const behButton: any = document.querySelector(".beh-button");
-    const turaButton: any = document.querySelector(".tura-button");
+    // Získaj referencie na elementy
+    const beh = document.querySelector(".beh-content");
+    const tura = document.querySelector(".tura-content");
+    const behButton = document.querySelector(".beh-button");
+    const turaButton = document.querySelector(".tura-button");
 
+    // Funkcia pre zobrazenie behu - s kontrolou existencie elementov
     const showBeh = () => {
+      if (!beh || !tura || !behButton || !turaButton) return;
+      
       beh.style.display = "block";
       tura.style.display = "none";
       behButton.classList.add("active");
@@ -74,17 +78,29 @@ const { frontmatter } = Astro.props;
       document.dispatchEvent(new CustomEvent("gpx:show"));
     };
 
+    // Funkcia pre zobrazenie túry - s kontrolou existencie elementov
     const showTura = () => {
-      beh.style.display = "none";
+      if (!tura) return;
+      
+      // Ak beh neexistuje, len skryjeme túru a nastavíme tlačidlo
+      if (beh) beh.style.display = "none";
       tura.style.display = "block";
-      behButton.classList.remove("active");
-      turaButton.classList.add("active");
-      document.dispatchEvent(new CustomEvent("gpx:show"));
+      
+      if (behButton) behButton.classList.remove("active");
+      if (turaButton) turaButton.classList.add("active");
+      
+      // Odošli event pre refreshnutie mapy, ak má zmysel
+      if (beh) document.dispatchEvent(new CustomEvent("gpx:show"));
     };
 
-    behButton.addEventListener("click", showBeh);
-    turaButton.addEventListener("click", showTura);
+    // Pripoj event listenery, iba ak existujú tlačidlá
+    if (behButton) behButton.addEventListener("click", showBeh);
+    if (turaButton) turaButton.addEventListener("click", showTura);
     
-    document.dispatchEvent(new CustomEvent('gpx:show'));
+    // Nastav predvolenú záložku - ak GPX existuje, ukáž túru, inak nič
+    if (tura) {
+      // Ak GPX existuje, tak na začiatku dispatchneme event pre mapu
+      if (beh) document.dispatchEvent(new CustomEvent('gpx:show'));
+    }
   });
 </script>
