@@ -7,8 +7,14 @@ import PageLayout from "../../layouts/PageLayout.astro";
 
 const allPosts = await getCollection("blog");
 
+const sortedPosts = allPosts.sort((a, b) => {
+  const dateA = new Date(a.data.pubDate);
+  const dateB = new Date(b.data.pubDate);
+  return dateB.getTime() - dateA.getTime();
+});
+
 const postsWithReadingTime = await Promise.all(
-  allPosts.map(async (post) => {
+  sortedPosts.map(async (post) => {
     const { remarkPluginFrontmatter } = await post.render();
     return {
       ...post,
@@ -18,7 +24,6 @@ const postsWithReadingTime = await Promise.all(
 );
 ---
 
-{/* Dorobiť Image nech nie je nad header */}
 <PageLayout title="Blog | beznahory.sk">
   <Heading
     blogTitle="Blog"
@@ -41,7 +46,7 @@ const postsWithReadingTime = await Promise.all(
               </a>
               <div class="content-wrapper">
                 <header class="header-blog">
-                  <h2>
+                  <h2 class="title">
                     <a href={`/blog/${post.slug}`}>{post.data.title}</a>
                   </h2>
                   <p class="read">{post.minutesRead}</p>
@@ -89,9 +94,6 @@ const postsWithReadingTime = await Promise.all(
     }
   </div>
 </PageLayout>
-{
-  /* <a href="https://www.svgbackgrounds.com/set/free-svg-backgrounds-and-patterns/">Free SVG Backgrounds and Patterns by SVGBackgrounds.com</a> */
-}
 <style>
   .container {
     max-width: 1500px;
@@ -104,6 +106,9 @@ const postsWithReadingTime = await Promise.all(
   }
   .blog-header h2 {
     font-size: 1.5rem;
+  }
+  .title a:visited {
+    color: purple;
   }
   .blog-header {
     background-image: url("../../icons/pozadieAbout.svg");

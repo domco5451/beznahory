@@ -10,7 +10,12 @@ const currentPath = Astro.url.pathname;
 const allPosts = await getCollection("blog", ({ data }) => {
   return data.type === "tura";
 });
-console.log(allPosts);
+
+const sortedPosts = allPosts.sort((a, b) => {
+  const dateA = new Date(a.data.pubDate);
+  const dateB = new Date(b.data.pubDate);
+  return dateB.getTime() - dateA.getTime();
+});
 
 const kraje = [
   { href: "/hikes/bratislavsky-kraj", kraj: "Bratislavský kraj" },
@@ -45,7 +50,7 @@ const kraje = [
     {
       currentPath === "/hikes" && (
         <div class="grid-container-hikes">
-          {allPosts.map((post: any) => (
+          {sortedPosts.map((post: any) => (
             <a href={`/blog/${post.slug}`}>
               <div>
                 <Image

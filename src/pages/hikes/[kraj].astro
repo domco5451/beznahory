@@ -6,16 +6,22 @@ import { Image } from "astro:assets";
 
 export async function getStaticPaths() {
   const allPosts = await getCollection("blog");
+
+  const sortedPosts = allPosts.sort((a, b) => {
+    const dateA = new Date(a.data.pubDate);
+    const dateB = new Date(b.data.pubDate);
+    return dateB.getTime() - dateA.getTime();
+  });
   {
     return [
-      { params: { kraj: "bratislavsky-kraj" }, props: { posts: allPosts } },
-      { params: { kraj: "trnavsky-kraj" }, props: { posts: allPosts } },
-      { params: { kraj: "trenciansky-kraj" }, props: { posts: allPosts } },
-      { params: { kraj: "nitriansky-kraj" }, props: { posts: allPosts } },
-      { params: { kraj: "zilinsky-kraj" }, props: { posts: allPosts } },
-      { params: { kraj: "banskobystricky-kraj" }, props: { posts: allPosts } },
-      { params: { kraj: "presovsky-kraj" }, props: { posts: allPosts } },
-      { params: { kraj: "kosicky-kraj" }, props: { posts: allPosts } },
+      { params: { kraj: "bratislavsky-kraj" }, props: { posts: sortedPosts } },
+      { params: { kraj: "trnavsky-kraj" }, props: { posts: sortedPosts } },
+      { params: { kraj: "trenciansky-kraj" }, props: { posts: sortedPosts } },
+      { params: { kraj: "nitriansky-kraj" }, props: { posts: sortedPosts } },
+      { params: { kraj: "zilinsky-kraj" }, props: { posts: sortedPosts } },
+      { params: { kraj: "banskobystricky-kraj" }, props: { posts: sortedPosts } },
+      { params: { kraj: "presovsky-kraj" }, props: { posts: sortedPosts } },
+      { params: { kraj: "kosicky-kraj" }, props: { posts: sortedPosts } },
     ];
   }
 }
@@ -64,7 +70,13 @@ const filteredPosts = posts.filter((post: any) =>
                 </div>
                 <div class="icon-info">
                   <Icon name="date" size={20} />
-                  <p>{new Date(post.data.pubDate).toLocaleDateString("sk-SK", { year: 'numeric', month: 'long', day: 'numeric' })}</p>
+                  <p>
+                    {new Date(post.data.pubDate).toLocaleDateString("sk-SK", {
+                      year: "numeric",
+                      month: "long",
+                      day: "numeric",
+                    })}
+                  </p>
                 </div>
               </div>
             </div>

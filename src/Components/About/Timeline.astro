@@ -4,36 +4,41 @@ import { Image } from "astro:assets";
 import { Icon } from "astro-icon/components";
 
 const allPosts = await getCollection("blog");
+
+const sortedPosts = allPosts.sort((a, b) => {
+  const dateA = new Date(a.data.pubDate);
+  const dateB = new Date(b.data.pubDate);
+  return dateB.getTime() - dateA.getTime();
+});
 ---
 
 <section class="container">
   <h2>Časová os príspevkov</h2>
   <div class="wrapper">
-    { allPosts.length > 0 &&
-      allPosts.map((post: any) => (
-        <div class="item-wrapper">
-          <a href={`/blog/${post.slug}`}>
-            <div class="icon-text" >
-                <Icon class="icon" name="date" size={28}/>
+    {
+      allPosts.length > 0 &&
+        sortedPosts.map((post: any) => (
+          <div class="item-wrapper">
+            <a href={`/blog/${post.slug}`}>
+              <div class="icon-text">
+                <Icon class="icon" name="date" size={28} />
                 <p>{post.data.pubDate.toLocaleDateString()}</p>
-            </div>
-            <Image
-              class="thumbnail"
-              src={post.data.thumbnail}
-              alt={post.data.thumbnailAlt}
-              loading="lazy"
-            />
-            <div class="icon-heading">
-                <Icon class="icon" name="odoInfo" size={28}/>
+              </div>
+              <Image
+                class="thumbnail"
+                src={post.data.thumbnail}
+                alt={post.data.thumbnailAlt}
+                loading="lazy"
+              />
+              <div class="icon-heading">
+                <Icon class="icon" name="odoInfo" size={28} />
                 <h3>{post.data.title}</h3>
-            </div>
-          </a>
-        </div>
-      ))
+              </div>
+            </a>
+          </div>
+        ))
     }
-    {allPosts.length === 0 && (
-      <p>Žiadne príspevky na zobrazenie.</p>
-    )}
+    {allPosts.length === 0 && <p>Žiadne príspevky na zobrazenie.</p>}
   </div>
 </section>
 <style>
@@ -111,10 +116,11 @@ const allPosts = await getCollection("blog");
     background: rgb(238, 238, 238);
   }
   .icon {
-    color: var(--heading-text)
+    color: var(--heading-text);
   }
   @media (max-width: 900px) {
-    .item-wrapper::before, .item-wrapper::after {
+    .item-wrapper::before,
+    .item-wrapper::after {
       display: none;
     }
     .item-wrapper {

@@ -4,6 +4,14 @@ import { Image } from "astro:assets";
 import { Icon } from "astro-icon/components";
 
 const allPosts = await getCollection("blog");
+
+const sortedPosts = allPosts.sort((a, b) => {
+  const dateA = new Date(a.data.pubDate);
+  const dateB = new Date(b.data.pubDate);
+  return dateB.getTime() - dateA.getTime();
+});
+
+const limitedPosts = sortedPosts.slice(0, 12);
 ---
 
 <div class="container">
@@ -12,7 +20,7 @@ const allPosts = await getCollection("blog");
   </div>
   <div class="post-grid">
     {
-      allPosts.map((post: any) => (
+      limitedPosts.map((post: any) => (
         <a href={`/blog/${post.slug}`} class="post-wrapper">
           <Image
             class="thumbnail"

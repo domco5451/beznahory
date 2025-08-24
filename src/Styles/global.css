@@ -10,6 +10,7 @@ a {
   text-decoration: none;
   color: inherit;
 }
+
 li {
   list-style: none;
 }
@@ -34,5 +35,4 @@ img {
   --hover-text: #172238;
   --heading-text: #0055ff;
   --description-text: #666;
-
 }

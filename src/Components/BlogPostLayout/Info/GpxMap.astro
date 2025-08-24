@@ -53,23 +53,72 @@ const { frontmatter } = Astro.props;
 
     let gpxLayer = null;
     let gpxLoaded = false;
+    let fitBoundsCalled = false; // Flag na sledovanie, či už bolo zavolané fitBounds
 
-    // Inicializácia malej mapy
+    // Inicializácia mapy s predvolenými hodnotami - zoom nastavíme až po načítaní GPX
     const map = L.map("map", {
       fullscreenControl: true,
-    }).setView([initialLat, initialLng], 12);
+      minZoom: 6,
+      maxBounds: [
+        [44.0, 14.0],
+        [52.0, 25.0]
+      ],
+      maxBoundsViscosity: 1.0,
+    });
+    
+    // Nastavíme predvolené zobrazenie, ale len ako zálohu
+    map.setView([initialLat, initialLng], 9);
 
-    const refreshMap = () => {
-      map.invalidateSize();
+    // Vylepšená funkcia na aktualizáciu pohľadu mapy
+    const fitMapToBounds = (extraZoom = 0) => {
       if (gpxLoaded && gpxLayer && typeof gpxLayer.getBounds === "function") {
         const bounds = gpxLayer.getBounds();
         if (bounds && bounds.isValid && bounds.isValid()) {
-          map.fitBounds(bounds);
+          // Fit bounds s minimálnym paddingom, aby trasa vyplnila viewport
+          map.fitBounds(bounds, {
+            padding: [8, 8],
+            maxZoom: 18,
+            animate: true
+          });
+
+          // Po krátkom oneskorení vylepšíme zoom tak, aby trasa "vyplnila" obrazovku presnejšie.
+          // Zvýšime zoom o extraZoom alebo o 1, ak je to bezpečné (neprekročí max zoom).
+          setTimeout(() => {
+            try {
+              const center = bounds.getCenter();
+              const currZoom = map.getZoom();
+              const targetZoom = Math.min(currZoom + Math.max(1, extraZoom), 18);
+              if (targetZoom > currZoom) {
+                map.setView(center, targetZoom, { animate: true });
+              }
+            } catch (e) {
+              // ignore
+            }
+          }, 120);
+
+          fitBoundsCalled = true;
+          return true;
         }
       }
+      return false;
     };
 
+    // Funkcia na obnovenie mapy
+    const refreshMap = () => {
+      map.invalidateSize();
+      setTimeout(() => {
+        // Pokúsime sa fit bounds s oneskorením, aby sa mapa stihla vykresliť
+        if (!fitMapToBounds() && !fitBoundsCalled) {
+          // Ak sa nepodarilo, skúsime ešte raz s väčším oneskorením
+          setTimeout(() => fitMapToBounds(1), 400);
+        }
+      }, 100);
+    };
+
+    // Počúvame na rôzne eventy, ktoré by mohli ovplyvniť mapu
     document.addEventListener("gpx:show", refreshMap);
+    map.on('load', refreshMap);
+    window.addEventListener('resize', refreshMap);
 
     L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
       attribution:
@@ -77,30 +126,33 @@ const { frontmatter } = Astro.props;
     }).addTo(map);
 
     // GPX
-
     if (gpxPath && window.L.GPX) {
       try {
         gpxLayer = new L.GPX(gpxPath, {
           async: true,
           polyline_options: {
-            color: "#3388ff",
-            weight: 2,
-            opacity: 0.7,
+            color: "#0055ff",
+            weight: 4,        // Zvýšená hrúbka čiary pre lepšiu viditeľnosť
+            opacity: 0.85,    // Trochu vyššia nepriehľadnosť
           },
+          marker_options: {
+            startIconUrl: '',
+            endIconUrl: '',
+            shadowUrl: '',
+          }
         });
 
         gpxLayer
           .on("loaded", function (e) {
             gpxLoaded = true;
-            // Aktualizácia referencie vrstvy z eventu
             gpxLayer = e.target;
-            const bounds = gpxLayer.getBounds();
-            if (bounds && bounds.isValid && bounds.isValid()) {
-              map.fitBounds(bounds);
-            }
+            
+            // Hneď fitni bounds a následne ešte raz "priblížime" o 1 level pre presnejšie vyplnenie obrazovky
+            fitMapToBounds(1);           // okamžite
+            setTimeout(() => fitMapToBounds(1), 150);  // krátke opakovanie
+            setTimeout(() => fitMapToBounds(2), 600);  // druhé opakovanie ak treba
 
             // Štatistiky
-
             const distance = (e.target.get_distance() / 1000).toFixed(2); // km
             // Vypočítaj tempo v ms/km
             const paceMs = e.target.get_moving_pace();
@@ -184,5 +236,10 @@ const { frontmatter } = Astro.props;
         console.error("Chyba pri načítaní GPX", e);
       }
     }
+
+    // Zavolaj refresh mapy po úplnom načítaní stránky
+    window.addEventListener('load', () => {
+      refreshMap();
+    });
   });
 </script>
