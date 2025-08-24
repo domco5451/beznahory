@@ -60,7 +60,10 @@ const sortedPosts = allPosts.sort((a, b) => {
           </div>
         ))
       ) : (
-        <p>Zatial žiadne príspevky</p>
+        <div class="no-posts">
+          <Icon class="icon" name="odoInfo" size={30}/>
+          <p>Zatiaľ žiadne príspevky</p>
+        </div>
       )
     }
   </div>
@@ -164,6 +167,21 @@ const sortedPosts = allPosts.sort((a, b) => {
   }
   .cursor-flex:hover .cursor {
     transform: scale(1.3);
+  }
+  .no-posts {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+    background: #172238;
+    border-radius: 10px;
+    width: 100%;
+    color: white;
+    font-size: 1.2rem;
+  }
+  .icon {
+    color: #f7c948;
   }
   @media (max-width: 715px) {
     .post-container {

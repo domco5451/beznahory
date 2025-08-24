@@ -44,7 +44,10 @@ const kraje = [
     </div>
     {
       allPosts.length === 0 && Astro.url.pathname === "/hikes" ? (
-        <p style="margin-block: 20px">Zatial žiadne príspevky.</p>
+        <div class="no-posts">
+          <Icon class="icon" name="odoInfo" size={30}/>
+          <p>Zatiaľ žiadne príspevky</p>
+        </div>
       ) : null
     }
     {
@@ -121,6 +124,21 @@ const kraje = [
     display: flex;
     justify-content: space-between;
     align-items: center;
+  }
+  .no-posts {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+    background: #172238;
+    border-radius: 10px;
+    color: white;
+    font-size: 1.2rem;
+    margin-top: 20px;
+  }
+  .icon {
+    color: #f7c948;
   }
 
   /* Kraj Default */

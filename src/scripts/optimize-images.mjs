@@ -30,11 +30,6 @@ for (const file of await readdir(INPUT)) {
     await pipeline
       .avif({ quality: 45, effort: 4 })
       .toFile(path.join(OUTPUT, `${base}-${t.label}.avif`));
-
-    // WebP
-    await pipeline
-      .webp({ quality: 70 })
-      .toFile(path.join(OUTPUT, `${base}-${t.label}.webp`));
   }
 }
 console.log('Hotovo.');

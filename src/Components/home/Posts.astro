@@ -20,30 +20,42 @@ const limitedPosts = sortedPosts.slice(0, 12);
   </div>
   <div class="post-grid">
     {
-      limitedPosts.map((post: any) => (
-        <a href={`/blog/${post.slug}`} class="post-wrapper">
-          <Image
-            class="thumbnail"
-            src={post.data.thumbnailSmall}
-            alt={post.data.thumbnailSmallAlt}
-            loading="lazy"
-          />
-          <div class="content-wrapper">
-            <h3 class="post-title">{post.data.title}</h3>
-            {post.data.type === "tura" ? (
-              <div class="icon-info">
-                <Icon class="icon" name="gps2" size={20} />
-                <p>{post.data.okres}</p>
-              </div>
-            ) : (
-              <div class="icon-info">
-                <Icon class="icon" name="odoInfo" size={20} />
-                <p>{post.data.type}</p>
-              </div>
-            )}
-          </div>
-        </a>
-      ))
+      allPosts.length > 0 && (
+        limitedPosts.map((post: any) => (
+          <a href={`/blog/${post.slug}`} class="post-wrapper">
+            <Image
+              class="thumbnail"
+              src={post.data.thumbnailSmall}
+              alt={post.data.thumbnailSmallAlt}
+              loading="lazy"
+            />
+            <div class="content-wrapper">
+              <h3 class="post-title">{post.data.title}</h3>
+              {post.data.type === "tura" ? (
+                <div class="icon-info">
+                  <Icon class="icon" name="gps2" size={20} />
+                  <p>{post.data.okres}</p>
+                </div>
+              ) : (
+                <div class="icon-info">
+                  <Icon class="icon" name="odoInfo" size={20} />
+                  <p>{post.data.type}</p>
+                </div>
+              )}
+            </div>
+          </a>
+        ))
+      ) 
+    }
+  </div>
+  <div class="empty-wrapper">
+    {
+      allPosts.length === 0 && (
+        <div class="no-posts">
+          <Icon class="iconEmpty" name="odoInfo" size={30} />
+          <p>Zatiaľ žiadne príspevky</p>
+        </div>
+      )
     }
   </div>
 </div>
@@ -85,6 +97,28 @@ const limitedPosts = sortedPosts.slice(0, 12);
     height: 150px;
     object-fit: cover;
     border-radius: 13px 13px 0 0;
+  }
+  .empty-wrapper {
+    max-width: 1500px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .no-posts {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+    background: #172238;
+    border-radius: 10px;
+    width: 100%;
+    color: white;
+    font-size: 1.2rem;
+  }
+  .iconEmpty {
+    color: #f7c948;
   }
   .icon-info {
     display: flex;
